@@ -23,7 +23,7 @@ set $menu wofi --show run
 ### Output configuration
 #
 # Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
-# output * bg /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
+ # output * bg /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_1921x1080.png fill
 output * bg ~/Downloads/wallpaper/power_wallpaper.jpg fill
 #
 # Example configuration:
@@ -252,12 +252,15 @@ bindsym XF86MonBrightnessUp exec brightnessctl set 5%+
 exec wl-paste -t text --watch clipman store --no-persist
 exec_always dunst --startup_notification
 exec_always nm-applet
+exec_always --no-startup-id workstyle &> /tmp/workstyle.log
+
 
 for_window [app_id="galculator"] floating enable
 for_window [window_type="dialog"] floating enable
 for_window [window_role="dialog"] floating enable
 assign [class="firefox"] -> 3
 assign [class="^Urxvt$" instance="^htop$"] -> 9
+assign [class="Google-chrome"] workspace number 3
 
 # input type:keyboard xkb_capslock enabled
 # input type:keyboard xkb_numlock enabled
