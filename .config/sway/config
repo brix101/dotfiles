@@ -260,6 +260,7 @@ exec wl-paste -t text --watch clipman store --no-persist
 exec_always dunst --startup_notification
 exec_always nm-applet
 exec_always --no-startup-id workstyle &> /tmp/workstyle.log
+exec udiskie -s
 
 
 for_window [app_id="galculator"] floating enable
