@@ -1,11 +1,11 @@
 window:
   padding:
-    x: 5
-    y: 5
+    x: 2
+    y: 2
   class:
     instance: Alacritty
     general: Alacritty
-  opacity: 0.95
+  opacity: 1
 
 scrolling:
   history: 10000
@@ -37,8 +37,4 @@ shell:
   program: /usr/bin/zsh
 
 key_bindings:
-  - {
-      key: Return,
-      mods: Super|Shift,
-      action: SpawnNewInstance
-    }
+  - { key: Return, mods: Super|Shift, action: SpawnNewInstance }
