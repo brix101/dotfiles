@@ -58,7 +58,7 @@ keymap.set("n", "<leader>gs", "<cmd>Telescope git_status<cr>") -- list current c
 keymap.set("n", "<leader>rs", ":LspRestart<CR>") -- mapping to restart lsp if necessary
 
 --bufferline
-keymap.set("n", "<C-w>", "<Cmd>BufferLinePick<CR>") -- close current buffer with ctrl-w
+keymap.set("n", "<C-w>", "<Cmd>BufferLinePickClose<CR>") -- close current buffer with ctrl-w
 -- keymap.set("n", "<leader><tab>", "<Cmd>BufferLineCycleNext<CR>")
 -- keymap.set("n", "<S-tab>", "<Cmd>BufferLineCyclePrev<CR>")
 -- keymap.set("n", "[b", "<Cmd>BufferLineMoveNext<CR>")
