@@ -338,7 +338,7 @@ fi
 #getanames ()  { perl -ne 'while ( m/a name="([^"]*)"/gc ) { print $1, "\n"; }' $* }
 #getforms ()   { perl -ne 'while ( m:(\</?(input|form|select|option).*?\>):gic ) { print $1, "\n"; }' $* }
 #getstrings () { perl -ne 'while ( m/"(.*?)"/gc ) { print $1, "\n"; }' $*}
-#getanchors () { perl -ne 'while ( m/«([^«»\n]+)»/gc ) { print $1, "\n"; }' $* }
+#getanchors () { perl -ne 'while ( m/Â«([^Â«Â»\n]+)Â»/gc ) { print $1, "\n"; }' $* }
 #showINC ()    { perl -e 'for (@INC) { printf "%d %s\n", $i++, $_ }' }
 #vimpm ()      { vim `perldoc -l $1 | sed -e 's/pod$/pm/'` }
 #vimhelp ()    { vim -c "help $1" -c on -c "au! VimEnter *" }
@@ -355,27 +355,24 @@ eval "$(starship init zsh)"
 
 
 # alias
-
 alias v='nvim -w ~/.vimlog "$@"'
 alias vi='nvim -w ~/.vimlog "$@"'
 alias vim='nvim -w ~/.vimlog "$@"'
-##alias nvim='lvim -w ~/.vimlog "$@"'
-##alias lvim='lvim -w ~/.vimlog "$@"'
 alias mux='pgrep -vx tmux > /dev/null && \
-		tmux new -d -s delete-me && \
-		tmux run-shell ~/.config/tmux/plugins/tmux-resurrect/scripts/restore.sh && \
-		tmux kill-session -t delete-me && \
-		tmux attach || tmux attach'
+                tmux new -d -s delete-me && \
+                tmux run-shell ~/.config/tmux/plugins/tmux-resurrect/scripts/restore.sh && \
+                tmux kill-session -t delete-me && \
+                tmux attach || tmux attach'
 
 
-export PATH=/home/brix/.local/bin:$PATH
+export PATH=~/.local/bin:$PATH
 # source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 # [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 # pnpm
-export PNPM_HOME="/home/brix/.local/share/pnpm"
+export PNPM_HOME="~/.local/share/pnpm"
 case ":$PATH:" in
   *":$PNPM_HOME:"*) ;;
   *) export PATH="$PNPM_HOME:$PATH" ;;
@@ -385,5 +382,14 @@ esac
 export ANDROID_HOME=$HOME/Android/Sdk
 export PATH=$PATH:$ANDROID_HOME/emulator
 export PATH=$PATH:$ANDROID_HOME/platform-tools
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+#GO bin
+export PATH="$HOME/go/bin:$PATH"
+
+alias flyctl="$HOME/.fly/bin/flyctl"
 
 
