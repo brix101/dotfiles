@@ -17,6 +17,7 @@ return {
 		{
 			"hrsh7th/nvim-cmp",
 			dependencies = {
+				"simrat39/rust-tools.nvim",
 				"roobert/tailwindcss-colorizer-cmp.nvim",
 				"hrsh7th/cmp-nvim-lsp",
 				"hrsh7th/cmp-path",
@@ -248,6 +249,7 @@ return {
 		})
 
 		local lsp = require("lsp-zero").preset("recommended")
+		local rust_lsp = lsp.build_options("rust_analyzer", {})
 		lsp.on_attach(on_attach)
 		lsp.set_server_config({
 			on_init = function(client)
@@ -270,6 +272,8 @@ return {
 			lsp_cfg = true,
 			lsp_on_attach = on_attach,
 		})
+
+		require("rust-tools").setup({ server = rust_lsp })
 
 		lsp.setup()
 
