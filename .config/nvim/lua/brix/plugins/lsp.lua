@@ -142,7 +142,7 @@ return {
 			--)
 			vim.keymap.set(
 				"n",
-				"<leader>",
+				"<leader>ca",
 				"<Cmd>Lspsaga code_action<CR>",
 				{ buffer = bufnr, desc = "LSP show code actions" }
 			)
@@ -310,8 +310,8 @@ return {
 					c = cmp.mapping.close(),
 				}),
 				["<CR>"] = cmp.mapping.confirm({ select = false }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
-				["<C-p>"] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select }),
-				["<C-n>"] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select }),
+				["<C-k>"] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select }),
+				["<C-j>"] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select }),
 				["<Tab>"] = vim.schedule_wrap(function(fallback)
 					if cmp.visible() and has_words_before() then
 						cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
@@ -347,13 +347,13 @@ return {
 			},
 		})
 
-		-- For copilot
-		cmp.event:on("menu_opened", function()
-			vim.b.copilot_suggestion_hidden = true
-		end)
-
-		cmp.event:on("menu_closed", function()
-			vim.b.copilot_suggestion_hidden = false
-		end)
+		-- -- For copilot
+		-- cmp.event:on("menu_opened", function()
+		-- 	vim.b.copilot_suggestion_hidden = true
+		-- end)
+		--
+		-- cmp.event:on("menu_closed", function()
+		-- 	vim.b.copilot_suggestion_hidden = false
+		-- end)
 	end,
 }
