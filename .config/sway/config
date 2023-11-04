@@ -23,8 +23,8 @@ set $menu wofi --show run
 ### Output configuration
 #
 # Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
-output * bg /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
-# output * bg ~/Downloads/wallpaper/power_wallpaper.jpg fill
+# output * bg /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
+output * bg ./abstract.png fill
 #
 # Example configuration:
 #
@@ -35,12 +35,12 @@ output * bg /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
 ### Idle configuration
 #
 # Example configuration:
-#
-# exec swayidle -w \
-#          timeout 300 'swaylock -f -c 000000' \
-#          timeout 600 'swaymsg "output * power off"' resume 'swaymsg "output * power on"' \
-#          before-sleep 'swaylock -f -c 000000'
-#
+
+exec swayidle -w \
+         timeout 3600 'swaylock -f -c 000000' \
+         timeout 10800 'swaymsg "output * power off"' resume 'swaymsg "output * power on"' \
+         before-sleep 'swaylock -f -c 000000'
+
 # This will lock your screen after 300 seconds of inactivity, then turn off
 # your displays after another 300 seconds, and turn your screens back on when
 # resumed. It will also lock your screen before your computer goes to sleep.
@@ -199,6 +199,26 @@ mode "resize" {
 bindsym $mod+r mode "resize"
 
 #
+# exit mode
+#
+
+set $exit "exit: [s]leep, [p]oweroff, [r]eboot, [l]ogout"
+mode $exit {
+    bindsym --to-code {
+        s exec systemctl suspend, mode "default"
+        p exec systemctl poweroff
+        r exec systemctl reboot
+        l exec swaymsg exit
+        # w exec reboot-to-windows-somehow-lol.sh
+    
+        Return mode "default"
+        Escape mode "default"
+        $mod+x mode "default"
+   }
+}
+
+bindsym --to-code $mod+x mode $exit
+#
 # Status Bar:
 #
 # Read `man 5 sway-bar` for more information about this section.
@@ -261,7 +281,7 @@ exec_always dunst --startup_notification
 exec_always nm-applet
 exec_always --no-startup-id workstyle &> /tmp/workstyle.log
 exec udiskie -s
-
+exec wmname LG3D
 
 for_window [app_id="galculator"] floating enable
 for_window [window_type="dialog"] floating enable
