@@ -350,9 +350,10 @@ source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zs
 source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 source /usr/share/doc/pkgfile/command-not-found.zsh
 
-## END OF FILE #################################################################
 eval "$(starship init zsh)"
 
+# rustup complettion
+fpath+=~/.zfunc
 
 # alias
 alias v='nvim -w ~/.vimlog "$@"'
@@ -366,10 +367,6 @@ alias mux='pgrep -vx tmux > /dev/null && \
 
 
 export PATH=~/.local/bin:$PATH
-# source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme
-
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-# [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 # pnpm
 export PNPM_HOME="$HOME/.local/share/pnpm"
@@ -396,3 +393,4 @@ export PATH="$HOME/go/bin:$PATH"
 alias flyctl="$HOME/.fly/bin/flyctl"
 
 
+## END OF FILE #################################################################
