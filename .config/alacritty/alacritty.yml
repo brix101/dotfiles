@@ -5,7 +5,7 @@ window:
   class:
     instance: Alacritty
     general: Alacritty
-  opacity: 1
+  opacity: 0.9
 
 scrolling:
   history: 10000
@@ -31,7 +31,7 @@ import:
   - ~/.config/alacritty/catppuccin-mocha.yml
 
 selection:
-  save_to_clipboard: false
+  save_to_clipboard: true
 
 shell:
   program: /usr/bin/zsh
