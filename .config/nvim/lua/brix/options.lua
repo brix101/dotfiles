@@ -51,3 +51,4 @@ opt.undofile = true
 --maintain scroll to 8 digit
 opt.scrolloff = 8
 opt.colorcolumn = "80"
+vim.cmd("highlight ColorColumn ctermbg=darkblue")

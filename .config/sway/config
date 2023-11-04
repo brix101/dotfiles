@@ -37,12 +37,12 @@ output * bg ./abstract.png fill
 # Example configuration:
 
 exec swayidle -w \
-         timeout 3600 'swaylock -f -c 000000' \
-         timeout 10800 'swaymsg "output * power off"' resume 'swaymsg "output * power on"' \
+         timeout 1800 'swaylock -f -c 000000' \
+         timeout 3600 'swaymsg "output * power off"' resume 'swaymsg "output * power on"' \
          before-sleep 'swaylock -f -c 000000'
 
 # This will lock your screen after 300 seconds of inactivity, then turn off
-# your displays after another 300 seconds, and turn your screens back on when
+# your displays after another 3600 seconds, and turn your screens back on when
 # resumed. It will also lock your screen before your computer goes to sleep.
 
 ### Input configuration
@@ -238,20 +238,20 @@ bar {
 }
 
 
-default_border pixel 1
-default_floating_border pixel 1
+set $gap_space 3
+
+default_border pixel $gap_space
+default_floating_border pixel $gap_space
 # font pango:monospace 0
 
 # Remove title bar
-titlebar_padding 1
+titlebar_padding 3
 titlebar_border_thickness 0
 
-client.focused "#eb69f2" "#eb69f2" "#e0def4" "#eb69f2"
-client.unfocused "#6e6a86" "#6e6a86" "#e0def4" "#6e6a86"
+client.focused "#babbf1" "#babbf1" "#e0def4" "#babbf1"
+client.unfocused "#494d64" "#494d64" "#e0def4" "#494d64"
 
-
-gaps inner 5
-
+gaps inner $gap_space
 
 # Wob Settings
 set $WOBSOCK $XDG_RUNTIME_DIR/wob.sock
@@ -270,7 +270,6 @@ bindsym XF86AudioPrev exec playerctl previous
 bindsym --locked XF86AudioPlay exec playerctl play-pause
 
 bindsym XF86Search exec $menu
-
 
 # Sreen brightness controls
 bindsym XF86MonBrightnessDown exec brightnessctl set 5%- | sed -En 's/.*\(([0-9]+)%\).*/\1/p' > $WOBSOCK
