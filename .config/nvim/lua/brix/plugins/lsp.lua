@@ -41,7 +41,7 @@ return {
 		local format_opts = { async = false, timeout_ms = 2500 }
 
 		local function register_fmt_keymap(name, bufnr)
-			local fmt_keymap = "<leader>f"
+			local fmt_keymap = "<leader>fm"
 			vim.keymap.set("n", fmt_keymap, function()
 				vim.lsp.buf.format(vim.tbl_extend("force", format_opts, { name = name, bufnr = bufnr }))
 			end, { desc = "Format current buffer [LSP]", buffer = bufnr })

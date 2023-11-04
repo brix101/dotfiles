@@ -44,6 +44,7 @@ opt.swapfile = false
 opt.backup = false
 
 -- undofile for days
+---@diagnostic disable-next-line: assign-type-mismatch
 opt.undodir = os.getenv("HOME") .. "/.vim/undodir"
 opt.undofile = true
 
