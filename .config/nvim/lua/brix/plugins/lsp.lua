@@ -340,6 +340,7 @@ return {
 							nvim_lsp = "[LSP]",
 							luasnip = "[SNIP]",
 							path = "[PATH]",
+							crates = "[CRATES]",
 						},
 					})(entry, item)
 					return require("tailwindcss-colorizer-cmp").formatter(entry, item)

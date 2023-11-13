@@ -1,1 +1,2 @@
-require("brix")
+require("brix.core")
+require("brix.lazy")
