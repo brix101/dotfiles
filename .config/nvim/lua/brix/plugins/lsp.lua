@@ -201,6 +201,14 @@ return {
 				register_fmt_keymap(client.name, bufnr)
 				register_fmt_autosave(client.name, bufnr)
 			end
+
+			if client.name == "tsserver" then
+				-- opts.desc = "Rename file and update file imports"
+				vim.keymap.set("n", "<leader>oi", ":OrganizeImports<CR>", { buffer = bufnr, desc = "Organize imports" }) -- organize imports (not in youtube nvim video)
+
+				-- opts.desc = "Remove unused imports"
+				-- keymap.set("n", "<leader>ru", ":TypescriptRemoveUnused<CR>", opts) -- remove unused variables (not in youtube nvim video)
+			end
 		end
 
 		local capabilities = vim.lsp.protocol.make_client_capabilities()
@@ -239,6 +247,15 @@ return {
 			"rust-analyzer",
 		}
 
+		local function organize_imports()
+			local params = {
+				command = "_typescript.organizeImports",
+				arguments = { vim.api.nvim_buf_get_name(0) },
+				title = "",
+			}
+			vim.lsp.buf.execute_command(params)
+		end
+
 		require("mason-tool-installer").setup({ ensure_installed = tools })
 
 		-- Register your lsp servers
@@ -265,7 +282,15 @@ return {
 		lspconfig.cssls.setup({})
 		lspconfig.tailwindcss.setup({})
 		require("typescript").setup({
-			server = { on_attach = on_attach },
+			server = {
+				on_attach = on_attach,
+				commands = {
+					OrganizeImports = {
+						organize_imports,
+						description = "Organize Imports",
+					},
+				},
+			},
 		})
 
 		require("go").setup({
