@@ -1,7 +1,3 @@
-require("brix.autocmds")
-require("brix.options")
-require("brix.keymaps")
-
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
 	vim.fn.system({
