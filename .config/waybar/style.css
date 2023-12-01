@@ -3,6 +3,15 @@
 @define-color bg #24273a;
 @define-color bg2 #494d64;
 
+@define-color bg-color #1a1b26;
+@define-color fg-color #a9b1d6;
+
+@define-color tn-green #9ece6a;
+@define-color tn-red #f7768e;
+@define-color tn-blue #7aa2f7;
+@define-color tn-yellow #e0af68;
+@define-color tn-purple #bb9af7;
+
 * {
   font-family: "JetBrains Mono", "Symbols Nerd Font",
     "Font Awesome 5 Brands Regular", "Arial", "Roboto", "Helvetica",
@@ -90,10 +99,13 @@ button:hover {
 #wireplumber,
 #custom-media,
 #custom-pacman,
+#custom-notification,
 #tray,
 #mode,
 #idle_inhibitor,
 #scratchpad,
+#mpris,
+#upower,
 #mpd {
   padding: 0 10px;
   color: #ffffff;
@@ -297,10 +309,23 @@ label:focus {
   margin-bottom: 3px;
 }
 
+#upower {
+  color: #7aa2f7;
+}
+
+#upower.charging {
+  background: #9ece6a;
+  color: #1a1b26;
+}
+
 #scratchpad.empty {
   background-color: transparent;
 }
 
 #custom-pacman {
   color: #f5e0dc;
+}
+
+#custom-notification {
+  font-family: "NotoSansMono Nerd Font";
 }

@@ -1,10 +1,28 @@
-for_window [app_id="galculator"] floating enable
+# set floating (nontiling) for special apps:
+for_window [app_id="pavucontrol" ] floating enable, resize set width 40 ppt height 30 ppt
+for_window [class="Lxappearance"] floating enable, resize set width 60 ppt height 50 ppt
+
+# set floating for window roles
+for_window [window_role="pop-up"] floating enable
+for_window [window_role="bubble"] floating enable
+for_window [window_role="task_dialog"] floating enable
+for_window [window_role="Preferences"] floating enable
 for_window [window_type="dialog"] floating enable
-for_window [window_role="dialog"] floating enable
+for_window [window_type="menu"] floating enable
+for_window [window_role="About"] floating enable
+for_window [title="Picture in picture"] floating enable, sticky enable
+for_window [title="htop"] floating enable, resize set width 50 ppt height 70 ppt
+for_window [app_id="thunar" title="File Operation Progress"] floating enable, sticky enable
+for_window [app_id="thunar" title="Confirm to replace files"] floating enable, sticky enable
+for_window [app_id="foot" title="Update Pacman"] floating enable, border pixel 2
 
 
 assign [class="firefox"] -> 3
 assign [app_id="Alacritty" instance="^htop$"] -> 9
 assign [class="Google-chrome"] workspace number 3
 assign [class="Postman"] workspace number 4
+assign [class="discord"] workspace number 6
+assign [class="Spotify"] workspace number 7
+assign [class="vlc"] workspace number 8
 assign [app_id="thunar"] workspace number 9
+assign [class="obs"] workspace number 10

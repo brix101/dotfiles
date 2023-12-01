@@ -8,3 +8,8 @@ echo "$UPDATES"
 # else
 # 	notify-send -a "openSUSE TumbleWeed Updates" "Up to date" "No packages need to be upgraded"
 # fi
+# if [[ $updates -gt 0 ]]; then
+#     echo "#$updates"
+# else
+#     echo ""
+# fi

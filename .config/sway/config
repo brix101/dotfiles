@@ -10,7 +10,7 @@ include $HOME/.config/sway/config.d/*
 # xwayland disable
 
 # Set the background image
-output * bg /home/brix/.config/sway/backgrounds/flatppuccin_4k_macchiato.png fill
+output * bg /home/brix/.config/sway/backgrounds/under_the_night_sky_by_bisbiswas_ddfk819-fullview.jpg fill
 
 
 
