@@ -1,0 +1,24 @@
+#
+# Status Bar:
+#
+# Read `man 5 sway-bar` for more information about this section.
+bar {
+    swaybar_command waybar
+}
+
+
+set $gap_space 3
+default_border pixel $gap_space
+default_floating_border pixel $gap_space
+# font pango:monospace 0
+
+# Remove title bar
+titlebar_padding 1
+titlebar_border_thickness 0
+
+client.focused "#babbf1" "#babbf1" "#e0def4" "#babbf1"
+client.unfocused "#494d64" "#494d64" "#e0def4" "#494d64"
+
+gaps inner 5
+
+
