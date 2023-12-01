@@ -4,7 +4,9 @@
 @define-color bg2 #494d64;
 
 * {
-  font-family: "JetBrains Mono Nerd Font", monospace;
+  font-family: "JetBrains Mono", "Symbols Nerd Font",
+    "Font Awesome 5 Brands Regular", "Arial", "Roboto", "Helvetica",
+    "sans-serif";
   font-size: 14px;
 }
 
@@ -87,6 +89,7 @@ button:hover {
 #pulseaudio,
 #wireplumber,
 #custom-media,
+#custom-pacman,
 #tray,
 #mode,
 #idle_inhibitor,
@@ -113,7 +116,8 @@ button:hover {
 }
 
 #clock {
-  background-color: #64727d;
+  color: #efb8cc;
+  /* background-color: #64727d; */
   margin-bottom: 3px;
 }
 
@@ -295,4 +299,8 @@ label:focus {
 
 #scratchpad.empty {
   background-color: transparent;
+}
+
+#custom-pacman {
+  color: #f5e0dc;
 }
