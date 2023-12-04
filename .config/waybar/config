@@ -9,18 +9,16 @@
         "custom/media",
     ],
     "modules-center": [
-        "clock"
     ],
     "modules-right": [
         "custom/pacman",
         "idle_inhibitor",
-        "pulseaudio", 
-        "backlight", 
-        "keyboard-state",
         "network",
         "tray",
+        "pulseaudio", 
         "custom/notification",
-        "upower"
+        "clock",
+        "upower",
     ],
     // Modules configuration
    "keyboard-state": {
@@ -76,13 +74,13 @@
         }
     },
     "tray": {
-         "icon-size": 21,
+        "reverse-direction": true,
+        "icon-size": 18,
         "spacing": 10
     },
     "clock": {
         "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
-        "format": " {:%H:%M:%S}",
-        "format-alt": " {:%a %b %d}",
+        "format": "{:%a %d %b %H:%M:%S}",
         "tooltip": true,
         "interval": 1
     },
@@ -113,15 +111,17 @@
         "format-ethernet": "",
         "tooltip-format": "{ifname} via {gwaddr}",
         "format-linked": "{ifname} (No IP) ",
-        "format-disconnected": "⚠",
-        "format-alt": "{ipaddr}"
+        //"format-disconnected": "⚠",
+        //"format-alt": "{ipaddr}"
     },
     "pulseaudio": {
         // "scroll-step": 1, // %, can be a float
-        "format": "{volume}% {icon} {format_source}",
+        // "format": "{volume}% {icon} {format_source}",
+        "format": "{volume}% {icon}",
         "format-bluetooth": "{volume}% {icon} {format_source}",
         "format-bluetooth-muted": " {icon} {format_source}",
-        "format-muted": " {format_source}",
+        // "format-muted": " {format_source}",
+        "format-muted": "0%  ",
         "format-source": "{volume}% ",
         "format-source-muted": "",
         "format-icons": {
@@ -135,6 +135,15 @@
         },
         "on-click": "pavucontrol"
     },
+    "custom/linux": {
+        "format": "<span font_family='FiraCode Nerd Font'>{}</span> ",
+        "exec": "~/.config/waybar/scripts/systemIcon.sh",
+        "interval": "once",
+        "tooltip": false,
+        "return-type": "string",
+        "on-click": "foot -e $SHELL -c 'neofetch --stdout --title \"System Information\" && read'",
+        "escape": true
+    },
     "custom/media": {
         "format": "{icon} {}",
         "return-type": "json",
@@ -144,11 +153,11 @@
             "default": "🎜"
         },
         "escape": true,
-        "exec": "$HOME/.config/waybar/mediaplayer.py 2> /dev/null" // Script in resources folder
-        // "exec": "$HOME/.config/waybar/mediaplayer.py --player spotify 2> /dev/null" // Filter player based on name
+        // "exec": "$HOME/.config/waybar/scripts/mediaplayer.py 2> /dev/null" // Script in resources folder
+        "exec": "$HOME/.config/waybar/scripts/mediaplayer.py --player spotify 2> /dev/null" // Filter player based on name
     },
     "custom/pacman": {
-      "format": " {}",
+      "format": " {}",
       "interval": 14400, // every hour
       "exec": "$HOME/.config/waybar/scripts/updates.sh", // # of updates
       "exec-if": "exit 0", // always run; consider advanced run conditions
@@ -158,6 +167,7 @@
     },
     "custom/notification": {
         "tooltip": false,
+        "icon-size": 18,
         "format": "{icon}",
         "format-icons": {
             "notification": "<span foreground='red'><sup></sup></span>",
