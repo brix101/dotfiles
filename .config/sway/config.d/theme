@@ -16,8 +16,22 @@ default_floating_border pixel $gap_space
 titlebar_padding 1
 titlebar_border_thickness 0
 
-client.focused "#babbf1" "#babbf1" "#e0def4" "#babbf1"
-client.unfocused "#494d64" "#494d64" "#e0def4" "#494d64"
+# Set colors
+set $bg #24273a
+set $fg #cad3f5
+set $br #8aadf4
+set $ia #181926
+set $ur #ed8796
+
+# class                 border  backgr. text    indicator child_border
+client.focused          $br     $br     $fg     $br       $br
+client.focused_inactive $bg     $bg     $fg     $br       $bg
+client.unfocused        $bg     $bg     $fg     $br       $bg
+# client.urgent           $ur     $ur     $fg     $bg       $ur #currently not implemented
+#client.placeholder     $br     $br     $fg     $bg       $br #currently not implemented
+client.background $bg
+
+#? indicator for new window
 
 gaps inner 5
 
