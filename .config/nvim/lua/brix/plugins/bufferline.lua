@@ -18,7 +18,7 @@ return {
 				},
 			},
 			diagnostics = "nvim_lsp",
-			-- mode = "tabs",
+			mode = "tabs",
 			-- separator_style = "slant",
 			modified_icon = "●",
 			show_close_icon = false,
