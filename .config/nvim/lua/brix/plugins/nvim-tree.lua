@@ -69,8 +69,8 @@ return {
 			-- 	},
 			-- },
 			filters = {
-				dotfiles = false,
-				custom = { ".DS_Store" },
+				custom = { ".DS_Store", ".git" },
+				exclude = { ".gitignore", ".env" },
 			},
 			-- git = {
 			-- 	ignore = false,
