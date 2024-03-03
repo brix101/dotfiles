@@ -60,20 +60,20 @@ return {
 					enable = true,
 				},
 			},
-			actions = {
-				open_file = {
-					window_picker = {
-						enable = false,
-					},
-					quit_on_open = false,
-				},
-			},
+			-- actions = {
+			-- 	open_file = {
+			-- 		window_picker = {
+			-- 			enable = false,
+			-- 		},
+			-- 		quit_on_open = false,
+			-- 	},
+			-- },
 			filters = {
 				custom = { ".DS_Store" },
 			},
-			git = {
-				ignore = false,
-			},
+			-- git = {
+			-- 	ignore = false,
+			-- },
 		})
 
 		-- set keymaps
