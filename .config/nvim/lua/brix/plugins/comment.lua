@@ -2,23 +2,17 @@ return {
 	"numToStr/Comment.nvim",
 	event = { "BufReadPre", "BufNewFile" },
 	dependencies = {
-		"JoosepAlviste/nvim-ts-context-commentstring",
-	},
-	config = function()
-		require("ts_context_commentstring").setup({
-			enable_autocmd = false,
-			languages = {
-				typescript = "// %s",
-			},
-		})
-
-		require("Comment").setup({
-			pre_hook = require("ts_context_commentstring.integrations.comment_nvim").create_pre_hook(),
+		{
+			"JoosepAlviste/nvim-ts-context-commentstring",
+			ft = { "typescriptreact" },
 			opts = {
-				-- ignores empty lines
-				ignore = "^$",
+				enable_autocmd = false,
 			},
-			lazy = false,
-		})
-	end,
+		},
+	},
+	opts = {
+		pre_hook = function(ctx)
+			return require("ts_context_commentstring.integrations.comment_nvim").create_pre_hook()(ctx)
+		end,
+	},
 }
