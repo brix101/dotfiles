@@ -24,6 +24,13 @@ alias v='nvim -w ~/.vimlog "$@"'
 alias vi='nvim -w ~/.vimlog "$@"'
 alias vim='nvim -w ~/.vimlog "$@"'
 
+alias mux='pgrep -vx tmux > /dev/null && \
+                tmux new -d -s terminal && \
+                tmux run-shell ~/.config/tmux/plugins/tmux-resurrect/scripts/restore.sh && \
+                tmux attach'
+                # tmux kill-session -t delete-me && \
+                # tmux attach || tmux attach'
+
 #########################################################################################################
 export PATH=~/.local/bin:$PATH
 
