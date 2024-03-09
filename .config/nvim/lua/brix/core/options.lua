@@ -35,8 +35,10 @@ opt.signcolumn = "yes" -- show sign column so that text doesn't shift
 -- backspace
 opt.backspace = "indent,eol,start" -- allow backspace on indent, end of line or insert mode start position
 
--- clipboard
-opt.clipboard:append("unnamedplus") -- use system clipboard as default register
+-- Sync clipboard between OS and Neovim.
+--  Remove this option if you want your OS clipboard to remain independent.
+--  See `:help 'clipboard'`
+opt.clipboard = "unnamedplus"
 
 -- split windows
 opt.splitright = true -- split vertical window to the right
@@ -55,3 +57,7 @@ opt.undofile = true
 opt.scrolloff = 8
 opt.colorcolumn = "80"
 vim.cmd("highlight ColorColumn ctermbg=darkblue")
+
+-- Set highlight on search, but clear on pressing <Esc> in normal mode
+vim.opt.hlsearch = true
+vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")

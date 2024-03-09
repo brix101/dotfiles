@@ -12,9 +12,6 @@ keymap.set("n", "<leader>en", vim.cmd.Ex)
 -- use jk to exit insert mode
 keymap.set("i", "jk", "<ESC>", { desc = "Exit insert mode with jk" })
 
--- clear search highlights
-keymap.set("n", "<leader>nh", ":nohl<CR>", { desc = "Clear search highlights" })
-
 keymap.set("n", "<leader>bo", "<cmd>BufferLineCloseOthers<CR>", { desc = "Close Other Buffers" }) --
 keymap.set("n", "<leader>bl", "<cmd>BufferLineCloseLeft<CR>", { desc = "Close Buffers To Left" }) --
 keymap.set("n", "<leader>br", "<cmd>BufferLineCloseRight<CR>", { desc = "Close Buffers To Right" }) --
