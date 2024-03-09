@@ -27,7 +27,6 @@ return {
 				"saadparwaiz1/cmp_luasnip",
 			},
 		},
-		{ "jose-elias-alvarez/null-ls.nvim" },
 		{ "nvimdev/lspsaga.nvim" },
 		{ "j-hui/fidget.nvim", tag = "legacy" },
 		-- Language specific
@@ -197,11 +196,6 @@ return {
 				register_fmt_autosave(client.name, bufnr)
 			end
 
-			if client.name == "null-ls" then
-				register_fmt_keymap(client.name, bufnr)
-				register_fmt_autosave(client.name, bufnr)
-			end
-
 			if client.name == "tsserver" then
 				-- opts.desc = "Rename file and update file imports"
 				vim.keymap.set("n", "<leader>oi", ":OrganizeImports<CR>", { buffer = bufnr, desc = "Organize imports" }) -- organize imports (not in youtube nvim video)
@@ -309,16 +303,6 @@ return {
 		require("rust-tools").setup({ server = rust_lsp })
 
 		lsp.setup()
-
-		-- Linter/Formatter registeration via null-ls
-		local null_ls = require("null-ls")
-		null_ls.setup({
-			sources = {
-				null_ls.builtins.formatting.stylua,
-				null_ls.builtins.formatting.prettier,
-				null_ls.builtins.diagnostics.eslint_d,
-			},
-		})
 
 		-- Override autocompletion in this section
 		-- for nvim-cmp

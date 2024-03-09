@@ -24,14 +24,11 @@ return {
 					"css",
 					"prisma",
 					"markdown",
-					"markdown_inline",
-					"graphql",
 					"bash",
 					"lua",
 					"vim",
 					"dockerfile",
 					"gitignore",
-					"query",
 				},
 
 				-- Install parsers synchronously (only applied to `ensure_installed`)
