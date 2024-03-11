@@ -28,7 +28,9 @@ return {
 			},
 		},
 		{ "nvimdev/lspsaga.nvim" },
-		{ "j-hui/fidget.nvim", tag = "legacy" },
+		-- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
+		-- { "j-hui/fidget.nvim", tag = "legacy" },
+	      	{ 'j-hui/fidget.nvim', opts = {} },
 		-- Language specific
 		{ "folke/neodev.nvim", lazy = false },
 		{ "jose-elias-alvarez/typescript.nvim", lazy = false },
@@ -58,7 +60,6 @@ return {
 			})
 		end
 
-		require("fidget").setup({})
 		require("lspsaga").setup({
 			ui = { border = "rounded" },
 			symbol_in_winbar = { enable = false },
