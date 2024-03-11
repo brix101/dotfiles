@@ -21,8 +21,6 @@ source /usr/share/doc/pkgfile/command-not-found.zsh
 
 # alias
 alias v='nvim -w ~/.vimlog "$@"'
-alias vi='nvim -w ~/.vimlog "$@"'
-alias vim='nvim -w ~/.vimlog "$@"'
 
 alias mux='pgrep -vx tmux > /dev/null && \
                 tmux new -d -s terminal && \
