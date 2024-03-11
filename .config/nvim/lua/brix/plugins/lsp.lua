@@ -152,7 +152,8 @@ return {
 			--"<Cmd>lua vim.lsp.buf.rename()<CR>",
 			--{ buffer = bufnr, desc = "LSP rename word" }
 			--)
-			vim.keymap.set("n", "<leader>rn", "<Cmd>Lspsaga rename<CR>", { buffer = bufnr, desc = "LSP rename word" })
+			-- vim.keymap.set("n", "<leader>rn", "<Cmd>Lspsaga rename<CR>", { buffer = bufnr, desc = "LSP rename word" })
+			vim.keymap.set("n", "<leader>rn", "<Cmd>Lspsaga lsp_rename mode=n<CR>", { buffer = bufnr, desc = "LSP rename word" })
 			--vim.keymap.set(
 			--"n",
 			--"<leader>dn",
