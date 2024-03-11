@@ -2,17 +2,12 @@ return {
 	"numToStr/Comment.nvim",
 	event = { "BufReadPre", "BufNewFile" },
 	dependencies = {
-		{
-			"JoosepAlviste/nvim-ts-context-commentstring",
-			ft = { "typescriptreact" },
-			opts = {
-				enable_autocmd = false,
-			},
-		},
+		"JoosepAlviste/nvim-ts-context-commentstring",
+		"nvim-treesitter/nvim-treesitter,
 	},
 	opts = {
-		pre_hook = function(ctx)
-			return require("ts_context_commentstring.integrations.comment_nvim").create_pre_hook()(ctx)
+		pre_hook = function()		
+        		return vim.bo.commentstring
 		end,
 	},
 }
