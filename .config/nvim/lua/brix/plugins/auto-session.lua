@@ -2,10 +2,16 @@ return {
 	"rmagatti/auto-session",
 	config = function()
 		local auto_session = require("auto-session")
+		local function restore_nvim_tree()
+			local nvim_tree = require('nvim-tree')
+			nvim_tree.change_dir(vim.fn.getcwd())
+			nvim_tree.refresh()
+		end
 
 		auto_session.setup({
 			auto_restore_enabled = true,
 			auto_session_suppress_dirs = { "~/", "~/Projects", "~/Downloads", "/" },
+			post_restore_cmds = {restore_nvim_tree}
 		})
 
 		local keymap = vim.keymap
