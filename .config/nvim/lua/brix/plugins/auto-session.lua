@@ -2,21 +2,14 @@ return {
 	"rmagatti/auto-session",
 	config = function()
 		local auto_session = require("auto-session")
-		local function restore_nvim_tree()
-			local nvim_tree = require('nvim-tree')
-			nvim_tree.change_dir(vim.fn.getcwd())
-			nvim_tree.refresh()
-		end
-
 		auto_session.setup({
 			auto_restore_enabled = true,
 			auto_session_suppress_dirs = { "~/", "~/Projects", "~/Downloads", "/" },
 			cwd_change_handling = {
-			    post_cwd_changed_hook = function() -- example refreshing the lualine status line _after_ the cwd changes
-			      require("lualine").refresh() -- refresh lualine so the new session name is displayed in the status bar
-			    end,
+				post_cwd_changed_hook = function() -- example refreshing the lualine status line _after_ the cwd changes
+					require("lualine").refresh() -- refresh lualine so the new session name is displayed in the status bar
+				end,
 			},
-			post_restore_cmds = {restore_nvim_tree}
 		})
 
 		local keymap = vim.keymap
