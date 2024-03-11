@@ -22,9 +22,9 @@ return {
 				},
 			},
 			pickers = {
-			   	oldfiles = {
-			      		cwd_only = true,
-			    	}
+				oldfiles = {
+					cwd_only = true,
+				},
 			},
 		})
 
