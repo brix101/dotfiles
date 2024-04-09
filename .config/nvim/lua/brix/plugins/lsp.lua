@@ -190,6 +190,14 @@ return {
 				"<Cmd>Lspsaga show_line_diagnostics<CR>",
 				{ buffer = bufnr, desc = "LSP show diagnostic under cursor" }
 			)
+			
+			vim.keymap.set(
+				"n",
+				"<leader>rs",
+				"<Cmd>LspRestart<CR>",
+				{ buffer = bufnr, desc = "Restart LSP" }
+			)
+			
 
 			-- Register formatting and autoformatting
 			-- based on lsp server
