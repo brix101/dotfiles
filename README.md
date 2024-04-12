@@ -1,10 +1,10 @@
-# Arch Linux with Sway and Neovim
+# Arch Linux with Sway
 
 Welcome to my Arch Linux setup featuring the Sway tiling window manager and Neovim text editor!
 
 ## Introduction
 
-This repository contains the configuration files and setup instructions for my personalized Arch Linux environment. With Sway, I enjoy a lightweight and efficient tiling window manager that utilizes the Wayland protocol, providing a modern and streamlined user experience. Neovim serves as my primary text editor, offering powerful features and extensibility, ideal for coding and general text editing tasks.
+This repository contains the configuration files and setup instructions for my personalized Arch Linux environment. With Sway, I enjoy a lightweight and efficient tiling window manager that utilizes the Wayland protocol, providing a modern and streamlined user experience.
 
 ## Features
 
@@ -20,7 +20,6 @@ Before proceeding, ensure you have the following installed:
 
 - Arch Linux (or an Arch-based distribution)
 - Sway (and its dependencies)
-- Neovim (and any desired plugins or dependencies)
 - Git (to clone this repository)
 
 ### Installation
