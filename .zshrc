@@ -23,11 +23,12 @@ source /usr/share/doc/pkgfile/command-not-found.zsh
 alias v='nvim -w ~/.vimlog "$@"'
 
 alias mux='pgrep -vx tmux > /dev/null && \
-                tmux new -d -s terminal && \
+                tmux new -d -s delete-me && \
                 tmux run-shell ~/.config/tmux/plugins/tmux-resurrect/scripts/restore.sh && \
-                tmux attach -t terminal'
-                # tmux kill-session -t delete-me && \
-                # tmux attach || tmux attach'
+                tmux kill-session -t delete-me && \
+                tmux attach || tmux attach'
+                # tmux attach -t terminal'
+                
 
 #########################################################################################################
 export PATH=~/.local/bin:$PATH
