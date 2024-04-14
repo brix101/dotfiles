@@ -23,7 +23,8 @@ assign [class="firefox"] -> 3
 assign [app_id="Alacritty" instance="^htop$"] -> 9
 assign [class="Google-chrome"] workspace number 3
 assign [class="Postman"] workspace number 4
-assign [class="discord"] workspace number 6
+assign [class="discord"] workspace number 5
+assign [app_id="libreoffice-writer"] workspace number 6
 assign [class="Spotify"] workspace number 7
 assign [class="vlc"] workspace number 8
 assign [app_id="thunar"] workspace number 9
