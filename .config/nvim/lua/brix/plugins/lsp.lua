@@ -30,7 +30,7 @@ return {
 		{ "nvimdev/lspsaga.nvim" },
 		-- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
 		-- { "j-hui/fidget.nvim", tag = "legacy" },
-	      	{ 'j-hui/fidget.nvim', opts = {} },
+		{ "j-hui/fidget.nvim", opts = {} },
 		-- Language specific
 		{ "folke/neodev.nvim", lazy = false },
 		{ "jose-elias-alvarez/typescript.nvim", lazy = false },
@@ -152,8 +152,8 @@ return {
 			--"<Cmd>lua vim.lsp.buf.rename()<CR>",
 			--{ buffer = bufnr, desc = "LSP rename word" }
 			--)
-			-- vim.keymap.set("n", "<leader>rn", "<Cmd>Lspsaga rename<CR>", { buffer = bufnr, desc = "LSP rename word" })
-			vim.keymap.set("n", "<leader>rn", "<Cmd>Lspsaga lsp_rename mode=n<CR>", { buffer = bufnr, desc = "LSP rename word" })
+			vim.keymap.set("n", "<leader>rn", "<Cmd>Lspsaga rename<CR>", { buffer = bufnr, desc = "LSP rename word" })
+			-- vim.keymap.set("n", "<leader>rn", "<Cmd>Lspsaga lsp_rename mode=n<CR>", { buffer = bufnr, desc = "LSP rename word" })
 			--vim.keymap.set(
 			--"n",
 			--"<leader>dn",
@@ -190,14 +190,8 @@ return {
 				"<Cmd>Lspsaga show_line_diagnostics<CR>",
 				{ buffer = bufnr, desc = "LSP show diagnostic under cursor" }
 			)
-			
-			vim.keymap.set(
-				"n",
-				"<leader>rs",
-				"<Cmd>LspRestart<CR>",
-				{ buffer = bufnr, desc = "Restart LSP" }
-			)
-			
+
+			vim.keymap.set("n", "<leader>rs", "<Cmd>LspRestart<CR>", { buffer = bufnr, desc = "Restart LSP" })
 
 			-- Register formatting and autoformatting
 			-- based on lsp server
