@@ -9,12 +9,18 @@ return {
 			branch = "v3.x",
 			lazy = false,
 		},
+		{ "nvimdev/lspsaga.nvim" },
 		{ "j-hui/fidget.nvim", opts = {} },
 		{ "folke/neodev.nvim", opts = {} },
 		{ "b0o/schemastore.nvim" },
 		{ "hrsh7th/cmp-nvim-lsp" },
 	},
 	config = function()
+		require("lspsaga").setup({
+			ui = { border = "rounded" },
+			symbol_in_winbar = { enable = false },
+		})
+
 		vim.api.nvim_create_autocmd("LspAttach", {
 			group = vim.api.nvim_create_augroup("kickstart-lsp-attach", { clear = true }),
 			callback = function(event)
@@ -58,7 +64,8 @@ return {
 
 				-- Execute a code action, usually your cursor needs to be on top of an error
 				-- or a suggestion from your LSP for this to activate.
-				map("<leader>ca", vim.lsp.buf.code_action, "[C]ode [A]ction")
+				-- map("<leader>ca", vim.lsp.buf.code_action, "[C]ode [A]ction")
+				map("<leader>ca", "<Cmd>Lspsaga code_action<CR>", "[C]ode [A]ction")
 
 				-- Opens a popup that displays documentation about the word under your cursor
 				--  See `:help K` for why this keymap.
@@ -67,6 +74,10 @@ return {
 				-- WARN: This is not Goto Definition, this is Goto Declaration.
 				--  For example, in C this would take you to the header.
 				map("gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
+
+				map("<leader>ds", "<Cmd>Lspsaga show_line_diagnostics<CR>", "LSP show diagnostic under cursor")
+				map("<leader>dn", "<Cmd>Lspsaga diagnostic_jump_next<CR>", "LSP go to next diagnostic")
+				map("<leader>dp", "<Cmd>Lspsaga diagnostic_jump_prev<CR>", "LSP go to previous diagnostic")
 
 				-- The following two autocommands are used to highlight references of the
 				-- word under your cursor when your cursor rests there for a little while.
