@@ -7,4 +7,5 @@ return {
 			vim.cmd.colorscheme("nightfly")
 		end,
 	},
+	{ "EdenEast/nightfox.nvim" },
 }

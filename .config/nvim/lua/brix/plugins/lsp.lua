@@ -1,381 +1,151 @@
 return {
 	"neovim/nvim-lspconfig",
+	event = { "BufReadPre", "BufNewFile" },
 	dependencies = {
-		-- Core
-		{
-			"williamboman/mason.nvim",
-			dependencies = { "WhoIsSethDaniel/mason-tool-installer.nvim" },
-			build = function()
-				pcall(vim.cmd, "MasonUpdate")
-			end,
-		},
+		{ "williamboman/mason-lspconfig.nvim" },
 		{
 			"VonHeikemen/lsp-zero.nvim",
-			branch = "v2.x",
+			branch = "v3.x",
 			lazy = false,
 		},
-		{
-			"hrsh7th/nvim-cmp",
-			dependencies = {
-				"simrat39/rust-tools.nvim",
-				"roobert/tailwindcss-colorizer-cmp.nvim",
-				"hrsh7th/cmp-nvim-lsp",
-				"hrsh7th/cmp-path",
-				"hrsh7th/cmp-buffer",
-				"onsails/lspkind-nvim",
-				"L3MON4D3/LuaSnip",
-				"saadparwaiz1/cmp_luasnip",
-			},
-		},
-		{ "nvimdev/lspsaga.nvim" },
-		-- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
-		-- { "j-hui/fidget.nvim", tag = "legacy" },
-		{ "j-hui/fidget.nvim", opts = {} },
-		-- Language specific
-		{ "folke/neodev.nvim", lazy = false },
-		{ "jose-elias-alvarez/typescript.nvim", lazy = false },
-		{ "ray-x/go.nvim", lazy = false, dependencies = { "ray-x/guihua.lua" } },
+		{ "folke/neodev.nvim", opts = {} },
+		{ "b0o/schemastore.nvim" },
+		{ "hrsh7th/cmp-nvim-lsp" },
 	},
 	config = function()
-		-- Setup functions and options to be used further down
-		local format_group = vim.api.nvim_create_augroup("LspFormatGroup", {})
-		local format_opts = { async = false, timeout_ms = 2500 }
+		vim.api.nvim_create_autocmd("LspAttach", {
+			group = vim.api.nvim_create_augroup("kickstart-lsp-attach", { clear = true }),
+			callback = function(event)
+				-- NOTE: Remember that Lua is a real programming language, and as such it is possible
+				-- to define small helper and utility functions so you don't have to repeat yourself.
+				--
+				-- In this case, we create a function that lets us more easily define mappings specific
+				-- for LSP related items. It sets the mode, buffer and description for us each time.
+				local map = function(keys, func, desc)
+					vim.keymap.set("n", keys, func, { buffer = event.buf, desc = "LSP: " .. desc })
+				end
 
-		local function register_fmt_keymap(name, bufnr)
-			local fmt_keymap = "<leader>fm"
-			vim.keymap.set("n", fmt_keymap, function()
-				vim.lsp.buf.format(vim.tbl_extend("force", format_opts, { name = name, bufnr = bufnr }))
-			end, { desc = "Format current buffer [LSP]", buffer = bufnr })
-		end
+				-- Jump to the definition of the word under your cursor.
+				--  This is where a variable was first declared, or where a function is defined, etc.
+				--  To jump back, press <C-t>.
+				map("gd", require("telescope.builtin").lsp_definitions, "[G]oto [D]efinition")
 
-		local function register_fmt_autosave(name, bufnr)
-			vim.api.nvim_clear_autocmds({ group = format_group, buffer = bufnr })
-			vim.api.nvim_create_autocmd("BufWritePre", {
-				group = format_group,
-				buffer = bufnr,
-				callback = function()
-					vim.lsp.buf.format(vim.tbl_extend("force", format_opts, { name = name, bufnr = bufnr }))
-				end,
-				desc = "Format on save [LSP]",
-			})
-		end
+				-- Find references for the word under your cursor.
+				map("gr", require("telescope.builtin").lsp_references, "[G]oto [R]eferences")
 
-		require("lspsaga").setup({
-			ui = { border = "rounded" },
-			symbol_in_winbar = { enable = false },
+				-- Jump to the implementation of the word under your cursor.
+				--  Useful when your language has ways of declaring types without an actual implementation.
+				map("gI", require("telescope.builtin").lsp_implementations, "[G]oto [I]mplementation")
+
+				-- Jump to the type of the word under your cursor.
+				--  Useful when you're not sure what type a variable is and you want to see
+				--  the definition of its *type*, not where it was *defined*.
+				map("<leader>D", require("telescope.builtin").lsp_type_definitions, "Type [D]efinition")
+
+				-- Fuzzy find all the symbols in your current document.
+				--  Symbols are things like variables, functions, types, etc.
+				map("<leader>ds", require("telescope.builtin").lsp_document_symbols, "[D]ocument [S]ymbols")
+
+				-- Fuzzy find all the symbols in your current workspace.
+				--  Similar to document symbols, except searches over your entire project.
+				map("<leader>ws", require("telescope.builtin").lsp_dynamic_workspace_symbols, "[W]orkspace [S]ymbols")
+
+				-- Rename the variable under your cursor.
+				--  Most Language Servers support renaming across files, etc.
+				map("<leader>rn", vim.lsp.buf.rename, "[R]e[n]ame")
+
+				-- Execute a code action, usually your cursor needs to be on top of an error
+				-- or a suggestion from your LSP for this to activate.
+				map("<leader>ca", vim.lsp.buf.code_action, "[C]ode [A]ction")
+
+				-- Opens a popup that displays documentation about the word under your cursor
+				--  See `:help K` for why this keymap.
+				map("K", vim.lsp.buf.hover, "Hover Documentation")
+
+				-- WARN: This is not Goto Definition, this is Goto Declaration.
+				--  For example, in C this would take you to the header.
+				map("gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
+
+				-- The following two autocommands are used to highlight references of the
+				-- word under your cursor when your cursor rests there for a little while.
+				--    See `:help CursorHold` for information about when this is executed
+				--
+				-- When you move your cursor, the highlights will be cleared (the second autocommand).
+				local client = vim.lsp.get_client_by_id(event.data.client_id)
+				if client and client.server_capabilities.documentHighlightProvider then
+					local highlight_augroup = vim.api.nvim_create_augroup("kickstart-lsp-highlight", { clear = false })
+					vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
+						buffer = event.buf,
+						group = highlight_augroup,
+						callback = vim.lsp.buf.document_highlight,
+					})
+
+					vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI" }, {
+						buffer = event.buf,
+						group = highlight_augroup,
+						callback = vim.lsp.buf.clear_references,
+					})
+				end
+
+				-- The following autocommand is used to enable inlay hints in your
+				-- code, if the language server you are using supports them
+				--
+				-- This may be unwanted, since they displace some of your code
+				if client and client.server_capabilities.inlayHintProvider and vim.lsp.inlay_hint then
+					map("<leader>th", function()
+						vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
+					end, "[T]oggle Inlay [H]ints")
+				end
+			end,
 		})
 
-		local function on_attach(client, bufnr)
-			--vim.keymap.set(
-			--"n",
-			--"gd",
-			--"<Cmd>lua vim.lsp.buf.definition()<CR>",
-			--{ buffer = bufnr, desc = "LSP go to definition" }
-			--)
-			vim.keymap.set(
-				"n",
-				"gd",
-				"<Cmd>Lspsaga goto_definition<CR>",
-				{ buffer = bufnr, desc = "LSP go to definition" }
-			)
-			--vim.keymap.set(
-			--"n",
-			--"gt",
-			--"<Cmd>lua vim.lsp.buf.type_definition()<CR>",
-			--{ buffer = bufnr, desc = "LSP go to type definition" }
-			--)
-			vim.keymap.set(
-				"n",
-				"gt",
-				"<Cmd>Lspsaga peek_type_definition<CR>",
-				{ buffer = bufnr, desc = "LSP go to type definition" }
-			)
-			vim.keymap.set(
-				"n",
-				"gD",
-				"<Cmd>lua vim.lsp.buf.declaration()<CR>",
-				{ buffer = bufnr, desc = "LSP go to declaration" }
-			)
-			vim.keymap.set(
-				"n",
-				"gi",
-				"<Cmd>lua vim.lsp.buf.implementation()<CR>",
-				{ buffer = bufnr, desc = "LSP go to implementation" }
-			)
-			--vim.keymap.set(
-			--"n",
-			--"gw",
-			--"<Cmd>lua vim.lsp.buf.document_symbol()<CR>",
-			--{ buffer = bufnr, desc = "LSP document symbols" }
-			--)
-			vim.keymap.set("n", "gw", "<Cmd>Lspsaga lsp_finder<CR>", { buffer = bufnr, desc = "LSP document symbols" })
-			vim.keymap.set(
-				"n",
-				"gW",
-				"<Cmd>lua vim.lsp.buf.workspace_symbol()<CR>",
-				{ buffer = bufnr, desc = "LSP Workspace symbols" }
-			)
-			vim.keymap.set(
-				"n",
-				"gr",
-				"<Cmd>lua vim.lsp.buf.references()<CR>",
-				{ buffer = bufnr, desc = "LSP show references" }
-			)
-			--vim.keymap.set(
-			--"n",
-			--"K",
-			--"<Cmd>lua vim.lsp.buf.hover()<CR>",
-			--{ buffer = bufnr, desc = "LSP hover documentation" }
-			--)
-			vim.keymap.set("n", "K", "<Cmd>Lspsaga hover_doc<CR>", { buffer = bufnr, desc = "LSP hover documentation" })
-			vim.keymap.set(
-				"n",
-				"<c-k>",
-				"<Cmd>lua vim.lsp.buf.signature_help()<CR>",
-				{ buffer = bufnr, desc = "LSP signature help" }
-			)
-			--vim.keymap.set(
-			--"n",
-			--"<leader>ca",
-			--"<Cmd>lua vim.lsp.buf.code_action()<CR>",
-			--{ buffer = bufnr, desc = "LSP show code actions" }
-			--)
-			vim.keymap.set(
-				"n",
-				"<leader>ca",
-				"<Cmd>Lspsaga code_action<CR>",
-				{ buffer = bufnr, desc = "LSP show code actions" }
-			)
-			--vim.keymap.set(
-			--"n",
-			--"<leader>rn",
-			--"<Cmd>lua vim.lsp.buf.rename()<CR>",
-			--{ buffer = bufnr, desc = "LSP rename word" }
-			--)
-			vim.keymap.set("n", "<leader>rn", "<Cmd>Lspsaga rename<CR>", { buffer = bufnr, desc = "LSP rename word" })
-			-- vim.keymap.set("n", "<leader>rn", "<Cmd>Lspsaga lsp_rename mode=n<CR>", { buffer = bufnr, desc = "LSP rename word" })
-			--vim.keymap.set(
-			--"n",
-			--"<leader>dn",
-			--'<Cmd>lua vim.diagnostic.goto_next({ float = { border = "rounded" } })<CR>',
-			--{ buffer = bufnr, desc = "LSP go to next diagnostic" }
-			--)
-			vim.keymap.set(
-				"n",
-				"<leader>dn",
-				"<Cmd>Lspsaga diagnostic_jump_next<CR>",
-				{ buffer = bufnr, desc = "LSP go to next diagnostic" }
-			)
-			--vim.keymap.set(
-			--"n",
-			--"<leader>dp",
-			--'<Cmd>lua vim.diagnostic.goto_prev({ float = { border = "rounded" } })<CR>',
-			--{ buffer = bufnr, desc = "LSP go to previous diagnostic" }
-			--)
-			vim.keymap.set(
-				"n",
-				"<leader>dp",
-				"<Cmd>Lspsaga diagnostic_jump_prev<CR>",
-				{ buffer = bufnr, desc = "LSP go to previous diagnostic" }
-			)
-			--vim.keymap.set(
-			--"n",
-			--"<leader>ds",
-			--'<Cmd>lua vim.diagnostic.open_float({ border = "rounded" })<CR>',
-			--{ buffer = bufnr, desc = "LSP show diagnostic under cursor" }
-			--)
-			vim.keymap.set(
-				"n",
-				"<leader>ds",
-				"<Cmd>Lspsaga show_line_diagnostics<CR>",
-				{ buffer = bufnr, desc = "LSP show diagnostic under cursor" }
-			)
-
-			vim.keymap.set("n", "<leader>rs", "<Cmd>LspRestart<CR>", { buffer = bufnr, desc = "Restart LSP" })
-
-			-- Register formatting and autoformatting
-			-- based on lsp server
-			if client.name == "gopls" then
-				register_fmt_keymap(client.name, bufnr)
-				register_fmt_autosave(client.name, bufnr)
-			end
-
-			if client.name == "tsserver" then
-				-- opts.desc = "Rename file and update file imports"
-				vim.keymap.set("n", "<leader>oi", ":OrganizeImports<CR>", { buffer = bufnr, desc = "Organize imports" }) -- organize imports (not in youtube nvim video)
-
-				-- opts.desc = "Remove unused imports"
-				-- keymap.set("n", "<leader>ru", ":TypescriptRemoveUnused<CR>", opts) -- remove unused variables (not in youtube nvim video)
-			end
-		end
+		vim.api.nvim_create_autocmd("LspDetach", {
+			group = vim.api.nvim_create_augroup("kickstart-lsp-detach", { clear = true }),
+			callback = function(event)
+				vim.lsp.buf.clear_references()
+				vim.api.nvim_clear_autocmds({ group = "kickstart-lsp-highlight", buffer = event.buf })
+			end,
+		})
 
 		local capabilities = vim.lsp.protocol.make_client_capabilities()
-		capabilities.textDocument.completion.completionItem.snippetSupport = true
-		capabilities.textDocument.completion.completionItem.preselectSupport = true
-		capabilities.textDocument.completion.completionItem.insertReplaceSupport = true
-		capabilities.textDocument.completion.completionItem.resolveSupport = {
-			properties = {
-				"documentation",
-				"detail",
-				"additionalTextEdits",
-			},
-		}
 
-		vim.diagnostic.config({
-			virtual_text = {
-				severity = { vim.diagnostic.severity.ERROR, vim.diagnostic.severity.WARN },
-			},
-		})
+		capabilities = vim.tbl_deep_extend("force", capabilities, require("cmp_nvim_lsp").default_capabilities())
 
-		-- List out the lsp servers, linters, formatters
-		-- for mason
-		local tools = {
-			"lua-language-server",
-			"typescript-language-server",
-			"tailwindcss-language-server",
-			"html-lsp",
-			"css-lsp",
-			"json-lsp",
-			"gopls",
-			"python-lsp-server",
-			"black",
-			"stylua",
-			"prettier",
-			"eslint_d",
-			"rust-analyzer",
-		}
+		local servers = require("brix.plugins.lsp.servers")
 
-		local function organize_imports()
-			local params = {
-				command = "_typescript.organizeImports",
-				arguments = { vim.api.nvim_buf_get_name(0) },
-				title = "",
-			}
-			vim.lsp.buf.execute_command(params)
-		end
-
-		require("mason-tool-installer").setup({ ensure_installed = tools })
-
-		-- Register your lsp servers
-		-- if they depend on an extra plugin (eg go.nvim)
-		-- then call those in this section
-		require("neodev").setup({
-			-- add any options here, or leave empty to use the default settings
-		})
-
-		local lsp = require("lsp-zero").preset("recommended")
-		local rust_lsp = lsp.build_options("rust_analyzer", {})
-		lsp.on_attach(on_attach)
-		lsp.set_server_config({
-			on_init = function(client)
-				client.server_capabilities.semanticTokensProvider = nil
-			end,
-		})
-
-		local lspconfig = require("lspconfig")
-		lspconfig.lua_ls.setup(lsp.nvim_lua_ls())
-
-		lspconfig.jsonls.setup({})
-		lspconfig.html.setup({})
-		lspconfig.cssls.setup({})
-		lspconfig.tailwindcss.setup({})
-		require("typescript").setup({
-			server = {
-				on_attach = on_attach,
-				commands = {
-					OrganizeImports = {
-						organize_imports,
-						description = "Organize Imports",
-					},
-				},
-			},
-		})
-
-		require("go").setup({
-			lsp_cfg = true,
-			lsp_on_attach = on_attach,
-		})
-		local format_sync_grp = vim.api.nvim_create_augroup("GoImport", {})
-		vim.api.nvim_create_autocmd("BufWritePre", {
-			pattern = "*.go",
-			callback = function()
-				require("go.format").goimport()
-			end,
-			group = format_sync_grp,
-		})
-
-		require("rust-tools").setup({ server = rust_lsp })
-
-		lsp.setup()
-
-		-- Override autocompletion in this section
-		-- for nvim-cmp
-		local has_words_before = function()
-			if vim.api.nvim_buf_get_option(0, "buftype") == "prompt" then
-				return false
-			end
-			local line, col = unpack(vim.api.nvim_win_get_cursor(0))
-			return col ~= 0 and vim.api.nvim_buf_get_text(0, line - 1, 0, line - 1, col, {})[1]:match("^%s*$") == nil
-		end
-
-		local cmp = require("cmp")
-		cmp.setup({
-			performance = { debounce = 500 },
-			mapping = {
-				["<C-b>"] = cmp.mapping(cmp.mapping.scroll_docs(-4), { "i", "c" }),
-				["<C-f>"] = cmp.mapping(cmp.mapping.scroll_docs(4), { "i", "c" }),
-				["<C-space>"] = cmp.mapping(cmp.mapping.complete(), { "i", "c" }),
-				["<C-y>"] = cmp.config.disable, -- Specify `cmp.config.disable` if you want to remove the default `<C-y>` mapping.
-				["<C-e>"] = cmp.mapping({
-					i = cmp.mapping.abort(),
-					c = cmp.mapping.close(),
-				}),
-				["<CR>"] = cmp.mapping.confirm({ select = false }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
-				["<C-k>"] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select }),
-				["<C-j>"] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select }),
-				["<Tab>"] = vim.schedule_wrap(function(fallback)
-					if cmp.visible() and has_words_before() then
-						cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
-					else
-						fallback()
-					end
-				end),
-				["<S-Tab>"] = vim.schedule_wrap(function(fallback)
-					if cmp.visible() and has_words_before() then
-						cmp.select_prev_item({ behavior = cmp.SelectBehavior.Select })
-					else
-						fallback()
-					end
-				end),
-			},
-			window = {
-				completion = cmp.config.window.bordered(),
-				documentation = cmp.config.window.bordered(),
-			},
-			formatting = {
-				format = function(entry, item)
-					require("lspkind").cmp_format({
-						mode = "symbol_text",
-						menu = {
-							buffer = "[BUF]",
-							nvim_lsp = "[LSP]",
-							luasnip = "[SNIP]",
-							path = "[PATH]",
-							crates = "[CRATES]",
-						},
-					})(entry, item)
-					return require("tailwindcss-colorizer-cmp").formatter(entry, item)
+		require("mason-lspconfig").setup({
+			handlers = {
+				function(server_name)
+					local server = servers[server_name] or {}
+					-- This handles overriding only values explicitly passed
+					-- by the server configuration above. Useful when disabling
+					-- certain features of an LSP (for example, turning off formatting for tsserver)
+					server.capabilities = vim.tbl_deep_extend("force", {}, capabilities, server.capabilities or {})
+					require("lspconfig")[server_name].setup(server)
 				end,
 			},
 		})
 
-		-- -- For copilot
-		-- cmp.event:on("menu_opened", function()
-		-- 	vim.b.copilot_suggestion_hidden = true
-		-- end)
-		--
-		-- cmp.event:on("menu_closed", function()
-		-- 	vim.b.copilot_suggestion_hidden = false
-		-- end)
+		vim.diagnostic.config({
+			title = false,
+			underline = true,
+			virtual_text = true,
+			signs = true,
+			update_in_insert = false,
+			severity_sort = true,
+			float = {
+				source = "always",
+				style = "minimal",
+				border = "rounded",
+				header = "",
+				prefix = "",
+			},
+		})
+
+		local signs = { Error = " ", Warn = " ", Hint = "󰠠 ", Info = " " }
+		for type, icon in pairs(signs) do
+			local hl = "DiagnosticSign" .. type
+			vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
+		end
 	end,
 }
