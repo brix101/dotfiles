@@ -13,7 +13,6 @@ vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
 	{ import = "brix.plugins" },
-	-- { import = "brix.plugins.lsp" },
 }, {
 	install = {
 		colorscheme = { "nightfly" },
