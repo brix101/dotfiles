@@ -28,6 +28,13 @@ return {
 					},
 				},
 			})
+
+			vim.keymap.set(
+				"n",
+				"<leader>oi",
+				":TSToolsOrganizeImports<CR>",
+				{ desc = "TS sorts and removes unused imports" }
+			)
 		end,
 	},
 }

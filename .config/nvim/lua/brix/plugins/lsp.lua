@@ -2,12 +2,14 @@ return {
 	"neovim/nvim-lspconfig",
 	event = { "BufReadPre", "BufNewFile" },
 	dependencies = {
+		{ "williamboman/mason.nvim", config = true }, -- NOTE: Must be loaded before dependants
 		{ "williamboman/mason-lspconfig.nvim" },
 		{
 			"VonHeikemen/lsp-zero.nvim",
 			branch = "v3.x",
 			lazy = false,
 		},
+		{ "j-hui/fidget.nvim", opts = {} },
 		{ "folke/neodev.nvim", opts = {} },
 		{ "b0o/schemastore.nvim" },
 		{ "hrsh7th/cmp-nvim-lsp" },
