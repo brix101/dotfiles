@@ -21,7 +21,7 @@ return {
 			},
 		},
 	},
-	tsserver = {},
+	-- tsserver = {},
 	gopls = {},
 	tailwindcss = {},
 	html = {},

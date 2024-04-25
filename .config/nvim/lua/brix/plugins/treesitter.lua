@@ -7,79 +7,68 @@ return {
 			"nvim-treesitter/nvim-treesitter-textobjects",
 			"windwp/nvim-ts-autotag",
 		},
-		config = function()
-			-- import nvim-treesitter plugin
-			local treesitter = require("nvim-treesitter.configs")
-
-			-- configure treesitter
-			treesitter.setup({
-				-- A list of parser names, or "all" (the five listed parsers should always be installed)
-				ensure_installed = {
-					"typescript",
-					"tsx",
-					"javascript",
-					"lua",
-					"vimdoc",
-					"go",
-					"python",
-					"json",
-					"html",
-					"css",
-					"prisma",
-					"markdown",
-					"markdown_inline",
-					"vim",
-					"dockerfile",
-					"gitignore",
+		opts = {
+			ensure_installed = {
+				"bash",
+				"html",
+				"lua",
+				"luadoc",
+				"vimdoc",
+				"typescript",
+				"tsx",
+				"javascript",
+				"lua",
+				"vimdoc",
+				"go",
+				"python",
+				"json",
+				"css",
+				"prisma",
+				"markdown",
+				"markdown_inline",
+				"vim",
+				"dockerfile",
+				"gitignore",
+			},
+			-- Autoinstall languages that are not installed
+			auto_install = true,
+			sync_install = false,
+			highlight = {
+				enable = true,
+				-- Some languages depend on vim's regex highlighting system (such as Ruby) for indent rules.
+				--  If you are experiencing weird indenting issues, add the language to
+				--  the list of additional_vim_regex_highlighting and disabled languages for indent.
+				additional_vim_regex_highlighting = { "ruby" },
+			},
+			indent = { enable = true, disable = { "ruby" } },
+			-- enable autotagging (w/ nvim-ts-autotag plugin)
+			autotag = {
+				enable = true,
+			},
+			incremental_selection = {
+				enable = true,
+				keymaps = {
+					init_selection = "<C-space>",
+					node_incremental = "<C-space>",
+					scope_incremental = false,
+					node_decremental = "<bs>",
 				},
+			},
+		},
+		config = function(_, opts)
+			-- [[ Configure Treesitter ]] See `:help nvim-treesitter`
 
-				-- Install parsers synchronously (only applied to `ensure_installed`)
-				sync_install = false,
+			-- Prefer git instead of curl in order to improve connectivity in some environments
+			require("nvim-treesitter.install").prefer_git = true
+			---@diagnostic disable-next-line: missing-fields
+			require("nvim-treesitter.configs").setup(opts)
 
-				-- Automatically install missing parsers when entering buffer
-				-- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
-				auto_install = true,
-
-				-- enable syntax highlighting
-				highlight = {
-					enable = true,
-					use_languagetree = true,
-
-					-- NOTE: these are the names of the parsers and not the filetype. (for example if you want to
-					-- disable highlighting for the `tex` filetype, you need to include `latex` in this list as this is
-					-- the name of the parser)
-					disable = function(_, buf)
-						local max_filesize = 100 * 1024 -- 100 KB
-						local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
-						if ok and stats and stats.size > max_filesize then
-							return true
-						end
-					end,
-
-					-- Setting this to true will run `:h syntax` and tree-sitter at the same time.
-					-- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
-					-- Using this option may slow down your editor, and you may see some duplicate highlights.
-					-- Instead of true it can also be a list of languages
-					additional_vim_regex_highlighting = false,
-				},
-				-- enable indentation
-				indent = {
-					enable = true,
-				},
-				-- enable autotagging (w/ nvim-ts-autotag plugin)
-				autotag = {
-					enable = true,
-				},
-				incremental_selection = {
-					enable = true,
-					keymaps = {
-						init_selection = "<C-space>",
-						node_incremental = "<C-space>",
-						scope_incremental = false,
-						node_decremental = "<bs>",
-					},
-				},
-			})
+			-- There are additional nvim-treesitter modules that you can use to interact
+			-- with nvim-treesitter. You should go explore a few and see what interests you:
+			--
+			--    - Incremental selection: Included, see `:help nvim-treesitter-incremental-selection-mod`
+			--    - Show your current context: https://github.com/nvim-treesitter/nvim-treesitter-context
+			--    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
 		end,
 	},
 }

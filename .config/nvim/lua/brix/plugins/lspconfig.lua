@@ -70,7 +70,8 @@ return {
 
 				-- Opens a popup that displays documentation about the word under your cursor
 				--  See `:help K` for why this keymap.
-				map("K", vim.lsp.buf.hover, "Hover Documentation")
+				-- map("K", vim.lsp.buf.hover, "Hover Documentation")
+				map("K", "<Cmd>Lspsaga hover_doc<CR>", "Hover Documentation")
 
 				-- WARN: This is not Goto Definition, this is Goto Declaration.
 				--  For example, in C this would take you to the header.
@@ -85,6 +86,7 @@ return {
 					"Open diagnostic [Q]uickfix list"
 				)
 
+				map("<leader>rs", "<Cmd>LspRestart<CR>", "Restart LSP")
 				-- The following two autocommands are used to highlight references of the
 				-- word under your cursor when your cursor rests there for a little while.
 				--    See `:help CursorHold` for information about when this is executed
