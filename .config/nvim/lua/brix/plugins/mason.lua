@@ -21,6 +21,7 @@ return {
 			"python-lsp-server",
 		}
 		local formatters = {
+			"prettierd",
 			"prettier", -- prettier formatter
 			"stylua", -- lua formatter
 			"isort", -- python formatter
