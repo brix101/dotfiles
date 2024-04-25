@@ -17,8 +17,8 @@ return {
 	},
 	config = function()
 		require("lspsaga").setup({
-			ui = { border = "rounded" },
-			symbol_in_winbar = { enable = false },
+			-- symbol_in_winbar = { enable = false },
+			rename = { in_select = false, auto_save = true },
 		})
 
 		vim.api.nvim_create_autocmd("LspAttach", {
@@ -60,7 +60,8 @@ return {
 
 				-- Rename the variable under your cursor.
 				--  Most Language Servers support renaming across files, etc.
-				map("<leader>rn", vim.lsp.buf.rename, "[R]e[n]ame")
+				-- map("<leader>rn", vim.lsp.buf.rename, "[R]e[n]ame")
+				map("<leader>rn", "<Cmd>Lspsaga rename<CR>", "[R]e[n]ame")
 
 				-- Execute a code action, usually your cursor needs to be on top of an error
 				-- or a suggestion from your LSP for this to activate.
@@ -75,9 +76,14 @@ return {
 				--  For example, in C this would take you to the header.
 				map("gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
 
-				map("<leader>ds", "<Cmd>Lspsaga show_line_diagnostics<CR>", "LSP show diagnostic under cursor")
-				map("<leader>dn", "<Cmd>Lspsaga diagnostic_jump_next<CR>", "LSP go to next diagnostic")
-				map("<leader>dp", "<Cmd>Lspsaga diagnostic_jump_prev<CR>", "LSP go to previous diagnostic")
+				map("]d", "<Cmd>Lspsaga diagnostic_jump_next<CR>", "Go to [N]ext diagnostic")
+				map("[d", "<Cmd>Lspsaga diagnostic_jump_prev<CR>", "Go to [P]revious diagnostic")
+				map("<leader>e", "<Cmd>Lspsaga show_line_diagnostics<CR>", "Show diagnostic [E]rror messages")
+				map(
+					"<leader>q",
+					"<Cmd>Lspsaga show_workspace_diagnostics ++float<CR>",
+					"Open diagnostic [Q]uickfix list"
+				)
 
 				-- The following two autocommands are used to highlight references of the
 				-- word under your cursor when your cursor rests there for a little while.
