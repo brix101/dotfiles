@@ -27,16 +27,6 @@ return {
 						-- autoImportFileExcludePatterns = { "node_modules/*", ".git/*" },
 					},
 				},
-				on_attach = function(client, _)
-					if client.name == "typescript-tools" then
-						vim.keymap.set(
-							"n",
-							"<leader>oi",
-							":TSToolsOrganizeImports<CR>",
-							{ desc = "TS sorts and removes unused imports" }
-						)
-					end
-				end,
 			})
 		end,
 	},
