@@ -16,10 +16,12 @@ return {
 		})
 		-- You can add other tools here that you want Mason to install
 		-- for you, so that they are available from within Neovim.
-		local servers = require("brix.plugins.lsp.servers")
-		local lsps = {
+		local lsp_servers = require("brix.plugins.lsp.servers")
+
+		local servers = {
 			"python-lsp-server",
 		}
+
 		local formatters = {
 			"prettierd",
 			"prettier", -- prettier formatter
@@ -27,13 +29,14 @@ return {
 			"isort", -- python formatter
 			"black", -- python formatter
 		}
+
 		local linters = {
 			"pylint",
 			"eslint_d",
 		}
 
-		local ensure_installed = vim.tbl_keys(servers or {})
-		vim.list_extend(ensure_installed, lsps)
+		local ensure_installed = vim.tbl_keys(lsp_servers or {})
+		vim.list_extend(ensure_installed, servers)
 		vim.list_extend(ensure_installed, formatters)
 		vim.list_extend(ensure_installed, linters)
 
