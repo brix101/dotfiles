@@ -10,6 +10,7 @@ return {
 	config = function()
 		local telescope = require("telescope")
 		local actions = require("telescope.actions")
+		local builtin = require("telescope.builtin")
 
 		telescope.setup({
 			defaults = {
@@ -26,6 +27,19 @@ return {
 				oldfiles = {
 					cwd_only = true,
 				},
+				find_files = {
+					hidden = true,
+				},
+				live_grep = {
+					additional_args = function()
+						return { "--hidden", "--glob", "!**/.git/*" }
+					end,
+				},
+				grep_string = {
+					additional_args = function()
+						return { "--hidden", "--glob", "!**/.git/*" }
+					end,
+				},
 			},
 			extensions = {
 				["ui-select"] = {
@@ -38,17 +52,15 @@ return {
 		telescope.load_extension("ui-select")
 
 		-- set keymaps
-		local keymap = vim.keymap -- for conciseness
+		local map = function(keys, func, desc)
+			vim.keymap.set("n", keys, func, { desc = "Telescope: " .. desc })
+		end
 
-		keymap.set("n", "<leader>ff", "<cmd>Telescope find_files<cr>", { desc = "Fuzzy find files in cwd" })
-		keymap.set(
-			"n",
-			"<leader>fa",
-			"<cmd>Telescope find_files hidden=true<cr>",
-			{ desc = "Find files including hidden files" }
-		)
-		keymap.set("n", "<leader>fr", "<cmd>Telescope oldfiles<cr>", { desc = "Fuzzy find recent files" })
-		keymap.set("n", "<leader>fs", "<cmd>Telescope live_grep<cr>", { desc = "Find string in cwd" })
-		keymap.set("n", "<leader>fc", "<cmd>Telescope grep_string<cr>", { desc = "Find string under cursor in cwd" })
+		map("<leader>fa", "<cmd>Telescope find_files hidden=true<cr>", "[F]ind [A]ll files")
+		map("<leader>ff", builtin.find_files, "[F]ind [F]iles")
+		map("<leader>fr", builtin.oldfiles, '[F]ind Recent Files ("." for repeat)')
+		map("<leader>fs", builtin.live_grep, "[F]ind by [G]rep")
+		map("<leader>fw", builtin.grep_string, "[F]ind [W]ord")
+		map("<leader>fb", builtin.buffers, "[F]ind existing buffers")
 	end,
 }
