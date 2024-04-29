@@ -18,7 +18,10 @@ return {
 	config = function()
 		require("lspsaga").setup({
 			-- symbol_in_winbar = { enable = false },
-			rename = { in_select = false, auto_save = true },
+			rename = {
+				-- in_select = false,
+				auto_save = true,
+			},
 		})
 
 		vim.api.nvim_create_autocmd("LspAttach", {
