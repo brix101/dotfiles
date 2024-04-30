@@ -19,9 +19,10 @@ for_window [app_id="thunar" title="Confirm to replace files"] floating enable
 for_window [app_id="foot" title="Update Pacman"] floating enable
 
 
-assign [class="firefox"] -> 3
-assign [app_id="Alacritty" instance="^htop$"] -> 9
-assign [class="Google-chrome"] workspace number 3
+# assign [app_id="firefox"] -> 3
+# assign [app_id="Alacritty" instance="^htop$"] -> 9
+assign [class="Google-chrome"] workspace number 2
+assign [app_id="firefox"] workspace number 3
 assign [class="Postman"] workspace number 4
 assign [class="discord"] workspace number 5
 assign [app_id="libreoffice-writer"] workspace number 6

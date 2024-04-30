@@ -5,6 +5,6 @@ return {
 		"nvim-lua/plenary.nvim",
 	},
 	keys = {
-		{ "<leader>gl", "<cmd>LazyGit<cr>", desc = "LayGit" },
+		{ "<leader>lg", "<cmd>LazyGit<cr>", desc = "LayGit" },
 	},
 }
