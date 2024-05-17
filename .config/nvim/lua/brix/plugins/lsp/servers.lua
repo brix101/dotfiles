@@ -75,4 +75,5 @@ return {
 	cssls = {},
 	rust_analyzer = {},
 	pyright = {},
+	svelte = {},
 }
