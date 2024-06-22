@@ -70,10 +70,15 @@ return {
 		-- staticcheck = true,
 		usePlaceholders = true,
 	},
-	tailwindcss = {},
+	tailwindcss = {
+		filetypes = { "svelte", "typescriptreact", "javascriptreact" },
+	},
 	html = {},
 	cssls = {},
 	rust_analyzer = {},
 	pyright = {},
 	svelte = {},
+	graphql = {
+		filetypes = { "graphql", "gql", "svelte", "typescriptreact", "javascriptreact" },
+	},
 }
