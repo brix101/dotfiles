@@ -20,7 +20,8 @@ return {
 			markdown = { { "prettierd", "prettier" } },
 			graphql = { { "prettierd", "prettier" } },
 			json = { { "prettierd", "prettier" } },
-			python = { "isort", "black" },
+			python = { { "isort", "black" } },
+			xml = { "xmlfomatter" },
 		},
 		format_on_save = function(bufnr)
 			-- Disable "format_on_save lsp_fallback" for languages that don't

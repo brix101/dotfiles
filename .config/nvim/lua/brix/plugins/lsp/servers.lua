@@ -76,7 +76,17 @@ return {
 	html = {},
 	cssls = {},
 	rust_analyzer = {},
-	pyright = {},
+	pyright = {
+		cmd = { "pyright-langserver", "--stdio" },
+		filetypes = { "python" },
+		python = {
+			analysis = {
+				autoSearchPaths = true,
+				diagnosticMode = "workspace",
+				useLibraryCodeForTypes = true,
+			},
+		},
+	},
 	svelte = {},
 	graphql = {
 		filetypes = { "graphql", "gql", "svelte", "typescriptreact", "javascriptreact" },
