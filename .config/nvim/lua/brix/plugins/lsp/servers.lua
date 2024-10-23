@@ -76,14 +76,18 @@ return {
 	html = {},
 	cssls = {},
 	rust_analyzer = {},
-	pyright = {
-		cmd = { "pyright-langserver", "--stdio" },
-		filetypes = { "python" },
-		python = {
-			analysis = {
-				autoSearchPaths = true,
-				diagnosticMode = "workspace",
-				useLibraryCodeForTypes = true,
+	pylsp = {
+		plugins = {
+			pyright = {
+				pyright = { enabled = false },
+				-- jedi = true,
+				-- pylsp_mypy = true,
+				black = true,
+				-- pylsp_flake8 = true,
+				isort = true,
+				pycodestyle = { enabled = false },
+				-- pylsp_pydocstyle = true,
+				-- pylsp_pylint = true,
 			},
 		},
 	},

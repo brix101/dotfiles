@@ -22,6 +22,9 @@ return {
 			json = { { "prettierd", "prettier" } },
 			python = { { "isort", "black" } },
 			xml = { "xmlfomatter" },
+			-- Use the "_" filetype to run formatters on filetypes that don't
+			-- have other formatters configured.
+			["_"] = { "trim_whitespace" },
 		},
 		format_on_save = function(bufnr)
 			-- Disable "format_on_save lsp_fallback" for languages that don't
