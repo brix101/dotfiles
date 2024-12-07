@@ -104,6 +104,10 @@ export NVM_DIR="$HOME/.nvm"
 
 #GO bin
 export PATH="$HOME/go/bin:$PATH"
+# Rust bin
+export PATH="$HOME/,cargo/bin:$PATH"
+
+export SDKPATH="$HOME/.sdkman"
 
 # rustup complettion
 fpath+=~/.zfunc

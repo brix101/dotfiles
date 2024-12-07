@@ -10,7 +10,7 @@ include $HOME/.config/sway/config.d/*
 # xwayland disable
 
 # Set the background image
-output * bg /home/brix/.config/sway/backgrounds/abstract.png fill
+output * bg /home/brix/.config/sway/backgrounds/cat_leaves.png fill
 
 
 

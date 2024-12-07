@@ -95,4 +95,5 @@ return {
 	graphql = {
 		filetypes = { "graphql", "gql", "svelte", "typescriptreact", "javascriptreact" },
 	},
+	jdtls = {},
 }

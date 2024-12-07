@@ -21,10 +21,12 @@ for_window [app_id="foot" title="Update Pacman"] floating enable
 
 # assign [app_id="firefox"] -> 3
 # assign [app_id="Alacritty" instance="^htop$"] -> 9
-assign [class="Google-chrome"] workspace number 2
+assign [class="jetbrains-idea-ce"] workspace number 2
+assign [class="Google-chrome"] workspace number 3
 assign [app_id="firefox"] workspace number 3
 assign [class="Postman"] workspace number 4
 assign [class="discord"] workspace number 5
+assign [class="jetbrains-toolbox"] workspace number 5
 assign [app_id="libreoffice-writer"] workspace number 6
 assign [class="Spotify"] workspace number 7
 assign [class="vlc"] workspace number 8
