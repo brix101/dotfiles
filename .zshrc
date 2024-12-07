@@ -29,7 +29,7 @@ zinit light Aloxaf/fzf-tab
 # Add in snippets
 zinit snippet OMZP::git
 zinit snippet OMZP::sudo
-zinit snippet OMZP::ubuntu
+zinit snippet OMZP::archlinux
 # zinit snippet OMZP::aws
 # zinit snippet OMZP::kubectl
 # zinit snippet OMZP::kubectx
@@ -87,7 +87,6 @@ alias mux='pgrep -vx tmux > /dev/null && \
                 # tmux attach -t terminal'
 
 export PATH=~/.local/bin:$PATH
-export PATH="$PATH:/opt/nvim-linux64/bin"
 
 # pnpm
 export PNPM_HOME="$HOME/.local/share/pnpm"
@@ -105,7 +104,6 @@ export NVM_DIR="$HOME/.nvm"
 
 #GO bin
 export PATH="$HOME/go/bin:$PATH"
-export PATH=$PATH:/usr/local/go/bin
-alias air="$HOME/go/bin/air"
 
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+# rustup complettion
+fpath+=~/.zfunc
