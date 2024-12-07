@@ -7,6 +7,9 @@ return {
 		"nvim-lua/plenary.nvim",
 	},
 	{
+		"github/copilot.vim",
+	},
+	{
 		-- Collection of various small independent plugins/modules
 		"echasnovski/mini.nvim",
 		config = function()

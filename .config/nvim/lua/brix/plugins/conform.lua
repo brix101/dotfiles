@@ -9,19 +9,22 @@ return {
 	opts = {
 		formatters_by_ft = {
 			lua = { "stylua" },
-			typescript = { { "prettierd", "prettier" } },
-			typescriptreact = { { "prettierd", "prettier" } },
-			javascript = { { "prettierd", "prettier" } },
-			javascriptreact = { { "prettierd", "prettier" } },
-			svelte = { { "prettierd", "prettier" } },
-			css = { { "prettierd", "prettier" } },
-			html = { { "prettierd", "prettier" } },
-			yaml = { { "prettierd", "prettier" } },
-			markdown = { { "prettierd", "prettier" } },
-			graphql = { { "prettierd", "prettier" } },
-			json = { { "prettierd", "prettier" } },
-			python = { { "isort", "black" } },
+			typescript = { "prettierd", "prettier", stop_after_first = true },
+			typescriptreact = { "prettierd", "prettier", stop_after_first = true },
+			javascript = { "prettierd", "prettier", stop_after_first = true },
+			javascriptreact = { "prettierd", "prettier", stop_after_first = true },
+			svelte = { "prettierd", "prettier", stop_after_first = true },
+			css = { "prettierd", "prettier", stop_after_first = true },
+			html = { "prettierd", "prettier", stop_after_first = true },
+			yaml = { "prettierd", "prettier", stop_after_first = true },
+			markdown = { "prettierd", "prettier", stop_after_first = true },
+			graphql = { "prettierd", "prettier", stop_after_first = true },
+			json = { "prettierd", "prettier", stop_after_first = true },
+			python = { "isort", "black" },
 			xml = { "xmlfomatter" },
+			-- Use the "_" filetype to run formatters on filetypes that don't
+			-- have other formatters configured.
+			["_"] = { "trim_whitespace" },
 		},
 		format_on_save = function(bufnr)
 			-- Disable "format_on_save lsp_fallback" for languages that don't
