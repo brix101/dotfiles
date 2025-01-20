@@ -105,6 +105,13 @@ return {
             -- },
           },
         },
+        eslint = {
+          settings = {
+            -- helps eslint find the eslintrc when it's placed in a subfolder instead of the cwd root
+            workingDirectories = { mode = "auto" },
+            format = true,
+          },
+        },
       },
       setup = {
         ts_ls = function()

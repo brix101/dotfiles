@@ -61,6 +61,12 @@ return {
         opts = {},
         version = "*",
       },
+      {
+        "j-hui/fidget.nvim",
+        opts = {
+          -- options
+        },
+      },
     },
 
     ---@module 'blink.cmp'
