@@ -37,12 +37,12 @@ set("v", "<A-j>", ":<C-u>execute \"'<,'>move '>+\" . v:count1<cr>gv=gv", { desc 
 set("v", "<A-k>", ":<C-u>execute \"'<,'>move '<-\" . (v:count1 + 1)<cr>gv=gv", { desc = "Move Up" })
 
 -- buffers
-set("n", "<S-h>", "<cmd>bprevious<cr>", { desc = "Prev Buffer" })
-set("n", "<S-l>", "<cmd>bnext<cr>", { desc = "Next Buffer" })
-set("n", "[b", "<cmd>bprevious<cr>", { desc = "Prev Buffer" })
-set("n", "]b", "<cmd>bnext<cr>", { desc = "Next Buffer" })
-set("n", "<leader>bb", "<cmd>e #<cr>", { desc = "Switch to Other Buffer" })
-set("n", "<leader>`", "<cmd>e #<cr>", { desc = "Switch to Other Buffer" })
+-- set("n", "<S-h>", "<cmd>bprevious<cr>", { desc = "Prev Buffer" })
+-- set("n", "<S-l>", "<cmd>bnext<cr>", { desc = "Next Buffer" })
+-- set("n", "[b", "<cmd>bprevious<cr>", { desc = "Prev Buffer" })
+-- set("n", "]b", "<cmd>bnext<cr>", { desc = "Next Buffer" })
+-- set("n", "<leader>bb", "<cmd>e #<cr>", { desc = "Switch to Other Buffer" })
+-- set("n", "<leader>`", "<cmd>e #<cr>", { desc = "Switch to Other Buffer" })
 -- set("n", "<leader>bd", function()
 --   Snacks.bufdelete()
 -- end, { desc = "Delete Buffer" })
@@ -154,11 +154,11 @@ set("n", "[w", diagnostic_goto(false, "WARN"), { desc = "Prev Warning" })
 
 -- lazygit
 -- if vim.fn.executable("lazygit") == 1 then
---   set("n", "<leader>gg", function() Snacks.lazygit( { cwd = LazyVim.root.git() }) end, { desc = "Lazygit (Root Dir)" })
---   set("n", "<leader>gG", function() Snacks.lazygit() end, { desc = "Lazygit (cwd)" })
---   set("n", "<leader>gf", function() Snacks.picker.git_log_file() end, { desc = "Git Current File History" })
---   set("n", "<leader>gl", function() Snacks.picker.git_log({ cwd = LazyVim.root.git() }) end, { desc = "Git Log" })
---   set("n", "<leader>gL", function() Snacks.picker.git_log() end, { desc = "Git Log (cwd)" })
+-- set("n", "<leader>g", function() Snacks.lazygit( { cwd = LazyVim.root.git() }) end, { desc = "Lazygit (Root Dir)" })
+-- set("n", "<leader>gG", function() Snacks.lazygit() end, { desc = "Lazygit (cwd)" })
+-- set("n", "<leader>gf", function() Snacks.picker.git_log_file() end, { desc = "Git Current File History" })
+-- set("n", "<leader>gl", function() Snacks.picker.git_log({ cwd = LazyVim.root.git() }) end, { desc = "Git Log" })
+-- set("n", "<leader>gL", function() Snacks.picker.git_log() end, { desc = "Git Log (cwd)" })
 -- end
 --
 -- set("n", "<leader>gb", function() Snacks.picker.git_log_line() end, { desc = "Git Blame Line" })

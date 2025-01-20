@@ -57,8 +57,6 @@ local function symbols_filter(entry, ctx)
 end
 
 return {
-  desc = "Awesome picker for FZF (alternative to Telescope)",
-  recommended = true,
   {
     "ibhagwan/fzf-lua",
     cmd = "FzfLua",
@@ -200,7 +198,17 @@ return {
       { "<leader>ff", "<cmd>FzfLua files<cr>", desc = "Find Files (Root Dir)" },
       -- { "<leader>fF", LazyVim.pick("files", { root = false }), desc = "Find Files (cwd)" },
       { "<leader>fg", "<cmd>FzfLua git_files<cr>", desc = "Find Files (git-files)" },
-      { "<leader>fr", "<cmd>FzfLua oldfiles<cr>", desc = "Recent" },
+      -- { "<leader>fr", "<cmd>FzfLua oldfiles<cr>", desc = "Recent" },
+      {
+        "<leader>fr",
+        function()
+          require("fzf-lua").oldfiles({
+            cwd_only = true,
+            stat_file = true, -- verify files exist on disk
+          })
+        end,
+        desc = "Recent",
+      },
       -- git
       { "<leader>gc", "<cmd>FzfLua git_commits<CR>", desc = "Commits" },
       { "<leader>gs", "<cmd>FzfLua git_status<CR>", desc = "Status" },
