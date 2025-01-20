@@ -8,15 +8,6 @@ return {
       { "williamboman/mason-lspconfig.nvim", config = function() end },
     },
     opts = function()
-      local Keys = require("plugins.lsp.keymaps").get()
-      -- stylua: ignore
-      vim.list_extend(Keys, {
-        { "gd", "<cmd>FzfLua lsp_definitions     jump_to_single_result=true ignore_current_line=true<cr>", desc = "Goto Definition", has = "definition" },
-        { "gr", "<cmd>FzfLua lsp_references      jump_to_single_result=true ignore_current_line=true<cr>", desc = "References", nowait = true },
-        { "gI", "<cmd>FzfLua lsp_implementations jump_to_single_result=true ignore_current_line=true<cr>", desc = "Goto Implementation" },
-        { "gy", "<cmd>FzfLua lsp_typedefs        jump_to_single_result=true ignore_current_line=true<cr>", desc = "Goto T[y]pe Definition" },
-      })
-
       ---@class PluginLspOpts
       local ret = {
         -- options for vim.diagnostic.config()
@@ -123,6 +114,16 @@ return {
     end,
     ---@param opts PluginLspOpts
     config = function(_, opts)
+      local lspUtil = require("util.lsp")
+
+      -- setup keymaps
+      lspUtil.on_attach(function(client, buffer)
+        require("plugins.lsp.keymaps").on_attach(client, buffer)
+      end)
+
+      lspUtil.setup()
+      lspUtil.on_dynamic_capability(require("plugins.lsp.keymaps").on_attach)
+
       local servers = opts.servers
       local blink = require("blink.cmp")
       local capabilities = vim.tbl_deep_extend(
@@ -182,8 +183,7 @@ return {
           handlers = { setup },
         })
       end
-
-    end
+    end,
   },
 
   -- cmdline tools and lsp servers
