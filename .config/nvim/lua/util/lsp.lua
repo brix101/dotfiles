@@ -153,6 +153,8 @@ end
 
 ---@param opts? LazyFormatter| {filter?: (string|lsp.Client.filter)}
 function M.formatter(opts)
+  local lazyUtil = require("util")
+
   opts = opts or {}
   local filter = opts.filter or {}
   filter = type(filter) == "string" and { name = filter } or filter
@@ -185,12 +187,14 @@ end
 
 ---@param opts? lsp.Client.format
 function M.format(opts)
+  local lazyUtil = require("util")
+
   opts = vim.tbl_deep_extend(
     "force",
     {},
     opts or {},
-    LazyVim.opts("nvim-lspconfig").format or {},
-    LazyVim.opts("conform.nvim").format or {}
+    lazyUtil.opts("nvim-lspconfig").format or {},
+    lazyUtil.opts("conform.nvim").format or {}
   )
   local ok, conform = pcall(require, "conform")
   -- use conform for formatting with LSP when available,

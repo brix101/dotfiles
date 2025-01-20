@@ -2,12 +2,30 @@ return {
   {
     "stevearc/conform.nvim",
     dependencies = { "mason.nvim" },
+    event = { "BufReadPre", "BufNewFile" },
     cmd = "ConformInfo",
     opts = {
       formatters_by_ft = {
         lua = { "stylua" },
         fish = { "fish_indent" },
         sh = { "shfmt" },
+        css = { "prettier" },
+        graphql = { "prettier" },
+        handlebars = { "prettier" },
+        html = { "prettier" },
+        javascript = { "prettier" },
+        javascriptreact = { "prettier" },
+        json = { "prettier" },
+        jsonc = { "prettier" },
+        less = { "prettier" },
+        markdown = { "prettier" },
+        ["markdown.mdx"] = { "prettier" },
+        scss = { "prettier" },
+        typescript = { "prettier" },
+        typescriptreact = { "prettier" },
+        vue = { "prettier" },
+        yaml = { "prettier" },
+
         -- Use the "*" filetype to run formatters on all filetypes.
         ["*"] = { "codespell" },
         -- Use the "_" filetype to run formatters on filetypes that don't
@@ -45,7 +63,7 @@ return {
       format_on_save = {
         -- I recommend these options. See :help conform.format for details.
         lsp_format = "fallback",
-        timeout_ms = 500,
+        timeout_ms = 2500,
       },
       -- If this is set, Conform will run the formatter asynchronously after save.
       -- It will pass the table to conform.format().
