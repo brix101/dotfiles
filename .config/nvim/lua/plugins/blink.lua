@@ -68,7 +68,6 @@ return {
         },
       },
     },
-
     ---@module 'blink.cmp'
     ---@type blink.cmp.Config
     opts = {
@@ -103,6 +102,14 @@ return {
         ghost_text = {
           enabled = vim.g.ai_cmp,
         },
+        list = {
+          selection = {
+            preselect = function(ctx)
+              return not require("blink.cmp").snippet_active({ direction = 1 })
+            end,
+            auto_insert = true,
+          },
+        },
       },
 
       -- experimental signature help support
@@ -118,12 +125,11 @@ return {
 
       keymap = {
 
-        preset = "default",
+        preset = "sup",
 
         ["<C-space>"] = { "show", "show_documentation", "hide_documentation" },
         ["<C-e>"] = { "hide", "fallback" },
-
-        ["<CR>"] = { "snippet_forward", "fallback" },
+        -- ["<CR>"] = { "accept", "fallback" },
 
         ["<Tab>"] = {
           function(cmp)

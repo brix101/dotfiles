@@ -4,6 +4,9 @@ return {
     "williamboman/mason-lspconfig.nvim",
     "WhoIsSethDaniel/mason-tool-installer.nvim",
   },
+  cmd = "Mason",
+  keys = { { "<leader>cm", "<cmd>Mason<cr>", desc = "Mason" } },
+  opts_extend = { "ensure_installed" },
   opts = {
     ensure_installed = {
       "stylua",
