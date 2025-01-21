@@ -94,7 +94,7 @@ return {
 
       local opts = {
         options = {
-          theme = "catpuccin",
+          theme = "auto",
           globalstatus = vim.o.laststatus == 3,
           disabled_filetypes = { statusline = { "dashboard", "alpha", "ministarter", "snacks_dashboard" } },
           component_separators = { left = "|", right = "|" },
@@ -208,9 +208,22 @@ return {
       file = {
         [".keep"] = { glyph = "󰊢", hl = "MiniIconsGrey" },
         ["devcontainer.json"] = { glyph = "", hl = "MiniIconsAzure" },
+        -- ts/js file
+        [".eslintrc.js"] = { glyph = "󰱺", hl = "MiniIconsYellow" },
+        [".node-version"] = { glyph = "", hl = "MiniIconsGreen" },
+        [".prettierrc"] = { glyph = "", hl = "MiniIconsPurple" },
+        [".yarnrc.yml"] = { glyph = "", hl = "MiniIconsBlue" },
+        ["eslint.config.js"] = { glyph = "󰱺", hl = "MiniIconsYellow" },
+        ["package.json"] = { glyph = "", hl = "MiniIconsGreen" },
+        ["tsconfig.json"] = { glyph = "", hl = "MiniIconsAzure" },
+        ["tsconfig.build.json"] = { glyph = "", hl = "MiniIconsAzure" },
+        ["yarn.lock"] = { glyph = "", hl = "MiniIconsBlue" },
+        -- go file
+        [".go-version"] = { glyph = "", hl = "MiniIconsBlue" },
       },
       filetype = {
         dotenv = { glyph = "", hl = "MiniIconsYellow" },
+        gotmpl = { glyph = "󰟓", hl = "MiniIconsGrey" },
       },
     },
     init = function()

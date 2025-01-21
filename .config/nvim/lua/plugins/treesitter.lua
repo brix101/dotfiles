@@ -15,33 +15,51 @@ return {
   {
     "nvim-treesitter/nvim-treesitter",
     version = false, -- last release is way too old and doesn't work on Windows
-    build = ":TSUpdate",
+    main = "nvim-treesitter.configs",
     event = { "BufReadPost", "BufNewFile", "BufWritePre" },
-    lazy = vim.fn.argc(-1) == 0, -- load treesitter early when opening a file from the cmdline
-    init = function(plugin)
-      -- PERF: add nvim-treesitter queries to the rtp and it's custom query predicates early
-      -- This is needed because a bunch of plugins no longer `require("nvim-treesitter")`, which
-      -- no longer trigger the **nvim-treesitter** module to be loaded in time.
-      -- Luckily, the only things that those plugins need are the custom queries, which we make available
-      -- during startup.
-      require("lazy.core.loader").add_to_rtp(plugin)
-      require("nvim-treesitter.query_predicates")
-    end,
+    dependencies = {
+      { "nvim-treesitter/nvim-treesitter-textobjects", lazy = true }
+    },
     cmd = { "TSUpdateSync", "TSUpdate", "TSInstall" },
+    build = ":TSUpdate",
     keys = {
       { "<c-space>", desc = "Increment Selection" },
       { "<bs>", desc = "Decrement Selection", mode = "x" },
     },
+    init = function(plugin)
+      -- PERF: add nvim-treesitter queries to the rtp and it's custom query predicates early
+      -- This is needed because a bunch of plugins no longer `require("nvim-treesitter")`, which
+      -- no longer trigger the **nvim-treeitter** module to be loaded in time.
+      -- Luckily, the only thins that those plugins need are the custom queries, which we make available
+      -- during startup.
+      -- CODE FROM LazyVim (thanks folke!) https://github.com/LazyVim/LazyVim/commit/1e1b68d633d4bd4faa912ba5f49ab6b8601dc0c9
+      require("lazy.core.loader").add_to_rtp(plugin)
+      pcall(require, "nvim-treesitter.query_predicates")
+    end,
     opts_extend = { "ensure_installed" },
     ---@type TSConfig
     ---@diagnostic disable-next-line: missing-fields
     opts = {
-
+      auto_install = true,
+      highlight = { enable = true },
+      indent = { enable = true },
+      incremental_selection = {
+        enable = true,
+        keymaps = {
+          init_selection = "<C-space>",
+          node_incremental = "<C-space>",
+          scope_incremental = false,
+          node_decremental = "<bs>",
+        },
+      },
       ensure_installed = {
         "bash",
         "c",
         "diff",
         "go",
+        "gomod",
+        "gowork",
+        "gosum",
         "html",
         "javascript",
         "jsdoc",
@@ -64,23 +82,6 @@ return {
         "xml",
         "yaml",
       },
-      -- Install parsers synchronously (only applied to `ensure_installed`)
-      sync_install = false,
-
-      -- Automatically install missing parsers when entering buffer
-      -- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
-      auto_install = true,
-      highlight = { enable = true },
-      indent = { enable = true },
-      incremental_selection = {
-        enable = true,
-        keymaps = {
-          init_selection = "<C-space>",
-          node_incremental = "<C-space>",
-          scope_incremental = false,
-          node_decremental = "<bs>",
-        },
-      },
       textobjects = {
         move = {
           enable = true,
@@ -92,66 +93,9 @@ return {
       },
     },
     ---@param opts TSConfig
-    config = function(_, opts)
-      -- if type(opts.ensure_installed) == "table" then
-      --   opts.ensure_installed = LazyVim.dedup(opts.ensure_installed)
-      -- end
-
-      -- Prefer git instead of curl in order to improve connectivity in some environments
-      require("nvim-treesitter.install").prefer_git = true
-      ---@diagnostic disable-next-line: missing-fields
-      require("nvim-treesitter.configs").setup(opts)
+    config = function(plugin, opts)
+  local ts = require(plugin.main)
+      ts.setup(opts)
     end,
-  },
-
-  {
-    "nvim-treesitter/nvim-treesitter-textobjects",
-    event = "VeryLazy",
-    enabled = true,
-    config = function()
-      -- If treesitter is already loaded, we need to run config again for textobjects
-      -- if LazyVim.is_loaded("nvim-treesitter") then
-      --   local opts = LazyVim.opts("nvim-treesitter")
-      require("nvim-treesitter.configs").setup({
-        textobjects = {
-          move = {
-            enable = true,
-            goto_next_start = { ["]f"] = "@function.outer", ["]c"] = "@class.outer", ["]a"] = "@parameter.inner" },
-            goto_next_end = { ["]F"] = "@function.outer", ["]C"] = "@class.outer", ["]A"] = "@parameter.inner" },
-            goto_previous_start = { ["[f"] = "@function.outer", ["[c"] = "@class.outer", ["[a"] = "@parameter.inner" },
-            goto_previous_end = { ["[F"] = "@function.outer", ["[C"] = "@class.outer", ["[A"] = "@parameter.inner" },
-          },
-        },
-      })
-      -- end
-
-      -- When in diff mode, we want to use the default
-      -- vim text objects c & C instead of the treesitter ones.
-      local move = require("nvim-treesitter.textobjects.move") ---@type table<string,fun(...)>
-      local configs = require("nvim-treesitter.configs")
-      for name, fn in pairs(move) do
-        if name:find("goto") == 1 then
-          move[name] = function(q, ...)
-            if vim.wo.diff then
-              local config = configs.get_module("textobjects.move")[name] ---@type table<string,string>
-              for key, query in pairs(config or {}) do
-                if q == query and key:find("[%]%[][cC]") then
-                  vim.cmd("normal! " .. key)
-                  return
-                end
-              end
-            end
-            return fn(q, ...)
-          end
-        end
-      end
-    end,
-  },
-
-  -- Automatically add closing tags for HTML and JSX
-  {
-    "windwp/nvim-ts-autotag",
-    event = { "BufReadPost", "BufNewFile", "BufWritePre" },
-    opts = {},
   },
 }
