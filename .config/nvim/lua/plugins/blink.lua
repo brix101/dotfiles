@@ -94,14 +94,14 @@ return {
         ghost_text = {
           enabled = vim.g.ai_cmp,
         },
-        -- list = {
-        --   selection = {
-        --     preselect = function(ctx)
-        --       return not require("blink.cmp").snippet_active({ direction = 1 })
-        --     end,
-        --     auto_insert = true,
-        --   },
-        -- },
+        list = {
+          selection = {
+            preselect = function(ctx)
+              return not require("blink.cmp").snippet_active({ direction = 1 })
+            end,
+            auto_insert = true,
+          },
+        },
       },
 
       -- experimental signature help support
@@ -117,7 +117,7 @@ return {
 
       keymap = {
 
-        preset = "sup",
+        preset = "super-tab",
 
         ["<C-space>"] = { "show", "show_documentation", "hide_documentation" },
         ["<C-e>"] = { "hide", "fallback" },
