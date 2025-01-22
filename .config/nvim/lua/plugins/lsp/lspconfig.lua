@@ -5,7 +5,7 @@ return {
     version = "*",
     event = { "BufReadPost", "BufNewFile", "BufWritePre" },
     dependencies = {
-       "mason.nvim" , -- NOTE: Must be loaded before dependants
+      "mason.nvim", -- NOTE: Must be loaded before dependants
       { "williamboman/mason-lspconfig.nvim", config = function() end },
     },
     opts = function()
