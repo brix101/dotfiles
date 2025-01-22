@@ -4,7 +4,7 @@ return {
     "williamboman/mason-lspconfig.nvim",
     "WhoIsSethDaniel/mason-tool-installer.nvim",
   },
-  config = function(_, opts)
+  config = function()
     require("mason").setup({
       ui = {
         icons = {
@@ -15,17 +15,8 @@ return {
       },
     })
 
-    -- TODO move this connected with the lsp servers config
-    local lsp = {
-      "lua_ls",
-      -- "ts_ls",
-      -- "vtsls",
-      "eslint",
-      "tailwindcss",
-      "gopls",
-      "marksman",
-      "graphql",
-    }
+    local lsp = require("plugins.lsp.servers")
+
     -- TODO move this to conform
     local formatters = {
       "stylua",
@@ -38,7 +29,7 @@ return {
     -- TODO move this to nvim lint
     local linters = {}
 
-    local ensure_installed = vim.tbl_keys(opts.ensure_installed or {})
+    local ensure_installed = vim.tbl_keys(lsp)
     local additional_tools = vim.tbl_flatten({ lsp, formatters, linters })
     vim.list_extend(ensure_installed, additional_tools)
 

@@ -87,21 +87,7 @@ set("n", "<leader>xq", "<cmd>copen<cr>", { desc = "Quickfix List" })
 set("n", "[q", vim.cmd.cprev, { desc = "Previous Quickfix" })
 set("n", "]q", vim.cmd.cnext, { desc = "Next Quickfix" })
 
--- diagnostic
-local diagnostic_goto = function(next, severity)
-  local go = next and vim.diagnostic.goto_next or vim.diagnostic.goto_prev
-  severity = severity and vim.diagnostic.severity[severity] or nil
-  return function()
-    go({ severity = severity })
-  end
-end
-set("n", "<leader>cd", vim.diagnostic.open_float, { desc = "Line Diagnostics" })
-set("n", "]d", diagnostic_goto(true), { desc = "Next Diagnostic" })
-set("n", "[d", diagnostic_goto(false), { desc = "Prev Diagnostic" })
-set("n", "]e", diagnostic_goto(true, "ERROR"), { desc = "Next Error" })
-set("n", "[e", diagnostic_goto(false, "ERROR"), { desc = "Prev Error" })
-set("n", "]w", diagnostic_goto(true, "WARN"), { desc = "Next Warning" })
-set("n", "[w", diagnostic_goto(false, "WARN"), { desc = "Prev Warning" })
+
 
 -- stylua: ignore start
 
