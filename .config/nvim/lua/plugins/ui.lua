@@ -13,7 +13,7 @@ return {
       indent = { enabled = true },
       input = { enabled = true },
       notifier = {
-        enabled = true,
+        enabled = false,
         timeout = 3000,
       },
       quickfile = { enabled = true },
@@ -211,8 +211,8 @@ return {
         },
         sections = {
           { section = "terminal", cmd = "fortune -s | cowsay", hl = "header", padding = 1, indent = 8 },
-          { title = "Project: ", file = vim.fn.fnamemodify(".", ":~"), padding = 1, icon = " " },
-          { section = "recent_files", cwd = true, limit = 8, padding = 1 },
+          -- { title = "Project: ", file = vim.fn.fnamemodify(".", ":~"), padding = 1, icon = " " },
+          { icon = " ", title = "Recent Files", section = "recent_files", cwd = true, limit = 8, padding = 1 },
           { title = "Bookmarks", padding = 1 },
           { section = "keys" },
           { section = "startup" },

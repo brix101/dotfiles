@@ -18,8 +18,8 @@ return {
     -- TODO move this connected with the lsp servers config
     local lsp = {
       "lua_ls",
-      "ts_ls",
-      "vtsls",
+      -- "ts_ls",
+      -- "vtsls",
       "eslint",
       "tailwindcss",
       "gopls",
