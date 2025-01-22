@@ -60,7 +60,6 @@ return {
         opts = {},
         version = "*",
       },
-      "brenoprata10/nvim-highlight-colors",
     },
     ---@module 'blink.cmp'
     ---@type blink.cmp.Config
