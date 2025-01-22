@@ -43,7 +43,7 @@ return {
         -- provide the inlay hints.
         inlay_hints = {
           enabled = true,
-          exclude = { "vue" }, -- filetypes for which you don't want to enable inlay hints
+          -- exclude = { "vue" }, -- filetypes for which you don't want to enable inlay hints
         },
         -- Enable this to enable the builtin LSP code lenses on Neovim >= 0.10.0
         -- Be aware that you also will need to properly configure your LSP server to
@@ -198,6 +198,9 @@ return {
               workingDirectories = { mode = "auto" },
               format = true,
             },
+            keys = {
+              { "<leader>cf", "<cmd>EslintFixAll<cr>", desc = "EslintFixAll" },
+            },
           },
           tailwindcss = {
             filetypes = { "typescriptreact", "javascriptreact", "html", "markdown" },
@@ -306,28 +309,31 @@ return {
               vim.tbl_deep_extend("force", {}, opts.settings.typescript, opts.settings.javascript or {})
           end,
           eslint = function()
-            -- vim.api.nvim_create_autocmd("BufWritePre", {
-            --   pattern = { "*.tsx", "*.ts", "*.jsx", "*.js" },
-            --   command = "silent! EslintFixAll",
-            --   group = vim.api.nvim_create_augroup("eslint", {}),
-            -- })
+            vim.api.nvim_create_autocmd("BufWritePre", {
+              callback = function(event)
+                local client = vim.lsp.get_clients({ name = "eslint", bufnr = event.buf })[1]
+                if client then
+                  vim.cmd("EslintFixAll")
+                end
+              end,
+            })
           end,
-          tailwindcss = function(_, opts)
-            local tw = require("util.lsp").get_raw_config("tailwindcss")
-            opts.filetypes = opts.filetypes or {}
-
-            -- Add default filetypes
-            vim.list_extend(opts.filetypes, tw.default_config.filetypes)
-
-            -- Remove excluded filetypes
-            --- @param ft string
-            opts.filetypes = vim.tbl_filter(function(ft)
-              return not vim.tbl_contains(opts.filetypes_exclude or {}, ft)
-            end, opts.filetypes)
-
-            -- Add additional filetypes
-            vim.list_extend(opts.filetypes, opts.filetypes_include or {})
-          end,
+          -- tailwindcss = function(_, opts)
+          --   local tw = require("util.lsp").get_raw_config("tailwindcss")
+          --   opts.filetypes = opts.filetypes or {}
+          --
+          --   -- Add default filetypes
+          --   vim.list_extend(opts.filetypes, tw.default_config.filetypes)
+          --
+          --   -- Remove excluded filetypes
+          --   --- @param ft string
+          --   opts.filetypes = vim.tbl_filter(function(ft)
+          --     return not vim.tbl_contains(opts.filetypes_exclude or {}, ft)
+          --   end, opts.filetypes)
+          --
+          --   -- Add additional filetypes
+          --   vim.list_extend(opts.filetypes, opts.filetypes_include or {})
+          -- end,
           gopls = function(_, opts)
             -- workaround for gopls not supporting semanticTokensProvider
             -- https://github.com/golang/go/issues/54531#issuecomment-1464982242
@@ -361,6 +367,7 @@ return {
             vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = "LSP: " .. desc })
           end
           local builtin = require("fzf-lua")
+          map("<leader>cl", "<cmd>LspInfo<cr>", "[L]sp Info")
           map("gd", "<cmd>FzfLua lsp_definitions     jump_to_single_result=true ignore_current_line=true<cr>", "[G]oto [D]efinition")
           map("gr", "<cmd>FzfLua lsp_references      jump_to_single_result=true ignore_current_line=true<cr>", "[G]oto [R]eferences")
           map("gI", "<cmd>FzfLua lsp_implementations jump_to_single_result=true ignore_current_line=true<cr>", "[G]oto [I]mplementation")
