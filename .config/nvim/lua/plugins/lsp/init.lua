@@ -81,10 +81,13 @@ return {
       vim.api.nvim_create_autocmd("LspAttach", {
         group = vim.api.nvim_create_augroup("brix-lsp-attach", { clear = true }),
         --stylua: ignore
-        callback = function(event)
+        callback = function(args)
+          local buffer = args.buf ---@type number
+          local client = vim.lsp.get_client_by_id(args.data.client_id)
+
           local map = function(keys, func, desc, mode)
             mode = mode or "n"
-            vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = "LSP: " .. desc })
+            vim.keymap.set(mode, keys, func, { buffer = buffer, desc = "LSP: " .. desc })
           end
           local builtin = require("fzf-lua")
 
@@ -107,8 +110,6 @@ return {
           map("[e", diagnostic_goto(false, "ERROR"),"Prev Error" )
           map("]w", diagnostic_goto(true, "WARN"),  "Next Warning" )
           map("[w", diagnostic_goto(false, "WARN"), "Prev Warning" )
-
-          local client = vim.lsp.get_client_by_id(event.data.client_id)
 
           if client then
             if client.name == "eslint"then
