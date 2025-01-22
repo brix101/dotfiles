@@ -7,6 +7,10 @@ return {
   cmd = "Mason",
   keys = { { "<leader>cm", "<cmd>Mason<cr>", desc = "Mason" } },
   opts = {
+    ensure_installed = {
+      "stylua",
+      "shfmt",
+    },
     ui = {
       icons = {
         package_installed = "✓",
@@ -31,8 +35,6 @@ return {
     }
     -- TODO move this to conform
     local formatters = {
-      "stylua",
-      "shfmt",
       "prettier", -- prettier formatter
       "isort", -- python formatter
       "black", -- python formatter

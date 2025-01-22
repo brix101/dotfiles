@@ -5,8 +5,8 @@ return {
     version = "*",
     event = { "BufReadPost", "BufNewFile", "BufWritePre" },
     dependencies = {
-		{ "williamboman/mason.nvim", config = true }, -- NOTE: Must be loaded before dependants
-		{ "williamboman/mason-lspconfig.nvim" },
+       "mason.nvim" , -- NOTE: Must be loaded before dependants
+      { "williamboman/mason-lspconfig.nvim", config = function() end },
     },
     opts = function()
       ---@class PluginLspOpts
@@ -247,8 +247,7 @@ return {
             return true
           end,
           vtsls = function(_, opts)
-            local lspUtil = require("util.lsp")
-            lspUtil.on_attach(function(client, buffer)
+            require("util.lsp").on_attach(function(client, buffer)
               client.commands["_typescript.moveToFileRefactoring"] = function(command, ctx)
                 ---@type string, string, lsp.Range
                 local action, uri, range = unpack(command.arguments)
@@ -310,8 +309,7 @@ return {
             -- })
           end,
           tailwindcss = function(_, opts)
-            local lspUtil = require("util.lsp")
-            local tw = lspUtil.get_raw_config("tailwindcss")
+            local tw = require("util.lsp").get_raw_config("tailwindcss")
             opts.filetypes = opts.filetypes or {}
 
             -- Add default filetypes
@@ -419,75 +417,6 @@ return {
           handlers = { setup },
         })
       end
-    end,
-  },
-
-  {
-    "williamboman/mason.nvim",
-    dependencies = {
-      "williamboman/mason-lspconfig.nvim",
-      "WhoIsSethDaniel/mason-tool-installer.nvim",
-    },
-    cmd = "Mason",
-    build = ":MasonUpdate",
-    keys = { { "<leader>cm", "<cmd>Mason<cr>", desc = "Mason" } },
-    opts = {
-      ensure_installed = {
-        "stylua",
-        "shfmt",
-        "prettier",
-        "black",
-        "goimports",
-        "gofumpt",
-        "markdownlint-cli2",
-        "markdown-toc",
-      },
-      ui = {
-        icons = {
-          package_installed = "✓",
-          package_pending = "➜",
-          package_uninstalled = "✗",
-        },
-      },
-    },
-    ---@param opts MasonSettings | {ensure_installed: string[]}
-    config = function(_, opts)
-      local lsp_servers = {
-        "lua_ls",
-        "ts_ls",
-        "vtsls",
-        "eslint",
-        "tailwindcss",
-        "gopls",
-        "marksman",
-      }
-
-      local ensure_installed = vim.tbl_keys(opts.ensure_installed)
-
-      vim.list_extend(ensure_installed, lsp_servers)
-
-      require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
-
-      require("mason").setup(opts)
-      local mr = require("mason-registry")
-      mr:on("package:install:success", function()
-        vim.defer_fn(function()
-          -- trigger FileType event to possibly load this newly installed LSP server
-          require("lazy.core.handler.event").trigger({
-            event = "FileType",
-            buf = vim.api.nvim_get_current_buf(),
-          })
-        end, 100)
-      end)
-
-      mr.refresh(function()
-        for _, tool in ipairs(opts.ensure_installed) do
-          local p = mr.get_package(tool)
-          if not p:is_installed() then
-            p:install()
-          end
-        end
-      end)
     end,
   },
 }
