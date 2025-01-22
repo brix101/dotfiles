@@ -7,6 +7,10 @@ return {
     dependencies = {
       "mason.nvim", -- NOTE: Must be loaded before dependants
       { "williamboman/mason-lspconfig.nvim", config = function() end },
+      {
+        "j-hui/fidget.nvim",
+        opts = {},
+      },
     },
     opts = function()
       ---@class PluginLspOpts
@@ -348,15 +352,27 @@ return {
     end,
     ---@param opts PluginLspOpts
     config = function(_, opts)
-      local lspUtil = require("util.lsp")
-
-      -- setup keymaps
-      lspUtil.on_attach(function(client, buffer)
-        require("plugins.lsp.keymaps").on_attach(client, buffer)
-      end)
-
-      lspUtil.setup()
-      lspUtil.on_dynamic_capability(require("plugins.lsp.keymaps").on_attach)
+      vim.api.nvim_create_autocmd("LspAttach", {
+        group = vim.api.nvim_create_augroup("brix-lsp-attach", { clear = true }),
+        --stylua: ignore
+        callback = function(event)
+          local map = function(keys, func, desc, mode)
+            mode = mode or "n"
+            vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = "LSP: " .. desc })
+          end
+          local builtin = require("fzf-lua")
+          map("gd", "<cmd>FzfLua lsp_definitions     jump_to_single_result=true ignore_current_line=true<cr>", "[G]oto [D]efinition")
+          map("gr", "<cmd>FzfLua lsp_references      jump_to_single_result=true ignore_current_line=true<cr>", "[G]oto [R]eferences")
+          map("gI", "<cmd>FzfLua lsp_implementations jump_to_single_result=true ignore_current_line=true<cr>", "[G]oto [I]mplementation")
+          map("gy", "<cmd>FzfLua lsp_typedefs        jump_to_single_result=true ignore_current_line=true<cr>", "[G]oto T[y]pe Definition")
+          map("gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
+          map("<leader>ds", builtin.lsp_document_symbols, "[D]ocument [S]ymbols")
+          map("<leader>rn", vim.lsp.buf.rename, "[R]e[n]ame")
+          map("<leader>ca", vim.lsp.buf.code_action, "[C]ode [A]ction", { "n", "v" })
+          map("K", vim.lsp.buf.hover, "Hover Documentation")
+          map("gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
+        end,
+      })
 
       local servers = opts.servers
       local blink_cmp = require("blink.cmp")

@@ -117,7 +117,7 @@ return {
 
       keymap = {
 
-        preset = "super-tab",
+        preset = "default",
 
         ["<C-space>"] = { "show", "show_documentation", "hide_documentation" },
         ["<C-e>"] = { "hide", "fallback" },
