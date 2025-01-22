@@ -1,4 +1,4 @@
-return{
+return {
   lua_ls = {
     settings = {
       Lua = {
@@ -25,8 +25,8 @@ return{
       },
     },
   },
-        -- "ts_ls" ={},
-      -- "vtsls" ={},
+  -- "ts_ls" ={},
+  -- "vtsls" ={},
   eslint = {
     settings = {
       workingDirectories = { mode = "auto" },
@@ -75,6 +75,6 @@ return{
     },
   },
   graphql = {
-		filetypes = { "graphql", "gql", "svelte", "typescriptreact", "javascriptreact" },
-	},
+    filetypes = { "graphql", "gql", "svelte", "typescriptreact", "javascriptreact" },
+  },
 }

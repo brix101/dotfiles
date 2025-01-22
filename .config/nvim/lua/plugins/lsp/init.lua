@@ -118,7 +118,6 @@ return {
         end,
       })
 
-      local servers = require("plugins.lsp.servers")
       local blink_cmp = require("blink.cmp")
       local capabilities = vim.tbl_deep_extend(
         "force",
@@ -128,47 +127,18 @@ return {
         opts.capabilities or {}
       )
 
-      local function setup_handler(server_name)
-        local server_opts = vim.tbl_deep_extend("force", {
-          capabilities = vim.deepcopy(capabilities),
-        }, servers[server_name] or {})
-
-        require("lspconfig")[server_name].setup(server_opts)
-      end
-
-      -- get all the servers that are available through mason-lspconfig
       local have_mason, mlsp = pcall(require, "mason-lspconfig")
-      local all_mslp_servers = {}
-      if have_mason then
-        all_mslp_servers = vim.tbl_keys(require("mason-lspconfig.mappings.server").lspconfig_to_package)
-      end
 
-      local ensure_installed = {} ---@type string[]
-      for server, server_opts in pairs(servers) do
-        if server_opts then
-          server_opts = server_opts == true and {} or server_opts
-          if server_opts.enabled ~= false then
-            -- if this is a server that cannot be installed with mason-lspconfig
-            if not vim.tbl_contains(all_mslp_servers, server) then
-              setup_handler(server)
-            else
-              ensure_installed[#ensure_installed + 1] = server
-            end
-          end
-        end
-      end
-
+      local servers = require("plugins.lsp.servers")
       if have_mason then
-        mlsp.setup({
-          automatic_installation = true,
-          ensure_installed = vim.tbl_deep_extend(
-            "force",
-            ensure_installed,
-            require("util").opts("mason-lspconfig.nvim").ensure_installed or {}
-          ),
-          handlers = {
-            setup_handler,
-          },
+        mlsp.setup_handlers({
+          function(server_name)
+            local server_opts = vim.tbl_deep_extend("force", {
+              capabilities = vim.deepcopy(capabilities),
+            }, servers[server_name] or {})
+
+            require("lspconfig")[server_name].setup(server_opts)
+          end,
         })
       end
     end,

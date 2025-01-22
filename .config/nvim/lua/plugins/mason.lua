@@ -15,7 +15,7 @@ return {
       },
     })
 
-    local lsp = require("plugins.lsp.servers")
+    local servers = require("plugins.lsp.servers")
 
     -- TODO move this to conform
     local formatters = {
@@ -29,8 +29,8 @@ return {
     -- TODO move this to nvim lint
     local linters = {}
 
-    local ensure_installed = vim.tbl_keys(lsp)
-    local additional_tools = vim.tbl_flatten({ lsp, formatters, linters })
+    local ensure_installed = vim.tbl_keys(servers)
+    local additional_tools = vim.tbl_flatten({ servers, formatters, linters })
     vim.list_extend(ensure_installed, additional_tools)
 
     require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
