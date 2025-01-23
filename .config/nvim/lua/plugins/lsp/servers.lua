@@ -32,6 +32,13 @@ return {
       workingDirectories = { mode = "auto" },
       format = true,
     },
+    keys = {
+      {
+        "<leader>cf",
+        "<cmd>EslintFixAll<cr>",
+        desc = "Eslint [F]ixAll",
+      },
+    },
   },
   tailwindcss = {
     filetypes = { "typescriptreact", "javascriptreact", "html", "markdown" },

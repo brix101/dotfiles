@@ -6,6 +6,14 @@ M._keys = nil
 ---@alias LazyKeysLspSpec LazyKeysSpec|{has?:string|string[], cond?:fun():boolean}
 ---@alias LazyKeysLsp LazyKeys|{has?:string|string[], cond?:fun():boolean}
 
+function M.diagnostic_goto(next, severity)
+  local go = next and vim.diagnostic.goto_next or vim.diagnostic.goto_prev
+  severity = severity and vim.diagnostic.severity[severity] or nil
+  return function()
+    go({ severity = severity })
+  end
+end
+
 ---@return LazyKeysLspSpec[]
 function M.get()
   if M._keys then
@@ -27,7 +35,6 @@ function M.get()
       { "<leader>cC", vim.lsp.codelens.refresh, desc = "Refresh & Display Codelens", mode = { "n" }, has = "codeLens" },
       { "<leader>cR", function() Snacks.rename.rename_file() end, desc = "Rename File", mode ={"n"}, has = { "workspace/didRenameFiles", "workspace/willRenameFiles" } },
       { "<leader>rn", vim.lsp.buf.rename, desc = "Rename", has = "rename" },
-      -- { "<leader>cA", LazyVim.lsp.action.source, desc = "Source Action", has = "codeAction" },
       { "]]", function() Snacks.words.jump(vim.v.count1) end, has = "documentHighlight",
         desc = "Next Reference", cond = function() return Snacks.words.is_enabled() end },
       { "[[", function() Snacks.words.jump(-vim.v.count1) end, has = "documentHighlight",
@@ -36,16 +43,15 @@ function M.get()
         desc = "Next Reference", cond = function() return Snacks.words.is_enabled() end },
       { "<a-p>", function() Snacks.words.jump(-vim.v.count1, true) end, has = "documentHighlight",
         desc = "Prev Reference", cond = function() return Snacks.words.is_enabled() end },
+      {"]d", M.diagnostic_goto(true), "Next Diagnostic"},
+      {"[d", M.diagnostic_goto(false), "Prev Diagnostic"},
+      {"]e", M.diagnostic_goto(true, "Error"), "Next Error"},
+      {"[e", M.diagnostic_goto(false, "ERROR"), "Prev Error"},
+      {"]w", M.diagnostic_goto(true, "WARN"), "Next Warning"},
+      {"[w", M.diagnostic_goto(true, "WARN"), "Prev Warning"},
     }
 
   return M._keys
-end
-
----@param opts? lsp.Client.filter
-function M.get_clients(opts)
-  local lazyUtil = require("util.lsp")
-
-  return lazyUtil.get_clients(opts)
 end
 
 ---@param method string|string[]
@@ -59,7 +65,7 @@ function M.has(buffer, method)
     return false
   end
   method = method:find("/") and method or "textDocument/" .. method
-  local clients = M.get_clients({ bufnr = buffer })
+  local clients = vim.lsp.get_clients({ bufnr = buffer })
   for _, client in ipairs(clients) do
     if client.supports_method(method) then
       return true
@@ -70,17 +76,15 @@ end
 
 ---@return LazyKeysLsp[]
 function M.resolve(buffer)
-  local lazyUtil = require("util")
   local Keys = require("lazy.core.handler.keys")
   if not Keys.resolve then
     return {}
   end
   local spec = vim.tbl_extend("force", {}, M.get())
-
-  local opts = lazyUtil.opts("nvim-lspconfig")
-  local clients = M.get_clients({ bufnr = buffer })
+  local servers = require("plugins.lsp.servers")
+  local clients = vim.lsp.get_clients({ bufnr = buffer })
   for _, client in ipairs(clients) do
-    local maps = opts.servers[client.name] and opts.servers[client.name].keys or {}
+    local maps = servers[client.name] and servers[client.name].keys or {}
     vim.list_extend(spec, maps)
   end
   return Keys.resolve(spec)
@@ -100,6 +104,11 @@ function M.on_attach(_, buffer)
       opts.has = nil
       opts.silent = opts.silent ~= false
       opts.buffer = buffer
+
+      if opts.desc then
+        opts.desc = "LSP: " .. opts.desc
+      end
+
       vim.keymap.set(keys.mode or "n", keys.lhs, keys.rhs, opts)
     end
   end

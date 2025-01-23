@@ -69,53 +69,12 @@ return {
     end,
     ---@param opts PluginLspOpts
     config = function(_, opts)
-      -- diagnostic
-      local diagnostic_goto = function(next, severity)
-        local go = next and vim.diagnostic.goto_next or vim.diagnostic.goto_prev
-        severity = severity and vim.diagnostic.severity[severity] or nil
-        return function()
-          go({ severity = severity })
-        end
-      end
-
       vim.api.nvim_create_autocmd("LspAttach", {
         group = vim.api.nvim_create_augroup("brix-lsp-attach", { clear = true }),
-        --stylua: ignore
         callback = function(args)
           local buffer = args.buf ---@type number
           local client = vim.lsp.get_client_by_id(args.data.client_id)
-
-          local map = function(keys, func, desc, mode)
-            mode = mode or "n"
-            vim.keymap.set(mode, keys, func, { buffer = buffer, desc = "LSP: " .. desc })
-          end
-          local builtin = require("fzf-lua")
-
-          map("<leader>cl", "<cmd>LspInfo<cr>", "[L]sp Info")
-          map("gd", "<cmd>FzfLua lsp_definitions     jump_to_single_result=true ignore_current_line=true<cr>", "[G]oto [D]efinition")
-          map("gr", "<cmd>FzfLua lsp_references      jump_to_single_result=true ignore_current_line=true<cr>", "[G]oto [R]eferences")
-          map("gI", "<cmd>FzfLua lsp_implementations jump_to_single_result=true ignore_current_line=true<cr>", "[G]oto [I]mplementation")
-          map("gy", "<cmd>FzfLua lsp_typedefs        jump_to_single_result=true ignore_current_line=true<cr>", "[G]oto T[y]pe Definition")
-          map("gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
-          map("<leader>ds", builtin.lsp_document_symbols, "[D]ocument [S]ymbols")
-          map("<leader>rn", vim.lsp.buf.rename, "[R]e[n]ame")
-          map("<leader>ca", vim.lsp.buf.code_action, "[C]ode [A]ction", { "n", "v" })
-          map("K", vim.lsp.buf.hover, "Hover Documentation")
-          map("gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
-          map("<leader>cd", vim.diagnostic.open_float, "Line Diagnostics")
-
-          map("]d", diagnostic_goto(true),  "Next Diagnostic" )
-          map("[d", diagnostic_goto(false), "Prev Diagnostic" )
-          map("]e", diagnostic_goto(true, "ERROR"), "Next Error" )
-          map("[e", diagnostic_goto(false, "ERROR"),"Prev Error" )
-          map("]w", diagnostic_goto(true, "WARN"),  "Next Warning" )
-          map("[w", diagnostic_goto(false, "WARN"), "Prev Warning" )
-
-          if client then
-            if client.name == "eslint"then
-              map("<leader>cf", "<cmd>EslintFixAll<cr>", "Eslint [F]ixAll")
-            end
-          end
+          require("plugins.lsp.keymaps").on_attach(client, buffer)
         end,
       })
 
