@@ -69,14 +69,9 @@ return {
     end,
     ---@param opts PluginLspOpts
     config = function(_, opts)
-      vim.api.nvim_create_autocmd("LspAttach", {
-        group = vim.api.nvim_create_augroup("brix-lsp-attach", { clear = true }),
-        callback = function(args)
-          local buffer = args.buf ---@type number
-          local client = vim.lsp.get_client_by_id(args.data.client_id)
-          require("plugins.lsp.keymaps").on_attach(client, buffer)
-        end,
-      })
+      require("util.lsp").on_attach(function(client, buffer)
+        require("plugins.lsp.keymaps").on_attach(client, buffer)
+      end)
 
       local blink_cmp = require("blink.cmp")
       local capabilities = vim.tbl_deep_extend(
@@ -90,12 +85,22 @@ return {
       local have_mason, mlsp = pcall(require, "mason-lspconfig")
 
       local servers = require("plugins.lsp.servers")
+      local setup = require("plugins.lsp.setup")
+
       if have_mason then
         mlsp.setup_handlers({
           function(server_name)
             local server_opts = vim.tbl_deep_extend("force", {
               capabilities = vim.deepcopy(capabilities),
             }, servers[server_name] or {})
+
+            if server_opts.enabled == false then
+              return
+            end
+
+            if setup[server_name] and setup[server_name](server_name, server_opts) then
+              return
+            end
 
             require("lspconfig")[server_name].setup(server_opts)
           end,
