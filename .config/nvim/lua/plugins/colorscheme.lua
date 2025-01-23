@@ -10,9 +10,17 @@ return {
   -- catppuccin
   {
     "catppuccin/nvim",
-    lazy = true,
+    -- lazy = true,
     name = "catppuccin",
     opts = {
+      transparent_background = false,
+      color_overrides = {
+        mocha = {
+          base = "#000000",
+          mantle = "#000000",
+          crust = "#000000",
+        },
+      },
       integrations = {
         aerial = true,
         alpha = true,
@@ -63,13 +71,9 @@ return {
         end,
       },
     },
-  },
-  {
-    "bluz71/vim-nightfly-guicolors",
-    priority = 1000,
-    config = function()
-      -- vim.g.nightflyTransparent = true
-      vim.cmd.colorscheme("nightfly")
+    config = function(_, opts)
+      require("catppuccin").setup(opts)
+      vim.cmd.colorscheme("catppuccin-mocha")
     end,
   },
 }
