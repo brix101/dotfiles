@@ -38,7 +38,7 @@ function M.get()
       { "]]", function() Snacks.words.jump(vim.v.count1) end, has = "documentHighlight", desc = "Next Reference", cond = function() return Snacks.words.is_enabled() end },
       { "[[", function() Snacks.words.jump(-vim.v.count1) end, has = "documentHighlight", desc = "Prev Reference", cond = function() return Snacks.words.is_enabled() end },
       { "<a-n>", function() Snacks.words.jump(vim.v.count1, true) end, has = "documentHighlight", desc = "Next Reference", cond = function() return Snacks.words.is_enabled() end },
-      { "<a-p>", function() Snacks.words.jump(-vim.v.count1, true) end, has = "documentHighlight", FFsc = "Prev Reference", cond = function() return Snacks.words.is_enabled() end },
+      { "<a-p>", function() Snacks.words.jump(-vim.v.count1, true) end, has = "documentHighlight", desc = "Prev Reference", cond = function() return Snacks.words.is_enabled() end },
       {"]d", M.diagnostic_goto(true), "Next Diagnostic"},
       {"[d", M.diagnostic_goto(false), "Prev Diagnostic"},
       {"]e", M.diagnostic_goto(true, "Error"), "Next Error"},
