@@ -81,29 +81,46 @@ return {
         blink_cmp.get_lsp_capabilities(),
         opts.capabilities or {}
       )
-
-      local have_mason, mlsp = pcall(require, "mason-lspconfig")
-
       local servers = require("plugins.lsp.servers")
-      local setup = require("plugins.lsp.setup")
+
+      local function setup(server_name)
+        local server_opts = vim.tbl_deep_extend("force", {
+          capabilities = vim.deepcopy(capabilities),
+        }, servers[server_name] or {})
+
+        if server_opts.enabled == false then
+          return
+        end
+
+        require("lspconfig")[server_name].setup(server_opts)
+      end
+
+      -- get all the servers that are available through mason-lspconfig
+      local have_mason, mlsp = pcall(require, "mason-lspconfig")
+      local all_mslp_servers = {}
+      if have_mason then
+        all_mslp_servers = vim.tbl_keys(require("mason-lspconfig.mappings.server").lspconfig_to_package)
+      end
+
+      local ensure_installed = {} ---@type string[]
+      for server, server_opts in pairs(servers) do
+        if server_opts then
+          server_opts = server_opts == true and {} or server_opts
+          -- run manual setup if mason=false or if this is a server that cannot be installed with mason-lspconfig
+          if server_opts.mason == false or not vim.tbl_contains(all_mslp_servers, server) then
+            setup(server)
+          else
+            ensure_installed[#ensure_installed + 1] = server
+          end
+        end
+      end
 
       if have_mason then
-        mlsp.setup_handlers({
-          function(server_name)
-            local server_opts = vim.tbl_deep_extend("force", {
-              capabilities = vim.deepcopy(capabilities),
-            }, servers[server_name] or {})
-
-            if server_opts.enabled == false then
-              return
-            end
-
-            if setup[server_name] and setup[server_name](server_name, server_opts) then
-              return
-            end
-
-            require("lspconfig")[server_name].setup(server_opts)
-          end,
+        -- automatically hook up LSPs which are Mason-installed but not explicitly set up with `opts.servers`
+        mlsp.setup({
+          automatic_installation = true,
+          ensure_installed = ensure_installed,
+          handlers = { setup },
         })
       end
     end,

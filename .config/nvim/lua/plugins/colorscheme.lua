@@ -10,7 +10,7 @@ return {
   -- catppuccin
   {
     "catppuccin/nvim",
-    -- lazy = true,
+    lazy = true,
     name = "catppuccin",
     opts = {
       transparent_background = false,
@@ -71,9 +71,21 @@ return {
         end,
       },
     },
-    config = function(_, opts)
-      require("catppuccin").setup(opts)
-      vim.cmd.colorscheme("catppuccin-mocha")
+  },
+  {
+    "EdenEast/nightfox.nvim",
+    config = function()
+      -- vim.cmd.colorscheme("carbonfox")
     end,
+  },
+  {
+    "rose-pine/neovim",
+    name = "rose-pine",
+    config = function()
+      vim.cmd.colorscheme("rose-pine-main")
+    end,
+  },
+  {
+    "lunarvim/darkplus.nvim",
   },
 }
