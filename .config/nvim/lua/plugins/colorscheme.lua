@@ -10,15 +10,18 @@ return {
   -- catppuccin
   {
     "catppuccin/nvim",
-    lazy = true,
+    -- lazy = true,
     name = "catppuccin",
     opts = {
       transparent_background = false,
       color_overrides = {
         mocha = {
-          base = "#000000",
-          mantle = "#000000",
-          crust = "#000000",
+          -- base = "#1e1e2e",
+          -- mantle = "#181825",
+          -- crust = "#11111b",
+          base = "#010105",
+          mantle = "#0e0e1b",
+          crust = "#070711",
         },
       },
       integrations = {
@@ -71,6 +74,10 @@ return {
         end,
       },
     },
+    config = function(_, opts)
+      require("catppuccin").setup(opts)
+      vim.cmd.colorscheme("catppuccin-mocha")
+    end,
   },
   {
     "EdenEast/nightfox.nvim",
@@ -82,7 +89,7 @@ return {
     "rose-pine/neovim",
     name = "rose-pine",
     config = function()
-      vim.cmd.colorscheme("rose-pine-main")
+      -- vim.cmd.colorscheme("rose-pine-main")
     end,
   },
   {
