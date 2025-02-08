@@ -109,5 +109,7 @@ export PATH="$HOME/,cargo/bin:$PATH"
 
 export SDKPATH="$HOME/.sdkman"
 
+export TERM=xterm-256color
+
 # rustup complettion
 fpath+=~/.zfunc
