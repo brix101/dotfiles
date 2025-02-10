@@ -101,7 +101,7 @@ return {
       end
 
       local copilot_colors = {
-        ok = "DiagnosticOk",
+        ok = "Special",
         error = "DiagnosticError",
         pending = "DiagnosticWarn",
       }
