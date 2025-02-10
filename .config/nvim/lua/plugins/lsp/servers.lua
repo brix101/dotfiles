@@ -110,6 +110,13 @@ return {
         require("util.lsp").action["source.fixAll.ts"],
         desc = "Fix all diagnostics",
       },
+      {
+        "<leader>cV",
+        function()
+          require("util.lsp").execute({ command = "typescript.selectTypeScriptVersion" })
+        end,
+        desc = "Select TS workspace version",
+      },
     },
   },
   eslint = {
@@ -163,5 +170,11 @@ return {
       },
     },
   },
-  pyright = {},
+  pyright = {
+    settings = {
+      python = {
+        analysis = { diagnosticMode = "off", typeCheckingMode = "off" },
+      },
+    },
+  },
 }
