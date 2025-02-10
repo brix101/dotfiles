@@ -82,7 +82,7 @@ return {
         opts.capabilities or {}
       )
       local servers = require("plugins.lsp.servers")
-      local server_setup = require("plugins.lsp.setup")
+      -- local server_setup = require("plugins.lsp.setup")
 
       local function setup(server)
         local server_opts = vim.tbl_deep_extend("force", {
@@ -93,15 +93,15 @@ return {
           return
         end
 
-        if server_setup[server] then
-          if server_setup[server](server, server_opts) then
-            return
-          end
-        elseif server_setup["*"] then
-          if server_setup["*"](server, server_opts) then
-            return
-          end
-        end
+        -- if server_setup[server] then
+        --   if server_setup[server](server, server_opts) then
+        --     return
+        --   end
+        -- elseif server_setup["*"] then
+        --   if server_setup["*"](server, server_opts) then
+        --     return
+        --   end
+        -- end
 
         require("lspconfig")[server].setup(server_opts)
       end
