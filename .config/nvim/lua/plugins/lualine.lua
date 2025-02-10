@@ -71,9 +71,6 @@ return {
   -- statusline
   {
     "nvim-lualine/lualine.nvim",
-    dependencies = {
-      "meuter/lualine-so-fancy.nvim",
-    },
     event = "VeryLazy",
     init = function()
       vim.g.lualine_laststatus = vim.o.laststatus
@@ -106,6 +103,16 @@ return {
         pending = "DiagnosticWarn",
       }
 
+      local function get_active_lsps()
+        local active_lsps = {}
+
+        for _, client in ipairs(vim.lsp.get_clients()) do
+          table.insert(active_lsps, client.name)
+        end
+
+        return active_lsps
+      end
+
       local opts = {
         options = {
           theme = "auto",
@@ -135,7 +142,12 @@ return {
           },
           lualine_x = {
             Snacks.profiler.status(),
-            { "fancy_lsp_servers" },
+            -- stylua: ignore
+            {
+              function() return "󰌘 " .. table.concat(get_active_lsps(), ",") end,
+              cond = function() return get_active_lsps() ~= nil end,
+              color = function() return { fg = Snacks.util.color("Statement") } end,
+            },
             -- stylua: ignore
             {
               function() return icons.kinds.Copilot end,
