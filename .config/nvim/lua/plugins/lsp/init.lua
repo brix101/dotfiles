@@ -82,17 +82,28 @@ return {
         opts.capabilities or {}
       )
       local servers = require("plugins.lsp.servers")
+      local server_setup = require("plugins.lsp.setup")
 
-      local function setup(server_name)
+      local function setup(server)
         local server_opts = vim.tbl_deep_extend("force", {
           capabilities = vim.deepcopy(capabilities),
-        }, servers[server_name] or {})
+        }, servers[server] or {})
 
         if server_opts.enabled == false then
           return
         end
 
-        require("lspconfig")[server_name].setup(server_opts)
+        if server_setup[server] then
+          if server_setup[server](server, server_opts) then
+            return
+          end
+        elseif server_setup["*"] then
+          if server_setup["*"](server, server_opts) then
+            return
+          end
+        end
+
+        require("lspconfig")[server].setup(server_opts)
       end
 
       -- get all the servers that are available through mason-lspconfig

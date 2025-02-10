@@ -185,4 +185,26 @@ return {
       },
     },
   },
+  ruff = {
+    cmd_env = { RUFF_TRACE = "messages" },
+    init_options = {
+      settings = {
+        logLevel = "error",
+      },
+    },
+    keys = {
+      {
+        "<leader>co",
+        require("util.lsp").action["source.organizeImports"],
+        desc = "Organize Imports",
+      },
+    },
+  },
+  pyright = {
+    settings = {
+      python = {
+        analysis = { diagnosticMode = "off", typeCheckingMode = "off" },
+      },
+    },
+  },
 }
