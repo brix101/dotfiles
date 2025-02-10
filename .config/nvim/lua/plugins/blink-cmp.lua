@@ -76,6 +76,7 @@ return {
         -- set to 'mono' for 'Nerd Font Mono' or 'normal' for 'Nerd Font'
         -- adjusts spacing to ensure icons are aligned
         nerd_font_variant = "mono",
+        kind_icons = kinds,
       },
       completion = {
         accept = {
@@ -143,7 +144,7 @@ return {
         -- adding any nvim-cmp sources here will enable them
         -- with blink.compat
         compat = {},
-        default = { "lsp", "path", "snippets", "buffer", "copilot" },
+        default = { "lsp", "path", "snippets", "buffer", "copilot", "lazydev" },
         cmdline = {},
         providers = {
           copilot = {
@@ -153,24 +154,23 @@ return {
             score_offset = 100,
             async = true,
           },
+          lazydev = {
+            name = "LazyDev",
+            module = "lazydev.integrations.blink",
+            score_offset = 100, -- show at a higher priority than lsp
+          },
         },
       },
-
       keymap = {
-
-        preset = "default",
-
+        preset = "super-tab",
         ["<C-space>"] = { "show", "show_documentation", "hide_documentation" },
         ["<C-e>"] = { "hide", "fallback" },
         ["<CR>"] = { "accept", "fallback" },
-
         ["<Tab>"] = {
+          -- stylua: ignore
           function(cmp)
-            if cmp.snippet_active() then
-              return cmp.accept()
-            else
-              return cmp.select_and_accept()
-            end
+            if cmp.snippet_active() then return cmp.accept()
+            else return cmp.select_and_accept() end
           end,
           "snippet_forward",
           "fallback",
@@ -242,23 +242,6 @@ return {
     end,
   },
 
-  -- lazydev
-  {
-    "saghen/blink.cmp",
-    opts = {
-      sources = {
-        -- add lazydev to your completion providers
-        default = { "lazydev" },
-        providers = {
-          lazydev = {
-            name = "LazyDev",
-            module = "lazydev.integrations.blink",
-            score_offset = 100, -- show at a higher priority than lsp
-          },
-        },
-      },
-    },
-  },
   -- catppuccin support
   {
     "catppuccin",
