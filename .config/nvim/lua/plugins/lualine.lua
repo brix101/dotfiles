@@ -92,6 +92,20 @@ return {
 
       vim.o.laststatus = vim.g.lualine_laststatus
 
+      local function copilot_status()
+        local clients = package.loaded["copilot"] and vim.lsp.get_clients({ name = "copilot", bufnr = 0 }) or {}
+        if #clients > 0 then
+          local status = require("copilot.api").status.data.status
+          return (status == "InProgress" and "pending") or (status == "Warning" and "error") or "ok"
+        end
+      end
+
+      local copilot_colors = {
+        ok = "Special",
+        error = "DiagnosticError",
+        pending = "DiagnosticWarn",
+      }
+
       local opts = {
         options = {
           theme = "auto",
@@ -124,9 +138,21 @@ return {
             { "fancy_lsp_servers" },
             -- stylua: ignore
             {
-              function() return require("noice").api.status.command.get() end,
-              cond = function() return package.loaded["noice"] and require("noice").api.status.command.has() end,
-              color = function() return { fg = Snacks.util.color("Statement") } end,
+              function() return icons.kinds.Copilot end,
+              cond = function() return copilot_status() ~= nil end,
+              color = function() return { fg = Snacks.util.color(copilot_colors[copilot_status()] or copilot_colors.ok) } end,
+            },
+             -- stylua: ignore
+            {
+                function()
+                  return require("noice").api.status.command.get()
+                end,
+                cond = function()
+                  return package.loaded["noice"] and require("noice").api.status.command.has()
+                end,
+                color = function()
+                  return { fg = Snacks.util.color("Statement") }
+                end,
             },
             -- stylua: ignore
             {

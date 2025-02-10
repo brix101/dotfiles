@@ -60,6 +60,7 @@ return {
         opts = {},
         version = "*",
       },
+      "giuxtaposition/blink-cmp-copilot",
     },
     ---@module 'blink.cmp'
     ---@type blink.cmp.Config
@@ -142,8 +143,17 @@ return {
         -- adding any nvim-cmp sources here will enable them
         -- with blink.compat
         compat = {},
-        default = { "lsp", "path", "snippets", "buffer" },
+        default = { "lsp", "path", "snippets", "buffer", "copilot" },
         cmdline = {},
+        providers = {
+          copilot = {
+            name = "copilot",
+            module = "blink-cmp-copilot",
+            kind = "Copilot",
+            score_offset = 100,
+            async = true,
+          },
+        },
       },
 
       keymap = {
