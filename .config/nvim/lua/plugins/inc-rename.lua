@@ -1,13 +1,10 @@
 return {
-
   -- Rename with cmdpreview
-  recommended = true,
-  desc = "Incremental LSP renaming based on Neovim's command-preview feature",
   {
     "smjonas/inc-rename.nvim",
     cmd = "IncRename",
     opts = {
-      input_buffer_type = "dressing",
+      -- input_buffer_type = "dressing",
     },
   },
 
@@ -30,11 +27,11 @@ return {
   },
 
   --- Noice integration
-  -- {
-  --   "folke/noice.nvim",
-  --   optional = true,
-  --   opts = {
-  --     presets = { inc_rename = true },
-  --   },
-  -- },
+  {
+    "folke/noice.nvim",
+    optional = true,
+    opts = {
+      presets = { inc_rename = true },
+    },
+  },
 }

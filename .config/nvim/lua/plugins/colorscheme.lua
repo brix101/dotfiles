@@ -25,7 +25,6 @@ return {
         },
       },
       integrations = {
-        aerial = true,
         alpha = true,
         cmp = true,
         dashboard = true,
@@ -63,17 +62,17 @@ return {
         which_key = true,
       },
     },
-    specs = {
-      {
-        "akinsho/bufferline.nvim",
-        optional = true,
-        opts = function(_, opts)
-          if (vim.g.colors_name or ""):find("catppuccin") then
-            opts.highlights = require("catppuccin.groups.integrations.bufferline").get()
-          end
-        end,
-      },
-    },
+    -- specs = {
+    --   {
+    --     "akinsho/bufferline.nvim",
+    --     optional = true,
+    --     opts = function(_, opts)
+    --       if (vim.g.colors_name or ""):find("catppuccin") then
+    --         opts.highlights = require("catppuccin.groups.integrations.bufferline").get()
+    --       end
+    --     end,
+    --   },
+    -- },
     config = function(_, opts)
       require("catppuccin").setup(opts)
       vim.cmd.colorscheme("catppuccin-mocha")
