@@ -29,6 +29,7 @@ return {
     enabled = false,
   },
   vtsls = {
+    enabled = false,
     -- explicitly add default filetypes, so that we can extend
     -- them in related extras
     filetypes = {

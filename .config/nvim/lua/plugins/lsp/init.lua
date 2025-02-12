@@ -64,14 +64,62 @@ return {
           formatting_options = nil,
           timeout_ms = nil,
         },
+        servers = {},
+        -- you can do any additional lsp server setup here
+        -- return true if you don't want this server to be setup with lspconfig
+        ---@type table<string, fun(server:string, opts:_.lspconfig.options):boolean?>
+        setup = {
+          -- example to setup with typescript.nvim
+          -- tsserver = function(_, opts)
+          --   require("typescript").setup({ server = opts })
+          --   return true
+          -- end,
+          -- Specify * to use this function as a fallback for any server
+          -- ["*"] = function(server, opts) end,
+        },
       }
       return ret
     end,
     ---@param opts PluginLspOpts
     config = function(_, opts)
-      require("util.lsp").on_attach(function(client, buffer)
+      local lsp_util = require("util.lsp")
+
+      lsp_util.on_attach(function(client, buffer)
         require("plugins.lsp.keymaps").on_attach(client, buffer)
       end)
+
+      lsp_util.setup()
+      lsp_util.on_dynamic_capability(require("plugins.lsp.keymaps").on_attach)
+
+      -- inlay hints
+      if opts.inlay_hints.enabled then
+        lsp_util.on_supports_method("textDocument/inlayHint", function(client, buffer)
+          if
+            vim.api.nvim_buf_is_valid(buffer)
+            and vim.bo[buffer].buftype == ""
+            and not vim.tbl_contains(opts.inlay_hints.exclude, vim.bo[buffer].filetype)
+          then
+            vim.lsp.inlay_hint.enable(true, { bufnr = buffer })
+          end
+        end)
+      end
+
+      -- code lens
+      if opts.codelens.enabled and vim.lsp.codelens then
+        lsp_util.on_supports_method("textDocument/codeLens", function(client, buffer)
+          vim.lsp.codelens.refresh()
+          vim.api.nvim_create_autocmd({ "BufEnter", "CursorHold", "InsertLeave" }, {
+            buffer = buffer,
+            callback = vim.lsp.codelens.refresh,
+          })
+        end)
+      end
+
+      local servers = opts.servers
+
+      for _, server in ipairs(require("plugins.lsp.servers")) do
+        table.insert(servers, server)
+      end
 
       local blink_cmp = require("blink.cmp")
       local capabilities = vim.tbl_deep_extend(
@@ -81,8 +129,12 @@ return {
         blink_cmp.get_lsp_capabilities(),
         opts.capabilities or {}
       )
-      local servers = require("plugins.lsp.servers")
-      local server_setup = require("plugins.lsp.setup")
+
+      local lsp_setup = opts.setup
+
+      for _, setup in ipairs(require("plugins.lsp.setup")) do
+        table.insert(lsp_setup, setup)
+      end
 
       local function setup(server)
         local server_opts = vim.tbl_deep_extend("force", {
@@ -93,12 +145,12 @@ return {
           return
         end
 
-        if server_setup[server] then
-          if server_setup[server](server, server_opts) then
+        if lsp_setup[server] then
+          if lsp_setup[server](server, server_opts) then
             return
           end
-        elseif server_setup["*"] then
-          if server_setup["*"](server, server_opts) then
+        elseif lsp_setup["*"] then
+          if lsp_setup["*"](server, server_opts) then
             return
           end
         end
