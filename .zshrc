@@ -113,3 +113,10 @@ export TERM=xterm-256color
 
 # rustup complettion
 fpath+=~/.zfunc
+
+# bun completions
+[ -s "/home/brix/.bun/_bun" ] && source "/home/brix/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"

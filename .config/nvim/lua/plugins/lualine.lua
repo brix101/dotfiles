@@ -71,6 +71,9 @@ return {
   -- statusline
   {
     "nvim-lualine/lualine.nvim",
+    dependencies = {
+      "meuter/lualine-so-fancy.nvim",
+    },
     event = "VeryLazy",
     init = function()
       vim.g.lualine_laststatus = vim.o.laststatus
@@ -118,6 +121,11 @@ return {
           },
           lualine_x = {
             Snacks.profiler.status(),
+            -- stylua: ignore
+            {
+              "fancy_lsp_servers",
+              color = function() return { fg = Snacks.util.color("Special") } end,
+            },
             -- stylua: ignore
             {
               function() return require("noice").api.status.command.get() end,

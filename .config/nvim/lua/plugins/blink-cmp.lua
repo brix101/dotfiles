@@ -144,7 +144,6 @@ return {
         -- with blink.compat
         compat = {},
         default = { "lsp", "path", "snippets", "buffer", "copilot", "lazydev" },
-        cmdline = {},
         providers = {
           copilot = {
             name = "copilot",
@@ -159,6 +158,9 @@ return {
             score_offset = 100, -- show at a higher priority than lsp
           },
         },
+      },
+      cmdline = {
+        enabled = false,
       },
       keymap = {
         preset = "super-tab",

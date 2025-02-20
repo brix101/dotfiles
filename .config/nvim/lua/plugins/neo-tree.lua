@@ -69,7 +69,7 @@ return {
       filtered_items = {
         visible = true,
         hide_dotfiles = true,
-        hide_gitignored = false,
+        hide_gitignored = true,
       },
     },
     window = {

@@ -1,3 +1,10 @@
+local icons = {
+  Error = " ",
+  Warn = " ",
+  Hint = " ",
+  Info = " ",
+}
+
 return {
   -- lspconfig
   {
@@ -28,10 +35,10 @@ return {
           severity_sort = true,
           signs = {
             text = {
-              [vim.diagnostic.severity.ERROR] = " ",
-              [vim.diagnostic.severity.WARN] = " ",
-              [vim.diagnostic.severity.HINT] = " ",
-              [vim.diagnostic.severity.INFO] = " ",
+              [vim.diagnostic.severity.ERROR] = icons.Error,
+              [vim.diagnostic.severity.WARN] = icons.Warn,
+              [vim.diagnostic.severity.HINT] = icons.Hint,
+              [vim.diagnostic.severity.INFO] = icons.Info,
             },
           },
         },
@@ -65,9 +72,6 @@ return {
           timeout_ms = nil,
         },
         servers = {},
-        -- you can do any additional lsp server setup here
-        -- return true if you don't want this server to be setup with lspconfig
-        ---@type table<string, fun(server:string, opts:_.lspconfig.options):boolean?>
         setup = {
           -- example to setup with typescript.nvim
           -- tsserver = function(_, opts)
@@ -88,12 +92,12 @@ return {
         require("plugins.lsp.keymaps").on_attach(client, buffer)
       end)
 
-      lsp_util.setup()
-      lsp_util.on_dynamic_capability(require("plugins.lsp.keymaps").on_attach)
+      -- lsp_util.setup()
+      -- lsp_util.on_dynamic_capability(require("plugins.lsp.keymaps").on_attach)
 
       -- inlay hints
       if opts.inlay_hints.enabled then
-        lsp_util.on_supports_method("textDocument/inlayHint", function(client, buffer)
+        lsp_util.on_supports_method("textDocument/inlayHint", function(_, buffer)
           if
             vim.api.nvim_buf_is_valid(buffer)
             and vim.bo[buffer].buftype == ""
@@ -106,7 +110,7 @@ return {
 
       -- code lens
       if opts.codelens.enabled and vim.lsp.codelens then
-        lsp_util.on_supports_method("textDocument/codeLens", function(client, buffer)
+        lsp_util.on_supports_method("textDocument/codeLens", function(_, buffer)
           vim.lsp.codelens.refresh()
           vim.api.nvim_create_autocmd({ "BufEnter", "CursorHold", "InsertLeave" }, {
             buffer = buffer,
@@ -115,12 +119,20 @@ return {
         end)
       end
 
-      local servers = opts.servers
-
-      for _, server in ipairs(require("plugins.lsp.servers")) do
-        table.insert(servers, server)
+      if type(opts.diagnostics.virtual_text) == "table" and opts.diagnostics.virtual_text.prefix == "icons" then
+        opts.diagnostics.virtual_text.prefix = vim.fn.has("nvim-0.10.0") == 0 and "●"
+          or function(diagnostic)
+            for d, icon in pairs(icons) do
+              if diagnostic.severity == vim.diagnostic.severity[d:upper()] then
+                return icon
+              end
+            end
+          end
       end
 
+      vim.diagnostic.config(vim.deepcopy(opts.diagnostics))
+
+      local servers = require("plugins.lsp.servers")
       local blink_cmp = require("blink.cmp")
       local capabilities = vim.tbl_deep_extend(
         "force",
@@ -130,11 +142,7 @@ return {
         opts.capabilities or {}
       )
 
-      local lsp_setup = opts.setup
-
-      for _, setup in ipairs(require("plugins.lsp.setup")) do
-        table.insert(lsp_setup, setup)
-      end
+      -- local lsp_setup = require("plugins.lsp.setup")
 
       local function setup(server)
         local server_opts = vim.tbl_deep_extend("force", {
@@ -145,16 +153,15 @@ return {
           return
         end
 
-        if lsp_setup[server] then
-          if lsp_setup[server](server, server_opts) then
-            return
-          end
-        elseif lsp_setup["*"] then
-          if lsp_setup["*"](server, server_opts) then
-            return
-          end
-        end
-
+        -- if lsp_setup[server] then
+        --   if lsp_setup[server](server, server_opts) then
+        --     return
+        --   end
+        -- elseif lsp_setup["*"] then
+        --   if lsp_setup["*"](server, server_opts) then
+        --     return
+        --   end
+        -- end
         require("lspconfig")[server].setup(server_opts)
       end
 
@@ -186,6 +193,54 @@ return {
           handlers = { setup },
         })
       end
+    end,
+  },
+
+  -- cmdline tools and lsp servers
+  {
+
+    "williamboman/mason.nvim",
+    cmd = "Mason",
+    keys = { { "<leader>cm", "<cmd>Mason<cr>", desc = "Mason" } },
+    opts_extend = { "ensure_installed" },
+    opts = {
+      ui = {
+        icons = {
+          package_installed = "✓",
+          package_pending = "➜",
+          package_uninstalled = "✗",
+        },
+      },
+      ensure_installed = {
+        "stylua",
+        "shfmt",
+        "prettier", -- prettier formatter
+        "isort", -- python formatter
+        "black", -- python formatter
+      },
+    },
+    ---@param opts MasonSettings | {ensure_installed: string[]}
+    config = function(_, opts)
+      require("mason").setup(opts)
+      local mr = require("mason-registry")
+      mr:on("package:install:success", function()
+        vim.defer_fn(function()
+          -- trigger FileType event to possibly load this newly installed LSP server
+          require("lazy.core.handler.event").trigger({
+            event = "FileType",
+            buf = vim.api.nvim_get_current_buf(),
+          })
+        end, 100)
+      end)
+
+      mr.refresh(function()
+        for _, tool in ipairs(opts.ensure_installed) do
+          local p = mr.get_package(tool)
+          if not p:is_installed() then
+            p:install()
+          end
+        end
+      end)
     end,
   },
 }

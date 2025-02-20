@@ -102,7 +102,7 @@ function M.on_attach(_, buffer)
       opts.buffer = buffer
 
       if opts.desc then
-        opts.desc = "LSP: " .. opts.desc
+        opts.desc = string.format("LSP: %s", opts.desc)
       end
 
       vim.keymap.set(keys.mode or "n", keys.lhs, keys.rhs, opts)
