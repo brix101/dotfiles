@@ -92,20 +92,6 @@ return {
 
       vim.o.laststatus = vim.g.lualine_laststatus
 
-      local function copilot_status()
-        local clients = package.loaded["copilot"] and vim.lsp.get_clients({ name = "copilot", bufnr = 0 }) or {}
-        if #clients > 0 then
-          local status = require("copilot.api").status.data.status
-          return (status == "InProgress" and "pending") or (status == "Warning" and "error") or "ok"
-        end
-      end
-
-      local copilot_colors = {
-        ok = "Special",
-        error = "DiagnosticError",
-        pending = "DiagnosticWarn",
-      }
-
       local opts = {
         options = {
           theme = "auto",
@@ -135,12 +121,10 @@ return {
           },
           lualine_x = {
             Snacks.profiler.status(),
-            { "fancy_lsp_servers" },
             -- stylua: ignore
             {
-              function() return icons.kinds.Copilot end,
-              cond = function() return copilot_status() ~= nil end,
-              color = function() return { fg = Snacks.util.color(copilot_colors[copilot_status()] or copilot_colors.ok) } end,
+              "fancy_lsp_servers",
+              color = function() return { fg = Snacks.util.color("Special") } end,
             },
             -- stylua: ignore
             {
@@ -213,6 +197,32 @@ return {
         symbols and symbols.get,
         cond = function()
           return vim.b.trouble_lualine ~= false and symbols.has()
+        end,
+      })
+
+      local function copilot_status()
+        local clients = package.loaded["copilot"] and vim.lsp.get_clients({ name = "copilot", bufnr = 0 }) or {}
+        if #clients > 0 then
+          local status = require("copilot.api").status.data.status
+          return (status == "InProgress" and "pending") or (status == "Warning" and "error") or "ok"
+        end
+      end
+
+      local copilot_colors = {
+        ok = "Special",
+        error = "DiagnosticError",
+        pending = "DiagnosticWarn",
+      }
+
+      table.insert(opts.sections.lualine_x, 2, {
+        function()
+          return icons.kinds.Copilot
+        end,
+        cond = function()
+          return copilot_status() ~= nil
+        end,
+        color = function()
+          return { fg = Snacks.util.color(copilot_colors[copilot_status()] or copilot_colors.ok) }
         end,
       })
 
