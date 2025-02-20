@@ -93,7 +93,7 @@ return {
 
       -- inlay hints
       if opts.inlay_hints.enabled then
-        lsp_util.on_supports_method("textDocument/inlayHint", function(client, buffer)
+        lsp_util.on_supports_method("textDocument/inlayHint", function(_, buffer)
           if
             vim.api.nvim_buf_is_valid(buffer)
             and vim.bo[buffer].buftype == ""
@@ -104,16 +104,16 @@ return {
         end)
       end
 
-      -- -- code lens
-      -- if opts.codelens.enabled and vim.lsp.codelens then
-      --   lsp_util.on_supports_method("textDocument/codeLens", function(client, buffer)
-      --     vim.lsp.codelens.refresh()
-      --     vim.api.nvim_create_autocmd({ "BufEnter", "CursorHold", "InsertLeave" }, {
-      --       buffer = buffer,
-      --       callback = vim.lsp.codelens.refresh,
-      --     })
-      --   end)
-      -- end
+      -- code lens
+      if opts.codelens.enabled and vim.lsp.codelens then
+        lsp_util.on_supports_method("textDocument/codeLens", function(_, buffer)
+          vim.lsp.codelens.refresh()
+          vim.api.nvim_create_autocmd({ "BufEnter", "CursorHold", "InsertLeave" }, {
+            buffer = buffer,
+            callback = vim.lsp.codelens.refresh,
+          })
+        end)
+      end
 
       local servers = require("plugins.lsp.servers")
       local blink_cmp = require("blink.cmp")
