@@ -115,6 +115,25 @@ return {
         end)
       end
 
+      if type(opts.diagnostics.virtual_text) == "table" and opts.diagnostics.virtual_text.prefix == "icons" then
+        opts.diagnostics.virtual_text.prefix = vim.fn.has("nvim-0.10.0") == 0 and "●"
+          or function(diagnostic)
+            local icons = {
+              Error = " ",
+              Warn = " ",
+              Hint = " ",
+              Info = " ",
+            }
+            for d, icon in pairs(icons) do
+              if diagnostic.severity == vim.diagnostic.severity[d:upper()] then
+                return icon
+              end
+            end
+          end
+      end
+
+      vim.diagnostic.config(vim.deepcopy(opts.diagnostics))
+
       local servers = require("plugins.lsp.servers")
       local blink_cmp = require("blink.cmp")
       local capabilities = vim.tbl_deep_extend(
@@ -188,6 +207,13 @@ return {
     keys = { { "<leader>cm", "<cmd>Mason<cr>", desc = "Mason" } },
     opts_extend = { "ensure_installed" },
     opts = {
+      ui = {
+        icons = {
+          package_installed = "✓",
+          package_pending = "➜",
+          package_uninstalled = "✗",
+        },
+      },
       ensure_installed = {
         "stylua",
         "shfmt",

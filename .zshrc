@@ -111,3 +111,4 @@ export PATH="$HOME/go/bin:$PATH"
 
 # rustup complettion
 fpath+=~/.zfunc
+export PATH="$HOME/.cargo/bin:$PATH"
