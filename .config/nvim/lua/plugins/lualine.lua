@@ -97,8 +97,8 @@ return {
           theme = "auto",
           globalstatus = vim.o.laststatus == 3,
           disabled_filetypes = { statusline = { "dashboard", "ministarter", "snacks_dashboard" } },
-          component_separators = { left = "|", right = "|" },
-          section_separators = { left = "", right = "" },
+          -- component_separators = { left = "|", right = "|" },
+          -- section_separators = { left = "", right = "" },
         },
         sections = {
           lualine_a = { "mode" },

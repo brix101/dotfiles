@@ -19,6 +19,7 @@ return {
       typescriptreact = { "prettier" },
       yaml = { "prettier" },
       go = { "goimports", "gofumpt" },
+      xml = { "xmlstarlet" },
       ["markdown"] = { "prettier", "markdownlint-cli2", "markdown-toc" },
       ["markdown.mdx"] = { "prettier", "markdownlint-cli2", "markdown-toc" },
 
@@ -26,7 +27,7 @@ return {
       ["*"] = { "codespell" },
       -- Use the "_" filetype to run formatters on filetypes that don't
       -- have other formatters configured.
-      ["_"] = { "trim_whitespace" },
+      -- ["_"] = { "trim_whitespace" },
     },
     -- The options you set here will be merged with the builtin formatters.
     -- You can also define any custom formatters here.

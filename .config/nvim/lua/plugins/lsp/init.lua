@@ -7,7 +7,6 @@ return {
     dependencies = {
       "mason.nvim", -- NOTE: Must be loaded before dependants
       { "williamboman/mason-lspconfig.nvim", config = function() end },
-      { "j-hui/fidget.nvim", opts = {} },
     },
     opts = function()
       ---@class PluginLspOpts

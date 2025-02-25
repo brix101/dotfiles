@@ -6,9 +6,7 @@ return {
   {
     "smjonas/inc-rename.nvim",
     cmd = "IncRename",
-    opts = {
-      input_buffer_type = "dressing",
-    },
+    opts = {},
   },
 
   -- LSP Keymaps
@@ -29,12 +27,12 @@ return {
     end,
   },
 
-  --- Noice integration
-  -- {
-  --   "folke/noice.nvim",
-  --   optional = true,
-  --   opts = {
-  --     presets = { inc_rename = true },
-  --   },
-  -- },
+  -- - Noice integration
+  {
+    "folke/noice.nvim",
+    optional = true,
+    opts = {
+      presets = { inc_rename = true },
+    },
+  },
 }
