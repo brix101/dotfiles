@@ -207,4 +207,5 @@ return {
       },
     },
   },
+  phpactor = {},
 }

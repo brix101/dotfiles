@@ -1,46 +1,3 @@
-local kinds = {
-  Array = " ",
-  Boolean = "󰨙 ",
-  Class = " ",
-  Codeium = "󰘦 ",
-  Color = " ",
-  Control = " ",
-  Collapsed = " ",
-  Constant = "󰏿 ",
-  Constructor = " ",
-  Copilot = " ",
-  Enum = " ",
-  EnumMember = " ",
-  Event = " ",
-  Field = " ",
-  File = " ",
-  Folder = " ",
-  Function = "󰊕 ",
-  Interface = " ",
-  Key = " ",
-  Keyword = " ",
-  Method = "󰊕 ",
-  Module = " ",
-  Namespace = "󰦮 ",
-  Null = " ",
-  Number = "󰎠 ",
-  Object = " ",
-  Operator = " ",
-  Package = " ",
-  Property = " ",
-  Reference = " ",
-  Snippet = "󱄽 ",
-  String = " ",
-  Struct = "󰆼 ",
-  Supermaven = " ",
-  TabNine = "󰏚 ",
-  Text = " ",
-  TypeParameter = " ",
-  Unit = " ",
-  Value = " ",
-  Variable = "󰀫 ",
-}
-
 return {
   {
     "saghen/blink.cmp",
@@ -76,6 +33,48 @@ return {
         -- set to 'mono' for 'Nerd Font Mono' or 'normal' for 'Nerd Font'
         -- adjusts spacing to ensure icons are aligned
         nerd_font_variant = "mono",
+        kind_icons = {
+          Array = " ",
+          Boolean = "󰨙 ",
+          Class = " ",
+          Codeium = "󰘦 ",
+          Color = " ",
+          Control = " ",
+          Collapsed = " ",
+          Constant = "󰏿 ",
+          Constructor = " ",
+          Copilot = " ",
+          Enum = " ",
+          EnumMember = " ",
+          Event = " ",
+          Field = " ",
+          File = " ",
+          Folder = " ",
+          Function = "󰊕 ",
+          Interface = " ",
+          Key = " ",
+          Keyword = " ",
+          Method = "󰊕 ",
+          Module = " ",
+          Namespace = "󰦮 ",
+          Null = " ",
+          Number = "󰎠 ",
+          Object = " ",
+          Operator = " ",
+          Package = " ",
+          Property = " ",
+          Reference = " ",
+          Snippet = "󱄽 ",
+          String = " ",
+          Struct = "󰆼 ",
+          Supermaven = " ",
+          TabNine = "󰏚 ",
+          Text = " ",
+          TypeParameter = " ",
+          Unit = " ",
+          Value = " ",
+          Variable = "󰀫 ",
+        },
       },
       completion = {
         accept = {
@@ -128,7 +127,7 @@ return {
         },
         list = {
           selection = {
-            preselect = function(ctx)
+            preselect = function()
               return not require("blink.cmp").snippet_active({ direction = 1 })
             end,
             auto_insert = true,
@@ -224,6 +223,7 @@ return {
             items = transform_items and transform_items(ctx, items) or items
             for _, item in ipairs(items) do
               item.kind = kind_idx or item.kind
+              -- item.kind_icon = opts.appearance.kind_icons[item.kind_name] or item.kind_icon or nil
             end
             return items
           end
@@ -236,15 +236,6 @@ return {
       require("blink.cmp").setup(opts)
     end,
   },
-  -- add icons
-  {
-    "saghen/blink.cmp",
-    opts = function(_, opts)
-      opts.appearance = opts.appearance or {}
-      opts.appearance.kind_icons = vim.tbl_extend("force", opts.appearance.kind_icons or {}, kinds)
-    end,
-  },
-
   -- catppuccin support
   {
     "catppuccin",

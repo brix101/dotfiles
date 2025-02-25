@@ -217,6 +217,7 @@ return {
         "prettier", -- prettier formatter
         "isort", -- python formatter
         "black", -- python formatter
+        "php-cs-fixer", -- php formatter
       },
     },
     ---@param opts MasonSettings | {ensure_installed: string[]}
