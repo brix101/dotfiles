@@ -1,3 +1,46 @@
+local kind_icons = {
+  Array = " ",
+  Boolean = "󰨙 ",
+  Class = " ",
+  Codeium = "󰘦 ",
+  Color = " ",
+  Control = " ",
+  Collapsed = " ",
+  Constant = "󰏿 ",
+  Constructor = " ",
+  Copilot = " ",
+  Enum = " ",
+  EnumMember = " ",
+  Event = " ",
+  Field = " ",
+  File = " ",
+  Folder = " ",
+  Function = "󰊕 ",
+  Interface = " ",
+  Key = " ",
+  Keyword = " ",
+  Method = "󰊕 ",
+  Module = " ",
+  Namespace = "󰦮 ",
+  Null = " ",
+  Number = "󰎠 ",
+  Object = " ",
+  Operator = " ",
+  Package = " ",
+  Property = " ",
+  Reference = " ",
+  Snippet = "󱄽 ",
+  String = " ",
+  Struct = "󰆼 ",
+  Supermaven = " ",
+  TabNine = "󰏚 ",
+  Text = " ",
+  TypeParameter = " ",
+  Unit = " ",
+  Value = " ",
+  Variable = "󰀫 ",
+}
+
 return {
   {
     "saghen/blink.cmp",
@@ -17,7 +60,6 @@ return {
         opts = {},
         version = "*",
       },
-      "giuxtaposition/blink-cmp-copilot",
     },
     ---@module 'blink.cmp'
     ---@type blink.cmp.Config
@@ -33,48 +75,6 @@ return {
         -- set to 'mono' for 'Nerd Font Mono' or 'normal' for 'Nerd Font'
         -- adjusts spacing to ensure icons are aligned
         nerd_font_variant = "mono",
-        kind_icons = {
-          Array = " ",
-          Boolean = "󰨙 ",
-          Class = " ",
-          Codeium = "󰘦 ",
-          Color = " ",
-          Control = " ",
-          Collapsed = " ",
-          Constant = "󰏿 ",
-          Constructor = " ",
-          Copilot = " ",
-          Enum = " ",
-          EnumMember = " ",
-          Event = " ",
-          Field = " ",
-          File = " ",
-          Folder = " ",
-          Function = "󰊕 ",
-          Interface = " ",
-          Key = " ",
-          Keyword = " ",
-          Method = "󰊕 ",
-          Module = " ",
-          Namespace = "󰦮 ",
-          Null = " ",
-          Number = "󰎠 ",
-          Object = " ",
-          Operator = " ",
-          Package = " ",
-          Property = " ",
-          Reference = " ",
-          Snippet = "󱄽 ",
-          String = " ",
-          Struct = "󰆼 ",
-          Supermaven = " ",
-          TabNine = "󰏚 ",
-          Text = " ",
-          TypeParameter = " ",
-          Unit = " ",
-          Value = " ",
-          Variable = "󰀫 ",
-        },
       },
       completion = {
         accept = {
@@ -142,21 +142,7 @@ return {
         -- adding any nvim-cmp sources here will enable them
         -- with blink.compat
         compat = {},
-        default = { "lsp", "path", "snippets", "buffer", "copilot", "lazydev" },
-        providers = {
-          copilot = {
-            name = "copilot",
-            module = "blink-cmp-copilot",
-            kind = "Copilot",
-            score_offset = 100,
-            async = true,
-          },
-          lazydev = {
-            name = "LazyDev",
-            module = "lazydev.integrations.blink",
-            score_offset = 100, -- show at a higher priority than lsp
-          },
-        },
+        default = { "lsp", "path", "snippets", "buffer" },
       },
       cmdline = {
         enabled = false,
@@ -223,7 +209,7 @@ return {
             items = transform_items and transform_items(ctx, items) or items
             for _, item in ipairs(items) do
               item.kind = kind_idx or item.kind
-              item.kind_icon = opts.appearance.kind_icons[item.kind_name] or item.kind_icon or nil
+              item.kind_icon = kind_icons[item.kind_name] or item.kind_icon or nil
             end
             return items
           end
@@ -236,10 +222,35 @@ return {
       require("blink.cmp").setup(opts)
     end,
   },
+  -- add icons
+  {
+    "saghen/blink.cmp",
+    opts = function(_, opts)
+      opts.appearance = opts.appearance or {}
+      opts.appearance.kind_icons = vim.tbl_extend("force", opts.appearance.kind_icons or {}, kind_icons)
+    end,
+  },
+
+  -- lazydev
+  {
+    "saghen/blink.cmp",
+    opts = {
+      sources = {
+        -- add lazydev to your completion providers
+        default = { "lazydev" },
+        providers = {
+          lazydev = {
+            name = "LazyDev",
+            module = "lazydev.integrations.blink",
+            score_offset = 100, -- show at a higher priority than lsp
+          },
+        },
+      },
+    },
+  },
   -- catppuccin support
   {
     "catppuccin",
-    optional = true,
     opts = {
       integrations = { blink_cmp = true },
     },
