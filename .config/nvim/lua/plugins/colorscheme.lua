@@ -49,6 +49,7 @@ return {
         neotree = true,
         notify = true,
         semantic_tokens = true,
+        snacks = true,
         treesitter = true,
         treesitter_context = true,
         which_key = true,
