@@ -88,31 +88,17 @@ alias mux='pgrep -vx tmux > /dev/null && \
 
 export PATH=~/.local/bin:$PATH
 
-# pnpm
-export PNPM_HOME="$HOME/.local/share/pnpm"
-case ":$PATH:" in
-  *":$PNPM_HOME:"*) ;;
-  *) export PATH="$PNPM_HOME:$PATH" ;;
-esac
-
-alias pn=pnpm
-# pnpm end
-
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
-#GO bin
-export PATH="$HOME/go/bin:$PATH"
-# Rust bin
-export PATH="$HOME/,cargo/bin:$PATH"
-
-export SDKPATH="$HOME/.sdkman"
-
-export TERM=xterm-256color
-
-# rustup complettion
-fpath+=~/.zfunc
+# pnpm
+export PNPM_HOME="/home/brix/.local/share/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end
 
 # bun completions
 [ -s "/home/brix/.bun/_bun" ] && source "/home/brix/.bun/_bun"
@@ -120,3 +106,16 @@ fpath+=~/.zfunc
 # bun
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
+
+#GO bin
+export PATH="$HOME/go/bin:$PATH"
+
+# Rust bin
+export PATH="$HOME/.cargo/bin:$PATH"
+
+# rustup complettion
+fpath+=~/.zfunc
+
+
+
+
