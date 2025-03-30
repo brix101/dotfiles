@@ -1,106 +1,60 @@
-@define-color cpt-rosewater #f4dbd6;
-@define-color cpt-flamingo #f0c6c6;
-@define-color cpt-pink #f5bde6;
-@define-color cpt-mauve #c6a0f6;
-@define-color cpt-red #ed8796;
-@define-color cpt-maroon #ee99a0;
-@define-color cpt-peach #f5a97f;
-@define-color cpt-yellow #eed49f;
-@define-color cpt-green #a6da95;
-@define-color cpt-teal #8bd5ca;
-@define-color cpt-sky #91d7e3;
-@define-color cpt-sapphire #7dc4e4;
-@define-color cpt-blue #8aadf4;
-@define-color cpt-lavender #b7bdf8;
-@define-color cpt-text #cad3f5;
-@define-color cpt-subtext1 #b8c0e0;
-@define-color cpt-subtext0 #a5adcb;
-@define-color cpt-overlay2 #939ab7;
-@define-color cpt-overlay1 #8087a2;
-@define-color cpt-overlay0 #6e738d;
-@define-color cpt-surface2 #5b6078;
-@define-color cpt-surface1 #494d64;
-@define-color cpt-surface0 #363a4f;
-@define-color cpt-base #24273a;
-@define-color cpt-mantle #1e2030;
-@define-color cpt-crust #181926;
+@import "mocha.css"; 
 
-/* background-color: @cpt-overlay0; */
 * {
-  font-family: "JetBrains Mono", "Symbols Nerd Font",
-    "Font Awesome 5 Brands Regular", "Arial", "Roboto", "Helvetica",
-    "sans-serif";
-  font-size: 14px;
+    font-family: "MesloLGS Nerd Font Mono Bold";
+    font-size: 16px;
+    min-height: 0;
+    font-weight: bold;
 }
 
 window#waybar {
-  background-color: @cpt-base;
-  border-bottom: 3px solid @cpt-surface1;
-  color: @cpt-text;
-  transition-property: background-color;
-  transition-duration: 0.5s;
+    background: transparent;
+    background-color: @crust;
+    color: @overlay0;
+    transition-property: background-color;
+    transition-duration: 0.1s;
+    border-bottom: 1px solid @overlay1;
 }
 
-window#waybar.hidden {
-  opacity: 0.2;
-}
-
-/*
-window#waybar.empty {
-    background-color: transparent;
-}
-window#waybar.solo {
-    background-color: #FFFFFF;
-}
-*/
-
-window#waybar.termite {
-  background-color: #3f3f3f;
-}
-
-window#waybar.chromium {
-  background-color: #000000;
-  border: none;
+#window {
+    margin: 8px;
+    padding-left: 8;
+    padding-right: 8;
 }
 
 button {
-  /* Use box-shadow instead of border so the text isn't offset */
-  box-shadow: inset 0 -3px transparent;
-  /* Avoid rounded borders under each button name */
-  border: none;
-  border-radius: 0;
+    box-shadow: inset 0 -3px transparent;
+    border: none;
+    border-radius: 0;
 }
 
-/* https://github.com/Alexays/Waybar/wiki/FAQ#the-workspace-buttons-have-a-strange-hover-effect */
 button:hover {
-  background: inherit;
-  box-shadow: inset 0 -3px @cpt-text;
+    background: inherit;
+    color: @mauve;
+    border-top: 2px solid @mauve;
 }
 
 #workspaces button {
-  padding: 0 5px;
-  background-color: transparent;
-  color: @cpt-text;
-}
-
-#workspaces button:hover {
-  background: @cpt-crust;
+    padding: 0 4px;
 }
 
 #workspaces button.focused {
-  background-color: @cpt-overlay0;
-  box-shadow: inset 0 -3px @cpt-text;
+    background-color: rgba(0, 0, 0, 0.3);
+    color: @rosewater;
+    border-top: 2px solid @rosewater;
+}
+
+#workspaces button.active {
+    background-color: rgba(0, 0, 0, 0.3);
+    color: @mauve;
+    border-top: 2px solid @mauve;
 }
 
 #workspaces button.urgent {
-  background-color: @cpt-red;
+    background-color: #eb4d4b;
 }
 
-#mode {
-  background-color: @cpt-overlay0;
-  margin-bottom: 3px;
-}
-
+#pulseaudio,
 #clock,
 #battery,
 #cpu,
@@ -108,233 +62,66 @@ button:hover {
 #disk,
 #temperature,
 #backlight,
-#network,
-#pulseaudio,
 #wireplumber,
-#custom-media,
-#custom-pacman,
-#custom-notification,
 #tray,
+#network,
 #mode,
-#idle_inhibitor,
-#keyboard-state,
-#scratchpad,
-#mpris,
-#upower,
-#mpd {
-  padding: 0 5px;
-  color: #ffffff;
-  margin-bottom: 3px;
-}
-
-#window,
-#workspaces {
-  margin: 0 2px;
-}
-
-/* If workspaces is the leftmost module, omit left margin */
-.modules-left > widget:first-child > #workspaces {
-  margin-left: 0;
-}
-
-/* If workspaces is the rightmost module, omit right margin */
-.modules-right > widget:last-child > #workspaces {
-  margin-right: 0;
+#scratchpad {
+  margin-top: 2px;
+  margin-bottom: 2px;
+  margin-left: 4px;
+  margin-right: 4px;
+  padding-left: 4px;
+  padding-right: 4px;
 }
 
 #clock {
-  color: @cpt-text;
-  background: rgba(0, 0, 0, 0.2);
-  /* background-color: @cpt-overlay0; */
+    color: @maroon;
+    border-bottom: 2px solid @maroon;
 }
 
-#battery {
-  background-color: #ffffff;
-  color: #000000;
-}
-
-#battery.charging,
-#battery.plugged {
-  color: #ffffff;
-  background-color: #26a65b;
-}
-
-@keyframes blink {
-  to {
-    background-color: #ffffff;
-    color: #000000;
-  }
-}
-
-#battery.critical:not(.charging) {
-  background-color: #f53c3c;
-  color: #ffffff;
-  animation-name: blink;
-  animation-duration: 0.5s;
-  animation-timing-function: linear;
-  animation-iteration-count: infinite;
-  animation-direction: alternate;
-}
-
-label:focus {
-  background-color: #000000;
-}
-
-#cpu {
-  background-color: #2ecc71;
-  color: #000000;
-}
-
-#memory {
-  background-color: #9b59b6;
-}
-
-#disk {
-  background-color: #964b00;
-}
-
-#backlight {
-  background-color: #90b1b1;
-}
-
-#network {
-  color: @cpt-text;
-}
-
-#network.disconnected {
-  color: @cpt-red;
+#clock.date {
+    color: @mauve;
+    border-bottom: 2px solid @mauve;
 }
 
 #pulseaudio {
-  color: @cpt-text;
+    color: @blue;
+    border-bottom: 2px solid @blue;
 }
 
-#pulseaudio.muted {
-  color: @cpt-red;
+#network {
+    color: @yellow;
+    border-bottom: 2px solid @yellow;
 }
 
-#wireplumber {
-  background-color: #fff0f5;
-  color: #000000;
+#idle_inhibitor {
+    margin-right: 12px;
+    color: #7cb342;
 }
-
-#wireplumber.muted {
-  background-color: #f53c3c;
-}
-
-#custom-media {
-  background: rgba(0, 0, 0, 0.2);
-  color: @cpt-text;
-  min-width: 100px;
-}
-
-/* #custom-media.custom-spotify { */
-/*   background-color: #66cc99; */
-/* } */
-/**/
-/* #custom-media.custom-vlc { */
-/*   background-color: #ffa000; */
-/* } */
-
-#temperature {
-  background-color: #f0932b;
-}
-
-#temperature.critical {
-  background-color: @cpt-red;
-}
-
-#tray {
-  color: @cpt-text;
-}
-
-#tray > .passive {
-  -gtk-icon-effect: dim;
-}
-
-#tray > .needs-attention {
-  -gtk-icon-effect: highlight;
-  background-color: @cpt-red;
-}
-
-/* #idle_inhibitor { 
-   background-color: #2d3436; 
- } */
 
 #idle_inhibitor.activated {
-  color: #2d3436;
+    color: @red;
 }
 
-#mpd {
-  background-color: #66cc99;
-  color: #2a5c45;
+#battery {
+    color: @green;
+    border-bottom: 2px solid @green;
 }
 
-#mpd.disconnected {
-  background-color: #f53c3c;
+/* If workspaces is the leftmost module, omit left margin */
+.modules-left>widget:first-child>#workspaces {
+    margin-left: 0;
 }
 
-#mpd.stopped {
-  background-color: #90b1b1;
+/* If workspaces is the rightmost module, omit right margin */
+.modules-right>widget:last-child>#workspaces {
+    margin-right: 0;
 }
 
-#mpd.paused {
-  background-color: #51a37a;
-}
-
-#language {
-  background: #00b093;
-  color: #740864;
-  padding: 0 5px;
-  min-width: 16px;
-}
-
-#keyboard-state {
-  background: #97e1ad;
-  color: #000000;
-  padding: 0 3px;
-}
-
-#keyboard-state > label {
-  padding: 0 5px;
-}
-
-#keyboard-state > label.locked {
-  background: rgba(0, 0, 0, 0.2);
-}
-
-#scratchpad {
-  background: rgba(0, 0, 0, 0.2);
-  color: @cpt-text;
-}
-
-#upower {
-  background: rgba(0, 0, 0, 0.2);
-  color: @cpt-text;
-}
-
-#upower.charging {
-  color: @cpt-subtext1;
-}
-
-#scratchpad.empty {
-  background-color: transparent;
-}
-
-#bluetooth {
-  font-size: 14px;
-  padding: 0 5px;
-}
-
-#bluetooth.disabled,
-#bluetooth.off {
-  color: @cpt-crust;
-}
-
-#custom-pacman {
-  color: @cpt-text;
-}
-
-#custom-notification {
-  font-family: "NotoSansMono Nerd Font";
+#custom-vpn {
+    color: @lavender;
+    border-radius: 15px;
+    padding-left: 6px;
+    padding-right: 6px;
 }
