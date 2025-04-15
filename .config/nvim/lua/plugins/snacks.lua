@@ -62,14 +62,13 @@ return {
           end,
         },
         sections = {
+          -- {
+          --   section = "terminal",
+          --   cmd = "fortune -c | cowthink -f $(find /usr/share/cowsay/cows -type f | shuf -n 1)",
+          --   height = 17,
+          --   padding = 1,
+          -- },
           {
-            section = "terminal",
-            cmd = "fortune -c | cowthink -f $(find /usr/share/cowsay/cows -type f | shuf -n 1)",
-            height = 17,
-            padding = 1,
-          },
-          {
-            pane = 2,
             icon = " ",
             title = "Recent Files",
             section = "recent_files",
@@ -78,9 +77,9 @@ return {
             indent = 2,
             padding = 1,
           },
-          { pane = 2, icon = " ", title = "Keymaps", section = "keys", padding = 1, indent = 2 },
-          { pane = 2, icon = " ", title = "Projects", section = "projects", indent = 2, padding = 1 },
-          { pane = 2, section = "startup" },
+          { icon = " ", title = "Keymaps", section = "keys", padding = 1, indent = 2 },
+          { icon = " ", title = "Projects", section = "projects", indent = 2, padding = 1 },
+          { section = "startup" },
         },
       },
       picker = {},

@@ -12,7 +12,7 @@ return {
     version = "*",
     event = { "BufReadPost", "BufNewFile", "BufWritePre" },
     dependencies = {
-      "mason.nvim", -- NOTE: Must be loaded before dependants
+      { "williamboman/mason.nvim", opts = {} }, -- NOTE: Must be loaded before dependants
       { "williamboman/mason-lspconfig.nvim", config = function() end },
       { "j-hui/fidget.nvim", opts = {} },
     },
