@@ -51,7 +51,7 @@ button:hover {
 }
 
 #workspaces button.urgent {
-  background-color: #eb4d4b;
+  background-color: @pink;
 }
 
 #pulseaudio,
@@ -87,7 +87,7 @@ button:hover {
 
 #pulseaudio {
   color: @blue;
-  border-bottom: 2px solid @blue;
+  /* border-bottom: 2px solid @blue; */
 }
 
 #network {
@@ -97,7 +97,7 @@ button:hover {
 
 #idle_inhibitor {
   margin-right: 12px;
-  color: #7cb342;
+  color: @green;
 }
 
 #idle_inhibitor.activated {
@@ -124,4 +124,9 @@ button:hover {
   border-radius: 15px;
   padding-left: 6px;
   padding-right: 6px;
+}
+
+#custom-notification {
+  font-family: "NotoSansMono Nerd Font";
+  font-size: 1.5rem;
 }

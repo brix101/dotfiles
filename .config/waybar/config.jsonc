@@ -9,36 +9,11 @@
     "tooltip": true,
     "interval": 1,
   },
-  "battery": {
-    "states": {
-      "warning": 30,
-      "critical": 15,
-    },
-    "format": "<span size='13000' foreground='#a6e3a1'>{icon} </span> {capacity}%",
-    "format-warning": "<span size='13000' foreground='#B1E3AD'>{icon} </span> {capacity}%",
-    "format-critical": "<span size='13000' foreground='#E38C8F'>{icon} </span> {capacity}%",
-    "format-charging": "<span size='13000' foreground='#B1E3AD'> </span>{capacity}%",
-    "format-plugged": "<span size='13000' foreground='#B1E3AD'> </span>{capacity}%",
-    "format-alt": "<span size='13000' foreground='#B1E3AD'>{icon} </span> {time}",
-    "format-full": "<span size='13000' foreground='#B1E3AD'> </span>{capacity}%",
-    "format-icons": ["", "", "", "", ""],
-    "tooltip-format": "{time}",
-  },
-  "network": {
-    "format-wifi": "",
-    "format-ethernet": "",
-    "tooltip-format": "{ifname} via {gwaddr}",
-    "format-linked": "{ifname} (No IP) ",
-    //"format-disconnected": "⚠",
-    //"format-alt": "{ipaddr}"
-  },
   "pulseaudio": {
-    // "scroll-step": 1, // %, can be a float
-    // "format": "{volume}% {icon} {format_source}",
-    "format": "{volume}% {icon}",
-    "format-bluetooth": "{volume}% {icon} {format_source}",
-    "format-bluetooth-muted": " {icon} {format_source}",
-    // "format-muted": " {format_source}",
+    "scroll-step": 1, // %, can be a float
+    "format": "{volume}% <span size='18432'>{icon}</span>",
+    "format-bluetooth": "{volume}% <span size='18432'>{icon}</span> {format_source}",
+    "format-bluetooth-muted": " <span size='18432'>{icon}</span> {format_source}",
     "format-muted": "0%  ",
     "format-source": "{volume}% ",
     "format-source-muted": "",
