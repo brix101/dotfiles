@@ -5,7 +5,7 @@
   "modules-right": ["custom/notification", "tray", "pulseaudio", "upower"],
   "clock": {
     "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
-    "format": "{:%a %d %b %H:%M:%S}",
+    "format": "{:%a %d %b %Y %I:%M:%S %p}",
     "tooltip": true,
     "interval": 1,
   },

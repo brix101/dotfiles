@@ -22,6 +22,7 @@ return {
       ["markdown"] = { "prettier", "markdownlint-cli2", "markdown-toc" },
       ["markdown.mdx"] = { "prettier", "markdownlint-cli2", "markdown-toc" },
       php = { "php_cs_fixer" },
+      htmlangular = { "prettier" },
 
       -- Use the "*" filetype to run formatters on all filetypes.
       ["*"] = { "codespell" },

@@ -208,4 +208,6 @@ return {
     },
   },
   phpactor = {},
+  angularls = {},
+  cssls = {},
 }
