@@ -125,9 +125,15 @@ return {
               color = function() return { fg = Snacks.util.color("Special") } end,
             },
             -- stylua: ignore
-          { "encoding" },
-            { "fileformat" },
+            {
+              "encoding",
+              color = { fg = "#e0af68" },
+            },
             -- stylua: ignore
+            {
+              "fileformat",
+              color = { fg = "#7dcfff" },
+            },
             -- stylua: ignore
             {
               require("lazy.status").updates,
