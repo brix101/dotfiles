@@ -2,16 +2,9 @@
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
--- Snacks animations
--- Set to `false` to globally disable all snacks animations
-
-vim.g.snacks_animate = true
--- LazyVim root dir detection
--- Each entry can be:
--- * the name of a detector function like `lsp` or `cwd`
--- * a pattern or array of patterns like `.git` or `lua`.
--- * a function with signature `function(buf) -> string|string[]`
-vim.g.root_spec = { "lsp", { ".git", "lua" }, "cwd" }
+-- if the completion engine supports the AI source,
+-- use that instead of inline suggestions
+vim.g.ai_cmp = true
 
 -- Set LSP servers to be ignored when used with `util.root.detectors.lsp`
 -- for detecting the LSP root
@@ -74,10 +67,9 @@ opt.spelllang = { "en" }
 opt.splitbelow = true -- Put new windows below current
 opt.splitkeep = "screen"
 opt.splitright = true -- Put new windows right of current
-opt.statuscolumn = [[%!v:lua.require'snacks.statuscolumn'.get()]]
 opt.tabstop = 2 -- Number of spaces tabs count for
 opt.termguicolors = true -- True color support
-opt.timeoutlen = vim.g.vscode and 1000 or 300 -- Lower than default (1000) to quickly trigger which-key
+opt.timeoutlen = 300 -- Lower than default (1000) to quickly trigger which-key
 opt.undodir = string.format("%s/undodir", vim.fn.stdpath("cache"))
 opt.undofile = true
 opt.undolevels = 10000
@@ -91,9 +83,6 @@ vim.opt.colorcolumn = "80"
 vim.cmd("highlight ColorColumn ctermbg=darkblue")
 
 opt.smoothscroll = true
-opt.foldexpr = "v:lua.require'lazyvim.util'.ui.foldexpr()"
-opt.foldmethod = "expr"
-opt.foldtext = ""
 
 -- Fix markdown indentation settings
 vim.g.markdown_recommended_style = 0

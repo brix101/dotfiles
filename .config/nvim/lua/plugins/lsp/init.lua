@@ -6,13 +6,12 @@ local icons = {
 }
 
 return {
-  -- lspconfig
   {
     "neovim/nvim-lspconfig",
     version = "*",
     event = { "BufReadPost", "BufNewFile", "BufWritePre" },
     dependencies = {
-      { "williamboman/mason.nvim", opts = {} }, -- NOTE: Must be loaded before dependants
+      "mason.nvim", -- NOTE: Must be loaded before dependants
       { "williamboman/mason-lspconfig.nvim", config = function() end },
       { "j-hui/fidget.nvim", opts = {} },
     },
@@ -119,17 +118,6 @@ return {
         end)
       end
 
-      if type(opts.diagnostics.virtual_text) == "table" and opts.diagnostics.virtual_text.prefix == "icons" then
-        opts.diagnostics.virtual_text.prefix = vim.fn.has("nvim-0.10.0") == 0 and "●"
-          or function(diagnostic)
-            for d, icon in pairs(icons) do
-              if diagnostic.severity == vim.diagnostic.severity[d:upper()] then
-                return icon
-              end
-            end
-          end
-      end
-
       vim.diagnostic.config(vim.deepcopy(opts.diagnostics))
 
       local servers = require("plugins.lsp.servers")
@@ -215,9 +203,6 @@ return {
         "stylua",
         "shfmt",
         "prettier", -- prettier formatter
-        "isort", -- python formatter
-        "black", -- python formatter
-        "php-cs-fixer", -- php formatter
       },
     },
     ---@param opts MasonSettings | {ensure_installed: string[]}

@@ -64,16 +64,9 @@ set("i", ";", ";<c-g>u")
 -- save file
 set({ "i", "x", "n", "s" }, "<C-s>", "<cmd>w<cr><esc>", { desc = "Save File" })
 
---keywordprg
-set("n", "<leader>K", "<cmd>norm! K<cr>", { desc = "Keywordprg" })
-
 -- better indenting
 set("v", "<", "<gv")
 set("v", ">", ">gv")
-
--- commenting
-set("n", "gco", "o<esc>Vcx<esc><cmd>normal gcc<cr>fxa<bs>", { desc = "Add Comment Below" })
-set("n", "gcO", "O<esc>Vcx<esc><cmd>normal gcc<cr>fxa<bs>", { desc = "Add Comment Above" })
 
 -- lazy
 set("n", "<leader>l", "<cmd>Lazy<cr>", { desc = "Lazy" })
@@ -87,17 +80,6 @@ set("n", "<leader>xq", "<cmd>copen<cr>", { desc = "Quickfix List" })
 set("n", "[q", vim.cmd.cprev, { desc = "Previous Quickfix" })
 set("n", "]q", vim.cmd.cnext, { desc = "Next Quickfix" })
 
-
-
--- stylua: ignore start
-
--- highlights under cursor
-set("n", "<leader>ui", vim.show_pos, { desc = "Inspect Pos" })
-set("n", "<leader>uI", "<cmd>InspectTree<cr>", { desc = "Inspect Tree" })
-
--- Terminal Mappings
-set("t", "<C-/>", "<cmd>close<cr>", { desc = "Hide Terminal" })
-set("t", "<c-_>", "<cmd>close<cr>", { desc = "which_key_ignore" })
 
 -- windows
 set("n", "<leader>w", "<c-w>", { desc = "Windows", remap = true })

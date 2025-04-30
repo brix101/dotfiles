@@ -62,12 +62,6 @@ return {
           end,
         },
         sections = {
-          -- {
-          --   section = "terminal",
-          --   cmd = "fortune -c | cowthink -f $(find /usr/share/cowsay/cows -type f | shuf -n 1)",
-          --   height = 17,
-          --   padding = 1,
-          -- },
           {
             icon = " ",
             title = "Recent Files",
@@ -113,7 +107,7 @@ return {
           })
         end,
       },
-      -- find
+      -- -- find
       { "<leader>fb", function() Snacks.picker.buffers() end, desc = "Buffers" },
       { "<leader>fc", function() Snacks.picker.files({ cwd = "~/.config/nvim" }) end, desc = "Find Config File" },
       { "<leader>ff", function() Snacks.picker.files() end, desc = "Find Files" },

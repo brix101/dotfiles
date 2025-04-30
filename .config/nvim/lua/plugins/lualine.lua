@@ -105,7 +105,6 @@ return {
           lualine_b = { "branch" },
 
           lualine_c = {
-            -- LazyVim.lualine.root_dir(),
             "filename",
             {
               "diagnostics",
@@ -117,7 +116,6 @@ return {
               },
             },
             { "filetype", icon_only = true, separator = "", padding = { left = 1, right = 0 } },
-            -- { LazyVim.lualine.pretty_path() },
           },
           lualine_x = {
             Snacks.profiler.status(),
@@ -127,23 +125,9 @@ return {
               color = function() return { fg = Snacks.util.color("Special") } end,
             },
             -- stylua: ignore
-            {
-              function() return require("noice").api.status.command.get() end,
-              cond = function() return package.loaded["noice"] and require("noice").api.status.command.has() end,
-              color = function() return { fg = Snacks.util.color("Statement") } end,
-            },
+          { "encoding" },
+            { "fileformat" },
             -- stylua: ignore
-            {
-              function() return require("noice").api.status.mode.get() end,
-              cond = function() return package.loaded["noice"] and require("noice").api.status.mode.has() end,
-              color = function() return { fg = Snacks.util.color("Constant") } end,
-            },
-            -- stylua: ignore
-            {
-              function() return "  " .. require("dap").status() end,
-              cond = function() return package.loaded["dap"] and require("dap").status() ~= "" end,
-              color = function() return { fg = Snacks.util.color("Debug") } end,
-            },
             -- stylua: ignore
             {
               require("lazy.status").updates,
@@ -200,31 +184,31 @@ return {
         end,
       })
 
-      -- local function copilot_status()
-      --   local clients = package.loaded["copilot"] and vim.lsp.get_clients({ name = "copilot", bufnr = 0 }) or {}
-      --   if #clients > 0 then
-      --     local status = require("copilot.api").status.data.status
-      --     return (status == "InProgress" and "pending") or (status == "Warning" and "error") or "ok"
-      --   end
-      -- end
-      --
-      -- local copilot_colors = {
-      --   ok = "Special",
-      --   error = "DiagnosticError",
-      --   pending = "DiagnosticWarn",
-      -- }
-      --
-      -- table.insert(opts.sections.lualine_x, 2, {
-      --   function()
-      --     return icons.kinds.Copilot
-      --   end,
-      --   cond = function()
-      --     return copilot_status() ~= nil
-      --   end,
-      --   color = function()
-      --     return { fg = Snacks.util.color(copilot_colors[copilot_status()] or copilot_colors.ok) }
-      --   end,
-      -- })
+      local function copilot_status()
+        local clients = package.loaded["copilot"] and vim.lsp.get_clients({ name = "copilot", bufnr = 0 }) or {}
+        if #clients > 0 then
+          local status = require("copilot.api").status.data.status
+          return (status == "InProgress" and "pending") or (status == "Warning" and "error") or "ok"
+        end
+      end
+
+      local copilot_colors = {
+        ok = "Special",
+        error = "DiagnosticError",
+        pending = "DiagnosticWarn",
+      }
+
+      table.insert(opts.sections.lualine_x, 2, {
+        function()
+          return icons.kinds.Copilot
+        end,
+        cond = function()
+          return copilot_status() ~= nil
+        end,
+        color = function()
+          return { fg = Snacks.util.color(copilot_colors[copilot_status()] or copilot_colors.ok) }
+        end,
+      })
 
       return opts
     end,

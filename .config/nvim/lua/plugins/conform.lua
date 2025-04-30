@@ -6,7 +6,6 @@ return {
   opts = {
     formatters_by_ft = {
       lua = { "stylua" },
-      fish = { "fish_indent" },
       sh = { "shfmt" },
       css = { "prettier" },
       graphql = { "prettier" },
@@ -21,8 +20,6 @@ return {
       go = { "goimports", "gofumpt" },
       ["markdown"] = { "prettier", "markdownlint-cli2", "markdown-toc" },
       ["markdown.mdx"] = { "prettier", "markdownlint-cli2", "markdown-toc" },
-      php = { "php_cs_fixer" },
-      htmlangular = { "prettier" },
 
       -- Use the "*" filetype to run formatters on all filetypes.
       ["*"] = { "codespell" },
@@ -87,11 +84,5 @@ return {
         conform.format({ bufnr = args.buf })
       end,
     })
-
-    -- vim.api.nvim_create_autocmd("BufWritePre", {
-    --   pattern = { "*.tsx", "*.ts", "*.jsx", "*.js" },
-    --   command = "silent! EslintFixAll",
-    --   group = vim.api.nvim_create_augroup("eslint", {}),
-    -- })
   end,
 }

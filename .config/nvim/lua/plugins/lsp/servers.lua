@@ -25,13 +25,7 @@ return {
       },
     },
   },
-  ts_ls = {
-    enabled = false,
-  },
   vtsls = {
-    enabled = false,
-    -- explicitly add default filetypes, so that we can extend
-    -- them in related extras
     filetypes = {
       "javascript",
       "javascriptreact",
@@ -64,6 +58,9 @@ return {
           parameterTypes = { enabled = true },
           propertyDeclarationTypes = { enabled = true },
           variableTypes = { enabled = false },
+        },
+        tsserver = {
+          maxTsServerMemory = 12288,
         },
       },
     },
@@ -167,9 +164,9 @@ return {
       },
     },
   },
-  graphql = {
-    filetypes = { "graphql", "gql", "svelte", "typescriptreact", "javascriptreact" },
-  },
+  -- graphql = {
+  --   filetypes = { "graphql", "gql", "svelte", "typescriptreact", "javascriptreact" },
+  -- },
   jsonls = {
     -- lazy-load schemastore when needed
     on_new_config = function(new_config)
@@ -185,29 +182,4 @@ return {
       },
     },
   },
-  ruff = {
-    cmd_env = { RUFF_TRACE = "messages" },
-    init_options = {
-      settings = {
-        logLevel = "error",
-      },
-    },
-    keys = {
-      {
-        "<leader>co",
-        require("util.lsp").action["source.organizeImports"],
-        desc = "Organize Imports",
-      },
-    },
-  },
-  pyright = {
-    settings = {
-      python = {
-        analysis = { diagnosticMode = "off", typeCheckingMode = "off" },
-      },
-    },
-  },
-  phpactor = {},
-  angularls = {},
-  cssls = {},
 }

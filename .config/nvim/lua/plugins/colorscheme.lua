@@ -1,14 +1,5 @@
 return {
-
-  -- tokyonight
-  {
-    "folke/tokyonight.nvim",
-    lazy = true,
-    opts = { style = "night" },
-  },
-
-  -- catppuccin
-  {
+    {
     "catppuccin/nvim",
     -- lazy = true,
     name = "catppuccin",
@@ -49,7 +40,6 @@ return {
         neotree = true,
         notify = true,
         semantic_tokens = true,
-        snacks = true,
         treesitter = true,
         treesitter_context = true,
         which_key = true,
@@ -59,21 +49,5 @@ return {
       require("catppuccin").setup(opts)
       vim.cmd.colorscheme("catppuccin-mocha")
     end,
-  },
-  {
-    "EdenEast/nightfox.nvim",
-    config = function()
-      -- vim.cmd.colorscheme("carbonfox")
-    end,
-  },
-  {
-    "rose-pine/neovim",
-    name = "rose-pine",
-    config = function()
-      -- vim.cmd.colorscheme("rose-pine-main")
-    end,
-  },
-  {
-    "lunarvim/darkplus.nvim",
   },
 }
