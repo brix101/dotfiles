@@ -182,4 +182,5 @@ return {
       },
     },
   },
+  marksman = {},
 }

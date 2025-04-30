@@ -46,7 +46,7 @@ return {
       indent = { enabled = true },
       input = { enabled = true },
       notifier = {
-        enabled = true,
+        enabled = false,
         timeout = 3000,
       },
       quickfile = { enabled = true },
@@ -75,7 +75,9 @@ return {
           { section = "startup" },
         },
       },
-      picker = {},
+      picker = {
+        ui_select = true,
+      },
     },
     -- stylua: ignore
     keys = {
@@ -136,6 +138,28 @@ return {
       { "<leader>sq", function() Snacks.picker.qflist() end, desc = "Quickfix List" },
       { "<leader>uC", function() Snacks.picker.colorschemes() end, desc = "Colorschemes" },
       { "<leader>qp", function() Snacks.picker.projects() end, desc = "Projects" },
+      {
+        "<leader>oo",
+        function()
+          local vault = vim.fn.expand("~/vaults/")
+          Snacks.picker.pick("grep", {
+            cwd = vault,
+            actions = {
+              create_note = function(picker, item)
+                picker:close()
+                vim.cmd("ObsidianNew " .. picker.finder.filter.search)
+              end,
+            },
+            win = {
+              input = {
+                keys = {
+                  ["<c-x>"] = { "create_note", desc = "Create new note", mode = { "i", "n" } },
+                },
+              },
+            },
+          })
+        end,
+      }
     },
     init = function()
       vim.api.nvim_create_autocmd("User", {
@@ -190,6 +214,47 @@ return {
     keys = {
       { "<leader>st", function() Snacks.picker.todo_comments() end, desc = "Todo" },
       { "<leader>sT", function () Snacks.picker.todo_comments({ keywords = { "TODO", "FIX", "FIXME" } }) end, desc = "Todo/Fix/Fixme" },
+    },
+  },
+  {
+    "folke/flash.nvim",
+    optional = true,
+    specs = {
+      {
+        "folke/snacks.nvim",
+        opts = {
+          picker = {
+            win = {
+              input = {
+                keys = {
+                  ["<a-s>"] = { "flash", mode = { "n", "i" } },
+                  ["s"] = { "flash" },
+                },
+              },
+            },
+            actions = {
+              flash = function(picker)
+                require("flash").jump({
+                  pattern = "^",
+                  label = { after = { 0, 0 } },
+                  search = {
+                    mode = "search",
+                    exclude = {
+                      function(win)
+                        return vim.bo[vim.api.nvim_win_get_buf(win)].filetype ~= "snacks_picker_list"
+                      end,
+                    },
+                  },
+                  action = function(match)
+                    local idx = picker.list:row2idx(match.pos[1])
+                    picker.list:_move(idx, true, true)
+                  end,
+                })
+              end,
+            },
+          },
+        },
+      },
     },
   },
 }
