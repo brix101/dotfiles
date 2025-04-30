@@ -72,7 +72,6 @@ return {
             padding = 1,
           },
           { icon = " ", title = "Keymaps", section = "keys", padding = 1, indent = 2 },
-          { icon = " ", title = "Projects", section = "projects", indent = 2, padding = 1 },
           { section = "startup" },
         },
       },
