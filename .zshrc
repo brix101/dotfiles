@@ -32,6 +32,7 @@ zinit snippet OMZP::sudo
 zinit snippet OMZP::archlinux
 zinit snippet OMZP::aws
 # zinit snippet OMZP::pass
+zinit snippet OMZP::nvm
 zinit snippet OMZP::command-not-found
 
 # Load completions
@@ -87,10 +88,6 @@ alias mux='pgrep -vx tmux > /dev/null && \
 
 export PATH=~/.local/bin:$PATH
 
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
 # pnpm
 export PNPM_HOME="/home/brix/.local/share/pnpm"
 case ":$PATH:" in
@@ -114,11 +111,3 @@ export PATH="$HOME/.cargo/bin:$PATH"
 
 # rustup complettion
 fpath+=~/.zfunc
-
-
-
-
-
-
-# Load Angular CLI autocompletion.
-source <(ng completion script)
