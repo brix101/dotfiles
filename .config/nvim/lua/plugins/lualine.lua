@@ -195,33 +195,36 @@ return {
         if #clients > 0 then
           return require("copilot.api").status.data.status or ""
         end
+        return nil
       end
 
+      -- Color and icon mappings
       local copilot_colors = {
-        [""] = "#585b70", -- off/empty (subtle gray)
-        Normal = "#a6e3a1", -- green (normal state)
-        InProgress = "#f9e2af", -- yellow (generating)
-        Warning = "#f38ba8", -- red/pink (warning/error)
+        [""] = "#585b70",
+        Normal = "#a6e3a1",
+        InProgress = "#f9e2af",
+        Warning = "#f38ba8",
       }
 
       local copilot_icons = {
-        [""] = "", -- off
-        Normal = "", -- active
-        InProgress = "", -- spinner
-        Warning = "", -- warning
+        [""] = "",
+        Normal = "",
+        InProgress = "",
+        Warning = "",
       }
 
+      -- Insert Copilot status into lualine_x
       table.insert(opts.sections.lualine_x, 2, {
         function()
-          local icon = copilot_icons[copilot_status() or ""] or copilot_icons[""]
-
-          return icon
+          local status = copilot_status() or ""
+          return copilot_icons[status] or copilot_icons[""]
         end,
         cond = function()
           return copilot_status() ~= nil
         end,
         color = function()
-          return { fg = copilot_colors[copilot_status()] or copilot_colors.ok }
+          local status = copilot_status() or ""
+          return { fg = copilot_colors[status] or copilot_colors[""] }
         end,
       })
 
