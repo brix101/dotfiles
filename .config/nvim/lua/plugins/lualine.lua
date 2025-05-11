@@ -115,25 +115,25 @@ return {
                 hint = icons.diagnostics.Hint,
               },
             },
-            { "filetype", icon_only = true, separator = "", padding = { left = 1, right = 0 } },
+            -- { "filetype", icon_only = true, separator = "", padding = { left = 1, right = 0 } },
           },
           lualine_x = {
             Snacks.profiler.status(),
             -- stylua: ignore
             {
               "fancy_lsp_servers",
-              color = function() return { fg = Snacks.util.color("Special") } end,
+              color = function() return { fg = "#89b4fa" } end,
             },
             -- stylua: ignore
-            {
-              "encoding",
-              color = { fg = "#e0af68" },
-            },
+            -- {
+            --   "encoding",
+            --   color = { fg = "#e0af68" },
+            -- },
             -- stylua: ignore
-            {
-              "fileformat",
-              color = { fg = "#7dcfff" },
-            },
+            -- {
+            --   "fileformat",
+            --   color = { fg = "#7dcfff" },
+            -- },
             -- stylua: ignore
             {
               require("lazy.status").updates,
@@ -193,26 +193,35 @@ return {
       local function copilot_status()
         local clients = package.loaded["copilot"] and vim.lsp.get_clients({ name = "copilot", bufnr = 0 }) or {}
         if #clients > 0 then
-          local status = require("copilot.api").status.data.status
-          return (status == "InProgress" and "pending") or (status == "Warning" and "error") or "ok"
+          return require("copilot.api").status.data.status or ""
         end
       end
 
       local copilot_colors = {
-        ok = "Special",
-        error = "DiagnosticError",
-        pending = "DiagnosticWarn",
+        [""] = "#585b70", -- off/empty (subtle gray)
+        Normal = "#a6e3a1", -- green (normal state)
+        InProgress = "#f9e2af", -- yellow (generating)
+        Warning = "#f38ba8", -- red/pink (warning/error)
+      }
+
+      local copilot_icons = {
+        [""] = "", -- off
+        Normal = "", -- active
+        InProgress = "", -- spinner
+        Warning = "", -- warning
       }
 
       table.insert(opts.sections.lualine_x, 2, {
         function()
-          return icons.kinds.Copilot
+          local icon = copilot_icons[copilot_status() or ""] or copilot_icons[""]
+
+          return icon
         end,
         cond = function()
           return copilot_status() ~= nil
         end,
         color = function()
-          return { fg = Snacks.util.color(copilot_colors[copilot_status()] or copilot_colors.ok) }
+          return { fg = copilot_colors[copilot_status()] or copilot_colors.ok }
         end,
       })
 
