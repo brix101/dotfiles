@@ -1,5 +1,5 @@
 return {
-    {
+  {
     "catppuccin/nvim",
     -- lazy = true,
     name = "catppuccin",
@@ -16,7 +16,7 @@ return {
         },
       },
       integrations = {
-        cmp = true,
+        blink_cmp = true,
         flash = true,
         fzf = true,
         grug_far = true,

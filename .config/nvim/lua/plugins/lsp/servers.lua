@@ -183,4 +183,7 @@ return {
     },
   },
   marksman = {},
+  graphql = {
+    filetypes = { "graphql", "gql", "typescriptreact", "javascriptreact" },
+  },
 }
