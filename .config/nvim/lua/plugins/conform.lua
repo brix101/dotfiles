@@ -49,6 +49,38 @@ return {
           return #diag > 0
         end,
       },
+      prettier = {
+        args = function(self, ctx)
+          local check_cwd = require("conform.util").root_file({
+            ".prettierrc",
+            ".prettierrc.json",
+            ".prettierrc.yml",
+            ".prettierrc.yaml",
+            ".prettierrc.json5",
+            ".prettierrc.js",
+            ".prettierrc.cjs",
+            ".prettierrc.mjs",
+            ".prettierrc.toml",
+            "prettier.config.js",
+            "prettier.config.cjs",
+            "prettier.config.mjs",
+            -- "package.json",
+          })
+
+          local has_cwd = check_cwd(self, ctx) ~= nil
+
+          if not has_cwd then
+            return {
+              "--stdin-filepath",
+              "$FILENAME",
+              "--config",
+              vim.fn.expand("~/.config/prettier/.prettierrc"),
+            }
+          end
+
+          return { "--stdin-filepath", "$FILENAME" }
+        end,
+      },
     },
     -- Set this to change the default values when calling conform.format()
     -- This will also affect the default values for format_on_save/format_after_save

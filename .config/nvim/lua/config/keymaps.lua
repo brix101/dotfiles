@@ -39,6 +39,9 @@ set("v", "<A-k>", ":<C-u>execute \"'<,'>move '<-\" . (v:count1 + 1)<cr>gv=gv", {
 -- Clear search and stop snippet on escape
 set("n", "<Esc>", "<cmd>nohlsearch<CR>", { desc = "Escape and Clear hlsearch" })
 
+-- Escape from insert mode with jk
+set("i", "jk", "<Esc>", { desc = "Escape" })
+
 -- Clear search, diff update and redraw
 -- taken from runtime/lua/_editor.lua
 set(
@@ -61,47 +64,6 @@ set("i", ",", ",<c-g>u")
 set("i", ".", ".<c-g>u")
 set("i", ";", ";<c-g>u")
 
--- save file
-set({ "i", "x", "n", "s" }, "<C-s>", "<cmd>w<cr><esc>", { desc = "Save File" })
-
 -- better indenting
 set("v", "<", "<gv")
 set("v", ">", ">gv")
-
--- lazy
-set("n", "<leader>l", "<cmd>Lazy<cr>", { desc = "Lazy" })
-
--- new file
-set("n", "<leader>fn", "<cmd>enew<cr>", { desc = "New File" })
-
-set("n", "<leader>xl", "<cmd>lopen<cr>", { desc = "Location List" })
-set("n", "<leader>xq", "<cmd>copen<cr>", { desc = "Quickfix List" })
-
-set("n", "[q", vim.cmd.cprev, { desc = "Previous Quickfix" })
-set("n", "]q", vim.cmd.cnext, { desc = "Next Quickfix" })
-
-
--- windows
-set("n", "<leader>w", "<c-w>", { desc = "Windows", remap = true })
-set("n", "<leader>-", "<C-W>s", { desc = "Split Window Below", remap = true })
-set("n", "<leader>|", "<C-W>v", { desc = "Split Window Right", remap = true })
-set("n", "<leader>wd", "<C-W>c", { desc = "Delete Window", remap = true })
-
--- tabs
-set("n", "<leader><tab>l", "<cmd>tablast<cr>", { desc = "Last Tab" })
-set("n", "<leader><tab>o", "<cmd>tabonly<cr>", { desc = "Close Other Tabs" })
-set("n", "<leader><tab>f", "<cmd>tabfirst<cr>", { desc = "First Tab" })
-set("n", "<leader><tab><tab>", "<cmd>tabnew<cr>", { desc = "New Tab" })
-set("n", "<leader><tab>]", "<cmd>tabnext<cr>", { desc = "Next Tab" })
-set("n", "<leader><tab>d", "<cmd>tabclose<cr>", { desc = "Close Tab" })
-set("n", "<leader><tab>[", "<cmd>tabprevious<cr>", { desc = "Previous Tab" })
-
--- native snippets. only needed on < 0.11, as 0.11 creates these by default
-if vim.fn.has("nvim-0.11") == 0 then
-  set("s", "<Tab>", function()
-    return vim.snippet.active({ direction = 1 }) and "<cmd>lua vim.snippet.jump(1)<cr>" or "<Tab>"
-  end, { expr = true, desc = "Jump Next" })
-  set({ "i", "s" }, "<S-Tab>", function()
-    return vim.snippet.active({ direction = -1 }) and "<cmd>lua vim.snippet.jump(-1)<cr>" or "<S-Tab>"
-  end, { expr = true, desc = "Jump Previous" })
-end
