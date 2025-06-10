@@ -12,7 +12,7 @@ return {
     event = { "BufReadPost", "BufNewFile", "BufWritePre" },
     dependencies = {
       "mason.nvim", -- NOTE: Must be loaded before dependants
-      { "williamboman/mason-lspconfig.nvim", config = function() end },
+      { "mason-org/mason-lspconfig.nvim", config = function() end },
       { "j-hui/fidget.nvim", opts = {} },
     },
     opts = function()
@@ -187,7 +187,7 @@ return {
   -- cmdline tools and lsp servers
   {
 
-    "williamboman/mason.nvim",
+    "mason-org/mason.nvim",
     cmd = "Mason",
     keys = { { "<leader>cm", "<cmd>Mason<cr>", desc = "Mason" } },
     opts_extend = { "ensure_installed" },
@@ -229,4 +229,8 @@ return {
       end)
     end,
   },
+
+  -- pin to v1 for now
+  { "mason-org/mason.nvim", version = "^1.0.0" },
+  { "mason-org/mason-lspconfig.nvim", version = "^1.0.0" },
 }
