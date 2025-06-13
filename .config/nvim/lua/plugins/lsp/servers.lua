@@ -94,7 +94,7 @@ return {
         desc = "Organize Imports",
       },
       {
-        "<leader>cM",
+        "<leader>ci",
         require("util.lsp").action["source.addMissingImports.ts"],
         desc = "Add missing imports",
       },
