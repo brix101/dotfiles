@@ -203,6 +203,8 @@ return {
         "stylua",
         "shfmt",
         "prettier", -- prettier formatter
+        "goimports",
+        "gofumpt", -- go formatter
       },
     },
     ---@param opts MasonSettings | {ensure_installed: string[]}

@@ -1,17 +1,4 @@
 local icons = {
-  misc = {
-    dots = "󰇘",
-  },
-  ft = {
-    octo = "",
-  },
-  dap = {
-    Stopped = { "󰁕 ", "DiagnosticWarn", "DapStoppedLine" },
-    Breakpoint = " ",
-    BreakpointCondition = " ",
-    BreakpointRejected = { " ", "DiagnosticError" },
-    LogPoint = ".>",
-  },
   diagnostics = {
     Error = " ",
     Warn = " ",
@@ -22,48 +9,6 @@ local icons = {
     added = " ",
     modified = " ",
     removed = " ",
-  },
-  kinds = {
-    Array = " ",
-    Boolean = "󰨙 ",
-    Class = " ",
-    Codeium = "󰘦 ",
-    Color = " ",
-    Control = " ",
-    Collapsed = " ",
-    Constant = "󰏿 ",
-    Constructor = " ",
-    Copilot = " ",
-    Enum = " ",
-    EnumMember = " ",
-    Event = " ",
-    Field = " ",
-    File = " ",
-    Folder = " ",
-    Function = "󰊕 ",
-    Interface = " ",
-    Key = " ",
-    Keyword = " ",
-    Method = "󰊕 ",
-    Module = " ",
-    Namespace = "󰦮 ",
-    Null = " ",
-    Number = "󰎠 ",
-    Object = " ",
-    Operator = " ",
-    Package = " ",
-    Property = " ",
-    Reference = " ",
-    Snippet = "󱄽 ",
-    String = " ",
-    Struct = "󰆼 ",
-    Supermaven = " ",
-    TabNine = "󰏚 ",
-    Text = " ",
-    TypeParameter = " ",
-    Unit = " ",
-    Value = " ",
-    Variable = "󰀫 ",
   },
 }
 
@@ -96,7 +41,7 @@ return {
         options = {
           theme = "auto",
           globalstatus = vim.o.laststatus == 3,
-          disabled_filetypes = { statusline = { "dashboard", "ministarter", "snacks_dashboard" } },
+          disabled_filetypes = { statusline = { "dashboard", "ministarter" } },
           component_separators = { left = "|", right = "|" },
           section_separators = { left = "", right = "" },
         },
@@ -118,28 +63,12 @@ return {
             -- { "filetype", icon_only = true, separator = "", padding = { left = 1, right = 0 } },
           },
           lualine_x = {
-            Snacks.profiler.status(),
             -- stylua: ignore
             {
               "fancy_lsp_servers",
               color = function() return { fg = "#89b4fa" } end,
             },
             -- stylua: ignore
-            -- {
-            --   "encoding",
-            --   color = { fg = "#e0af68" },
-            -- },
-            -- stylua: ignore
-            -- {
-            --   "fileformat",
-            --   color = { fg = "#7dcfff" },
-            -- },
-            -- stylua: ignore
-            {
-              require("lazy.status").updates,
-              cond = require("lazy.status").has_updates,
-              color = function() return { fg = Snacks.util.color("Special") } end,
-            },
             {
               "diff",
               symbols = {

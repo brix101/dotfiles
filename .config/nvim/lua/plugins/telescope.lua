@@ -1,52 +1,106 @@
 return {
-  -- "nvim-telescope/telescope.nvim",
-  -- dependencies = {
-  --   "nvim-lua/plenary.nvim",
-  --   "debugloop/telescope-undo.nvim",
-  --   "isak102/telescope-git-file-history.nvim",
-  --   { "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
-  -- },
-  -- lazy = false,
-  -- opts = {
-  --   pickers = {
-  --     find_files = {
-  --       hidden = true,
+  -- { -- Fuzzy Finder (files, lsp, etc)
+  --   "nvim-telescope/telescope.nvim",
+  --   event = "VimEnter",
+  --   dependencies = {
+  --     "nvim-lua/plenary.nvim",
+  --     "nvim-tree/nvim-web-devicons",
+  --     { -- If encountering errors, see telescope-fzf-native README for installation instructions
+  --       "nvim-telescope/telescope-fzf-native.nvim",
+
+  --       -- `build` is used to run some command when the plugin is installed/updated.
+  --       -- This is only run then, not every time Neovim starts up.
+  --       build = "make",
+
+  --       -- `cond` is a condition used to determine whether this plugin should be
+  --       -- installed and loaded.
+  --       cond = function()
+  --         return vim.fn.executable("make") == 1
+  --       end,
   --     },
-  --     git_files = {
-  --       hidden = true,
-  --     },
+  --     { "nvim-telescope/telescope-ui-select.nvim" },
   --   },
-  --   defaults = {
-  --     file_ignore_patterns = {
-  --       "node_modules/*",
-  --     },
-  --   },
-  --   extensions = {
-  --     fzf = {},
-  --   },
-  -- },
-  -- config = function(_, opts)
-  --   require("telescope").setup(opts)
-  --   require("telescope").load_extension("undo")
-  --   require("telescope").load_extension("fzf")
-  --   require("telescope").load_extension("git_file_history")
-  -- end,
-  -- keys = {
-  --   { "<Leader>ff", "<Cmd>Telescope find_files<CR>", desc = "Find files" },
-  --   { "<Leader>fr", "<Cmd>Telescope oldfiles<CR>", desc = "Recent files" },
-  --   { "<Leader>fs", "<Cmd>Telescope live_grep<CR>", desc = "Grep inside files" },
-  --   { "<Leader>fh", "<Cmd>Telescope help_tags<CR>", desc = "Search in vim :help" },
-  --   { "<Leader>fb", "<Cmd>Telescope buffers<CR>", desc = "List and search buffers" },
-  --   { "<Leader>fq", "<Cmd>Telescope quickfix<CR>", desc = "List and search quickfix" },
-  --   {
-  --     "<Leader>fd",
-  --     '<Cmd>lua require("telescope.builtin").find_files({ cwd = vim.fn.stdpath("config") })<CR>',
-  --     desc = "Find files in config path",
-  --   },
-  --   {
-  --     "<Leader>fw",
-  --     '<Cmd>lua require("telescope.builtin").grep_string({ search = vim.fn.expand("<cword>") })<CR>',
-  --     desc = "Grep word under cursor",
-  --   },
+  --   config = function()
+  --     -- Telescope is a fuzzy finder that comes with a lot of different things that
+  --     -- it can fuzzy find! It's more than just a "file finder", it can search
+  --     -- many different aspects of Neovim, your workspace, LSP, and more!
+  --     --
+  --     -- The easiest way to use Telescope, is to start by doing something like:
+  --     --  :Telescope help_tags
+  --     --
+  --     -- After running this command, a window will open up and you're able to
+  --     -- type in the prompt window. You'll see a list of `help_tags` options and
+  --     -- a corresponding preview of the help.
+  --     --
+  --     -- Two important keymaps to use while in Telescope are:
+  --     --  - Insert mode: <c-/>
+  --     --  - Normal mode: ?
+  --     --
+  --     -- This opens a window that shows you all of the keymaps for the current
+  --     -- Telescope picker. This is really useful to discover what Telescope can
+  --     -- do as well as how to actually do it!
+
+  --     -- [[ Configure Telescope ]]
+  --     -- See `:help telescope` and `:help telescope.setup()`
+  --     require("telescope").setup({
+  --       -- You can put your default mappings / updates / etc. in here
+  --       --  All the info you're looking for is in `:help telescope.setup()`
+  --       --
+  --       -- defaults = {
+  --       --   mappings = {
+  --       --     i = { ['<c-enter>'] = 'to_fuzzy_refine' },
+  --       --   },
+  --       -- },
+  --       pickers = {
+  --         oldfiles = {
+  --           cwd_only = true,
+  --         },
+  --         find_files = {
+  --           hidden = true,
+  --         },
+  --         live_grep = {
+  --           additional_args = function()
+  --             return { "--hidden", "--glob", "!**/.git/*" }
+  --           end,
+  --         },
+  --         grep_string = {
+  --           additional_args = function()
+  --             return { "--hidden", "--glob", "!**/.git/*" }
+  --           end,
+  --         },
+  --       },
+  --       extensions = {
+  --         ["ui-select"] = {
+  --           require("telescope.themes").get_dropdown(),
+  --         },
+  --       },
+  --     })
+
+  --     -- Enable Telescope extensions if they are installed
+  --     pcall(require("telescope").load_extension, "fzf")
+  --     pcall(require("telescope").load_extension, "ui-select")
+
+  --     -- set keymaps
+  --     local map = function(keys, func, desc)
+  --       vim.keymap.set("n", keys, func, { desc = "Telescope: " .. desc })
+  --     end
+
+  --     -- See `:help telescope.builtin`
+  --     local builtin = require("telescope.builtin")
+
+  --     -- map("<leader>fa", "<cmd>Telescope find_files hidden=true<cr>", "[F]ind [A]ll files")
+  --     map("<leader>fa", function()
+  --       builtin.find_files({
+  --         hidden = true,
+  --         no_ignore = true,
+  --         no_ignore_parent = true,
+  --       })
+  --     end, "[F]ind [A]ll files")
+  --     map("<leader>ff", builtin.find_files, "[F]ind [F]iles")
+  --     map("<leader>fr", builtin.oldfiles, '[F]ind Recent Files ("." for repeat)')
+  --     map("<leader>fs", builtin.live_grep, "[F]ind by [G]rep")
+  --     map("<leader>fw", builtin.grep_string, "[F]ind [W]ord")
+  --     map("<leader>fb", builtin.buffers, "[F]ind existing buffers")
+  --   end,
   -- },
 }

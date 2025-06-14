@@ -1,7 +1,6 @@
 return {
   {
     "catppuccin/nvim",
-    -- lazy = true,
     name = "catppuccin",
     opts = {
       transparent_background = false,
@@ -23,7 +22,6 @@ return {
         gitsigns = true,
         illuminate = true,
         indent_blankline = { enabled = true },
-        lsp_trouble = true,
         mason = true,
         markdown = true,
         mini = true,
@@ -36,9 +34,7 @@ return {
             information = { "undercurl" },
           },
         },
-        neotest = true,
         neotree = true,
-        notify = true,
         semantic_tokens = true,
         treesitter = true,
         treesitter_context = true,

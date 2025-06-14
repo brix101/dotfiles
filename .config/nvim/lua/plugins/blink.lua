@@ -4,11 +4,6 @@ return {
     event = "InsertEnter",
     version = "*",
     build = "cargo build --release",
-    opts_extend = {
-      "sources.completion.enabled_providers",
-      "sources.compat",
-      "sources.default",
-    },
     lazy = false,
     dependencies = {
       "rafamadriz/friendly-snippets",
@@ -18,14 +13,27 @@ return {
         opts = {},
         version = "*",
       },
+      {
+        'L3MON4D3/LuaSnip',
+        version = '2.*',
+        dependencies = {
+          {
+            'rafamadriz/friendly-snippets',
+            config = function()
+              require('luasnip.loaders.from_vscode').lazy_load()
+            end,
+          },
+        }
+      },
+      'folke/lazydev.nvim',
       "giuxtaposition/blink-cmp-copilot",
     },
     ---@module 'blink.cmp'
     ---@type blink.cmp.Config
     opts = {
-      -- snippets = {
-      --   preset = "luasnip",
-      -- },
+      snippets = {
+        preset = "luasnip",
+      },
       appearance = {
         use_nvim_cmp_as_default = false,
         nerd_font_variant = "mono",
@@ -52,7 +60,7 @@ return {
           auto_show_delay_ms = 200,
         },
         ghost_text = {
-          enabled = vim.g.ai_cmp,
+          enabled = false,
         },
         list = {
           selection = {
