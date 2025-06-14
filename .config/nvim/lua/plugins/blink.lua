@@ -61,6 +61,14 @@ return {
         ghost_text = {
           enabled = vim.g.ai_cmp,
         },
+        -- list = {
+        --   selection = {
+        --     preselect = function()
+        --       return not require("blink.cmp").snippet_active({ direction = 1 })
+        --     end,
+        --     auto_insert = true,
+        --   },
+        -- },
       },
       signature = {
         enabled = true,
@@ -88,6 +96,23 @@ return {
       keymap = {
         preset = "super-tab",
         ["<CR>"] = { "accept", "fallback" },
+        ["<Tab>"] = {
+          function(cmp)
+            if cmp.snippet_active() then
+              return cmp.accept()
+            else
+              return cmp.select_and_accept()
+            end
+          end,
+          function()
+            if vim.g.ai_cmp and require("copilot.suggestion").is_visible() then
+              require("copilot.suggestion").accept()
+              return true
+            end
+          end,
+          "snippet_forward",
+          "fallback",
+        },
       },
     },
   },
