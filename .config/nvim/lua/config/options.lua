@@ -15,7 +15,7 @@ opt.showmode = false -- Don't show the mode, since it's already in the status li
 opt.clipboard = "unnamedplus" -- Use the system clipboard for all yank, delete, change and put operations
 
 -- Enable break indent
-opt.breakindent = true
+opt.breakindent = false
 
 -- Save undo history
 opt.swapfile = false
@@ -27,9 +27,6 @@ opt.undofile = true
 -- Case-insensitive searching UNLESS \C or one or more capital letters in the search term
 opt.ignorecase = true
 opt.smartcase = true
-
--- Keep signcolumn on by default
-opt.signcolumn = "yes"
 
 -- tabs & indentation
 opt.tabstop = 2 -- 2 spaces for tabs (prettier default)
@@ -76,3 +73,5 @@ opt.cursorline = true
 opt.cursorline = true
 opt.confirm = true -- Confirm before closing modified buffers
 
+opt.wrap = false -- Disable line wrapping
+opt.smoothscroll = true -- Smooth scrolling
