@@ -83,19 +83,10 @@ return {
             score_offset = 100,
           },
           copilot = {
-            name = "copilot",
+            name = "Copilot",
             module = "blink-cmp-copilot",
             score_offset = 100,
             async = true,
-            transform_items = function(_, items)
-              local CompletionItemKind = require("blink.cmp.types").CompletionItemKind
-              local kind_idx = #CompletionItemKind + 1
-              CompletionItemKind[kind_idx] = "Copilot"
-              for _, item in ipairs(items) do
-                item.kind = kind_idx
-              end
-              return items
-            end,
           },
         },
       },
@@ -113,7 +104,8 @@ return {
             local copilot = require("copilot.suggestion")
 
             if vim.g.ai_cmp and copilot.is_visible() then
-              return copilot.accept()
+              copilot.accept()
+              return true
             elseif cmp.snippet_active() then
               return cmp.accept()
             else
@@ -126,8 +118,10 @@ return {
         ["<S-Tab>"] = { "snippet_backward", "fallback" },
         ["<Up>"] = { "select_prev", "fallback" },
         ["<Down>"] = { "select_next", "fallback" },
+
         ["<C-p>"] = { "select_prev", "fallback" },
         ["<C-n>"] = { "select_next", "fallback" },
+
         ["<C-b>"] = { "scroll_documentation_up", "fallback" },
         ["<C-f>"] = { "scroll_documentation_down", "fallback" },
         ["<C-k>"] = { "show_signature", "hide_signature", "fallback" },
