@@ -2,9 +2,8 @@ return {
   {
     "saghen/blink.cmp",
     event = "InsertEnter",
-    version = "*",
-    build = "cargo build --release",
-    lazy = false,
+    version = "1.*",
+    -- build = "cargo build --release",
     dependencies = {
       "rafamadriz/friendly-snippets",
       {
@@ -60,7 +59,7 @@ return {
           auto_show_delay_ms = 200,
         },
         ghost_text = {
-          enabled = false,
+          enabled = vim.g.ai_cmp,
         },
         list = {
           selection = {
@@ -112,9 +111,14 @@ return {
           -- stylua: ignore
           function(cmp)
             local copilot = require("copilot.suggestion")
-            if copilot.is_visible() and vim.g.ai_cmp then return copilot.accept()
-            elseif cmp.snippet_active() then return cmp.accept()
-            else return cmp.select_and_accept() end
+
+            if vim.g.ai_cmp and copilot.is_visible() then
+              return copilot.accept()
+            elseif cmp.snippet_active() then
+              return cmp.accept()
+            else
+              return cmp.select_and_accept()
+            end
           end,
           "snippet_forward",
           "fallback",

@@ -5,16 +5,7 @@ return {
     -- build = ":Copilot auth",
     event = "BufReadPost",
     opts = {
-      suggestion = {
-        enabled = vim.g.ai_cmp,
-        auto_trigger = true,
-        hide_during_completion = vim.g.ai_cmp,
-        keymap = {
-          accept = false, -- handled by  blink.cmp
-          next = "<M-]>",
-          prev = "<M-[>",
-        },
-      },
+      suggestion = { enabled = false },
       panel = { enabled = false },
       filetypes = {
         markdown = true,

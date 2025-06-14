@@ -18,6 +18,7 @@ return {
     "nvim-lualine/lualine.nvim",
     dependencies = {
       "meuter/lualine-so-fancy.nvim",
+      "AndreM222/copilot-lualine",
     },
     event = "VeryLazy",
     init = function()
@@ -63,6 +64,7 @@ return {
             -- { "filetype", icon_only = true, separator = "", padding = { left = 1, right = 0 } },
           },
           lualine_x = {
+            "copilot",
             -- stylua: ignore
             {
               "fancy_lsp_servers",
@@ -116,44 +118,6 @@ return {
         symbols and symbols.get,
         cond = function()
           return vim.b.trouble_lualine ~= false and symbols.has()
-        end,
-      })
-
-      local function copilot_status()
-        local clients = package.loaded["copilot"] and vim.lsp.get_clients({ name = "copilot", bufnr = 0 }) or {}
-        if #clients > 0 then
-          return require("copilot.api").status.data.status or ""
-        end
-        return nil
-      end
-
-      -- Color and icon mappings
-      local copilot_colors = {
-        [""] = "#585b70",
-        Normal = "#a6e3a1",
-        InProgress = "#f9e2af",
-        Warning = "#f38ba8",
-      }
-
-      local copilot_icons = {
-        [""] = "",
-        Normal = "",
-        InProgress = "",
-        Warning = "",
-      }
-
-      -- Insert Copilot status into lualine_x
-      table.insert(opts.sections.lualine_x, 2, {
-        function()
-          local status = copilot_status() or ""
-          return copilot_icons[status] or copilot_icons[""]
-        end,
-        cond = function()
-          return copilot_status() ~= nil
-        end,
-        color = function()
-          local status = copilot_status() or ""
-          return { fg = copilot_colors[status] or copilot_colors[""] }
         end,
       })
 
