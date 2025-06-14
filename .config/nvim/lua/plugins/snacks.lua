@@ -1,3 +1,40 @@
+---@type table<string, string[]|boolean>?
+local kind_filter = {
+  default = {
+    "Class",
+    "Constructor",
+    "Enum",
+    "Field",
+    "Function",
+    "Interface",
+    "Method",
+    "Module",
+    "Namespace",
+    "Package",
+    "Property",
+    "Struct",
+    "Trait",
+  },
+  markdown = false,
+  help = false,
+  -- you can specify a different filter for each filetype
+  lua = {
+    "Class",
+    "Constructor",
+    "Enum",
+    "Field",
+    "Function",
+    "Interface",
+    "Method",
+    "Module",
+    "Namespace",
+    -- "Package", -- remove package since luals uses it for control flow structures
+    "Property",
+    "Struct",
+    "Trait",
+  },
+}
+
 return {
   {
     "folke/snacks.nvim",
@@ -13,7 +50,7 @@ return {
       explorer = { enabled = false },
       indent = { enabled = true },
       input = { enabled = true },
-      picker = { enabled = false, ui_select = true },
+      picker = { enabled = true, ui_select = true },
       notifier = { enabled = false },
       quickfile = { enabled = true },
       scope = { enabled = true },
@@ -141,4 +178,3 @@ return {
     },
   },
 }
-
