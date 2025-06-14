@@ -104,13 +104,13 @@ return {
               return cmp.select_and_accept()
             end
           end,
+          "snippet_forward",
           function()
             if vim.g.ai_cmp and require("copilot.suggestion").is_visible() then
               require("copilot.suggestion").accept()
               return true
             end
           end,
-          "snippet_forward",
           "fallback",
         },
       },
