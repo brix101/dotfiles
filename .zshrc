@@ -29,9 +29,8 @@ zinit light Aloxaf/fzf-tab
 # Add in snippets
 zinit snippet OMZP::git
 zinit snippet OMZP::sudo
-zinit snippet OMZP::archlinux
 zinit snippet OMZP::aws
-# zinit snippet OMZP::pass
+zinit snippet OMZP::docker
 zinit snippet OMZP::nvm
 zinit snippet OMZP::command-not-found
 
@@ -76,38 +75,42 @@ alias c='clear'
 
 # Shell integrations
 eval "$(fzf --zsh)"
-eval "$(zoxide init --cmd cd zsh)"
+# eval "$(zoxide init --cmd cd zsh)"
 
 #########################################################################################################
-alias mux='pgrep -vx tmux > /dev/null && \
-                tmux new -d -s delete-me && \
-                tmux run-shell ~/.config/tmux/plugins/tmux-resurrect/scripts/restore.sh && \
-                tmux kill-session -t delete-me && \
-                tmux attach || tmux attach'
-                # tmux attach -t terminal'
+# alias mux='pgrep -vx tmux > /dev/null && \
+#                 tmux new -d -s delete-me && \
+#                 tmux run-shell ~/.config/tmux/plugins/tmux-resurrect/scripts/restore.sh && \
+#                 tmux kill-session -t delete-me && \
+#                 tmux attach || tmux attach'
+#                 # tmux attach -t terminal'
 
-export PATH=~/.local/bin:$PATH
+# export PATH=~/.local/bin:$PATH
 
 # pnpm
-export PNPM_HOME="/home/brix/.local/share/pnpm"
+export PNPM_HOME="/Users/brixterporras/Library/pnpm"
 case ":$PATH:" in
   *":$PNPM_HOME:"*) ;;
   *) export PATH="$PNPM_HOME:$PATH" ;;
 esac
 # pnpm end
+#
 
-# bun completions
-[ -s "/home/brix/.bun/_bun" ] && source "/home/brix/.bun/_bun"
+dsql-token () {
+  local SHORT="$1"
+  local REGION="us-east-1"
+  local HOSTNAME="${SHORT}.dsql.${REGION}.on.aws"
 
-# bun
-export BUN_INSTALL="$HOME/.bun"
-export PATH="$BUN_INSTALL/bin:$PATH"
+  aws dsql generate-db-connect-admin-auth-token \
+    --region "$REGION" \
+    --expires-in 28800 \
+    --hostname "$HOSTNAME" \
+  | tr -d '\n' | pbcopy
+}
 
-#GO bin
-export PATH="$HOME/go/bin:$PATH"
-
-# Rust bin
-export PATH="$HOME/.cargo/bin:$PATH"
-
-# rustup complettion
-fpath+=~/.zfunc
+# # Append the timestamp and socket path to a log file
+# if [ -n "$SSH_AUTH_SOCK" ]; then
+#     echo "$(date): SSH_AUTH_SOCK is set to $SSH_AUTH_SOCK" >> ~/.ssh/agent_history.log
+# else
+#     echo "$(date): SSH_AUTH_SOCK is NOT set" >> ~/.ssh/agent_history.log
+# fi

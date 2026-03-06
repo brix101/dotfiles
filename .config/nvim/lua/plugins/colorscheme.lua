@@ -9,22 +9,20 @@ return {
           -- base = "#1e1e2e",
           -- mantle = "#181825",
           -- crust = "#11111b",
-          base = "#010105",
-          mantle = "#0e0e1b",
-          crust = "#070711",
+          -- base = "#010105",
+          -- mantle = "#0e0e1b",
+          -- crust = "#070711",
         },
       },
       integrations = {
         blink_cmp = true,
-        flash = true,
-        fzf = true,
-        grug_far = true,
         gitsigns = true,
         illuminate = true,
-        indent_blankline = { enabled = true },
-        mason = true,
-        markdown = true,
-        mini = true,
+        indent_blankline = { 
+          enabled = false;
+          scope_color = "sapphire";
+          colored_indent_levels = false;
+        },
         native_lsp = {
           enabled = true,
           underlines = {

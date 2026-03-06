@@ -1,120 +1,103 @@
+vim.api.nvim_create_user_command("ConformDisable", function(args)
+  if args.bang then
+    -- FormatDisable! will disable formatting just for this buffer
+    vim.b.disable_autoformat = true
+  else
+    vim.g.disable_autoformat = true
+  end
+end, {
+  desc = "Disable conform-autoformat-on-save",
+  bang = true,
+})
+
+vim.api.nvim_create_user_command("ConformEnable", function()
+  vim.b.disable_autoformat = false
+  vim.g.disable_autoformat = false
+end, {
+  desc = "Re-enable conform-autoformat-on-save",
+})
+
 return {
-  "stevearc/conform.nvim",
-  dependencies = { "williamboman/mason.nvim" },
-  event = { "BufReadPre", "BufNewFile" },
-  cmd = "ConformInfo",
-  opts = {
-    formatters_by_ft = {
-      lua = { "stylua" },
-      sh = { "shfmt" },
-      css = { "prettier" },
-      graphql = { "prettier" },
-      html = { "prettier" },
-      javascript = { "prettier" },
-      javascriptreact = { "prettier" },
-      json = { "prettier" },
-      jsonc = { "prettier" },
-      typescript = { "prettier" },
-      typescriptreact = { "prettier" },
-      yaml = { "prettier" },
-      go = { "goimports", "gofumpt" },
-      ["markdown"] = { "prettier", "markdownlint-cli2", "markdown-toc" },
-      ["markdown.mdx"] = { "prettier", "markdownlint-cli2", "markdown-toc" },
-
-      -- Use the "*" filetype to run formatters on all filetypes.
-      ["*"] = { "codespell" },
-      -- Use the "_" filetype to run formatters on filetypes that don't
-      -- have other formatters configured.
-      ["_"] = { "trim_whitespace" },
-    },
-    -- The options you set here will be merged with the builtin formatters.
-    -- You can also define any custom formatters here.
-    ---@type table<string, conform.FormatterConfigOverride|fun(bufnr: integer): nil|conform.FormatterConfigOverride>
-    formatters = {
-      injected = { options = { ignore_errors = true } },
-      ["markdown-toc"] = {
-        condition = function(_, ctx)
-          for _, line in ipairs(vim.api.nvim_buf_get_lines(ctx.buf, 0, -1, false)) do
-            if line:find("<!%-%- toc %-%->") then
-              return true
-            end
-          end
+  {
+    "stevearc/conform.nvim",
+    event = { "BufWritePre" },
+    cmd = { "ConformInfo" },
+    keys = {
+      {
+        "<leader>fm",
+        function()
+          require("conform").format({ async = true, lsp_format = "fallback" })
         end,
-      },
-      ["markdownlint-cli2"] = {
-        condition = function(_, ctx)
-          local diag = vim.tbl_filter(function(d)
-            return d.source == "markdownlint"
-          end, vim.diagnostic.get(ctx.buf))
-          return #diag > 0
-        end,
-      },
-      prettier = {
-        args = function(self, ctx)
-          local check_cwd = require("conform.util").root_file({
-            ".prettierrc",
-            ".prettierrc.json",
-            ".prettierrc.yml",
-            ".prettierrc.yaml",
-            ".prettierrc.json5",
-            ".prettierrc.js",
-            ".prettierrc.cjs",
-            ".prettierrc.mjs",
-            ".prettierrc.toml",
-            "prettier.config.js",
-            "prettier.config.cjs",
-            "prettier.config.mjs",
-            -- "package.json",
-          })
-
-          local has_cwd = check_cwd(self, ctx) ~= nil
-
-          if not has_cwd then
-            return {
-              "--stdin-filepath",
-              "$FILENAME",
-              "--config",
-              vim.fn.expand("~/.config/prettier/.prettierrc"),
-            }
-          end
-
-          return { "--stdin-filepath", "$FILENAME" }
-        end,
+        mode = "",
+        desc = "[F]or[m]at buffer",
       },
     },
-    -- Set this to change the default values when calling conform.format()
-    -- This will also affect the default values for format_on_save/format_after_save
-    default_format_opts = {
-      timeout_ms = 3000,
-      async = false, -- not recommended to change
-      quiet = false, -- not recommended to change
-      lsp_format = "fallback", -- not recommended to change
-    },
-    -- If this is set, Conform will run the formatter on save.
-    -- It will pass the table to conform.format().
-    -- This can also be a function that returns the table.
-    format_on_save = {
-      -- I recommend these options. See :help conform.format for details.
-      lsp_format = "fallback",
-      timeout_ms = 2500,
-    },
-    -- If this is set, Conform will run the formatter asynchronously after save.
-    -- It will pass the table to conform.format().
-    -- This can also be a function that returns the table.
-    format_after_save = {
-      lsp_format = "fallback",
+    ---@module 'conform'
+    ---@type conform.setupOpts
+    opts = {
+      notify_on_error = false,
+      default_format_opts = {
+        async = true,
+        timeout_ms = 500,
+        lsp_format = "fallback",
+      },
+      format_on_save = function(bufnr)
+        local disable_filetypes = { c = true, cpp = true }
+        if disable_filetypes[vim.bo[bufnr].filetype] then
+          return nil
+        else
+          return {
+            timeout_ms = 500,
+            lsp_format = "fallback",
+          }
+        end
+      end,
+      formatters_by_ft = {
+        astro = { "oxfmt", "biome", "prettierd", stop_after_first = true },
+        javascript = { "oxfmt", "biome", "prettierd", stop_after_first = true },
+        typescript = { "oxfmt", "biome", "prettierd", stop_after_first = true },
+        typescriptreact = { "oxfmt", "biome", "prettierd", stop_after_first = true },
+        svelte = { "oxfmt", "prettierd", stop_after_first = true },
+        lua = { "stylua" },
+      },
+      formatters = {
+        oxfmt = {
+          condition = function(_, ctx)
+            return vim.fs.find({ ".oxfmtrc.json", ".oxfmtrc.jsonc" }, {
+              path = ctx.filename,
+              upward = true,
+              stop = vim.uv.os_homedir(),
+            })[1] ~= nil
+          end,
+        },
+        biome = {
+          condition = function(_, ctx)
+            return vim.fs.find({ "biome.json", "biome.jsonc" }, {
+              path = ctx.filename,
+              upward = true,
+              stop = vim.uv.os_homedir(),
+            })[1] ~= nil
+          end,
+        },
+        prettierd = {
+          condition = function(_, ctx)
+            return vim.fs.find({
+              ".prettierrc",
+              ".prettierrc.json",
+              ".prettierrc.js",
+              ".prettierrc.cjs",
+              ".prettierrc.mjs",
+              "prettier.config.js",
+              "prettier.config.cjs",
+              "prettier.config.mjs",
+            }, {
+              path = ctx.filename,
+              upward = true,
+              stop = vim.uv.os_homedir(),
+            })[1] ~= nil
+          end,
+        },
+      },
     },
   },
-  config = function(_, opts)
-    local conform = require("conform")
-
-    conform.setup(opts)
-
-    vim.api.nvim_create_autocmd("BufWritePre", {
-      pattern = "*",
-      callback = function(args)
-        conform.format({ bufnr = args.buf })
-      end,
-    })
-  end,
 }

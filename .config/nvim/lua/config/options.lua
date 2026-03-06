@@ -1,10 +1,7 @@
 -- This file is automatically loaded by plugins.core
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
-
--- if the completion engine supports the AI source,
--- use that instead of inline suggestions
-vim.g.ai_cmp = true
+vim.g.have_nerd_font = true
 
 local opt = vim.opt
 

@@ -1,179 +1,207 @@
----@type table<string, string[]|boolean>?
-local kind_filter = {
-  default = {
-    "Class",
-    "Constructor",
-    "Enum",
-    "Field",
-    "Function",
-    "Interface",
-    "Method",
-    "Module",
-    "Namespace",
-    "Package",
-    "Property",
-    "Struct",
-    "Trait",
-  },
-  markdown = false,
-  help = false,
-  -- you can specify a different filter for each filetype
-  lua = {
-    "Class",
-    "Constructor",
-    "Enum",
-    "Field",
-    "Function",
-    "Interface",
-    "Method",
-    "Module",
-    "Namespace",
-    -- "Package", -- remove package since luals uses it for control flow structures
-    "Property",
-    "Struct",
-    "Trait",
-  },
-}
+local filtered_message = { "No information available" }
 
 return {
   {
     "folke/snacks.nvim",
     priority = 1000,
     lazy = false,
+
     ---@type snacks.Config
     opts = {
-      -- your configuration comes here
-      -- or leave it empty to use the default settings
-      -- refer to the configuration section below
       bigfile = { enabled = true },
-      dashboard = { enabled = false },
-      explorer = { enabled = false },
+      bufdelete = { enabled = true },
+      dim = { enabled = true },
+      gitbrowse = { enabled = true },
       indent = { enabled = true },
       input = { enabled = true },
-      picker = { enabled = true, ui_select = true },
-      notifier = { enabled = false },
-      quickfile = { enabled = true },
-      scope = { enabled = true },
-      scroll = { enabled = true },
+      notifier = {
+        enabled = true,
+        timeout = 3000,
+        style = "fancy",
+      },
+      rename = { enabled = true },
+      toggle = { enabled = true },
+      scratch = { enabled = true },
       statuscolumn = { enabled = true },
       words = { enabled = true },
     },
-  -- stylua: ignore
-  keys = {
-    -- find
-    { "<leader>fb", function() Snacks.picker.buffers() end, desc = "Buffers" },
-    { "<leader>fc", function() Snacks.picker.files({ cwd = "~/.config/nvim" }) end, desc = "Find Config File" },
-    { "<leader>ff", function() Snacks.picker.files() end, desc = "Find Files" },
-    { "<leader>fg", function() Snacks.picker.git_files() end, desc = "Find Git Files" },
-    { "<leader>fr", function() Snacks.picker.recent({ filter={ cwd = true }}) end, desc = "Recent" },
-    -- git
-    { "<leader>gg", function() Snacks.lazygit() end, desc = "Lazygit" },
-    { "<leader>gb", function() Snacks.picker.git_branches() end, desc = "Git Branches" },
-    { "<leader>gl", function() Snacks.picker.git_log() end, desc = "Git Log" },
-    { "<leader>gL", function() Snacks.picker.git_log_line() end, desc = "Git Log Line" },
-    { "<leader>gs", function() Snacks.picker.git_status() end, desc = "Git Status" },
-    { "<leader>gS", function() Snacks.picker.git_stash() end, desc = "Git Stash" },
-    { "<leader>gd", function() Snacks.picker.git_diff() end, desc = "Git Diff (Hunks)" },
-    { "<leader>gf", function() Snacks.picker.git_log_file() end, desc = "Git Log File" },
-    -- Grep
-    { "<leader>sb", function() Snacks.picker.lines() end, desc = "Buffer Lines" },
-    { "<leader>sB", function() Snacks.picker.grep_buffers() end, desc = "Grep Open Buffers" },
-    { "<leader>sg", function() Snacks.picker.grep() end, desc = "Grep" },
-    { "<leader>sw", function() Snacks.picker.grep_word() end, desc = "Visual selection or word", mode = { "n", "x" } },
-  },
+
     init = function()
       vim.api.nvim_create_autocmd("User", {
         pattern = "VeryLazy",
         callback = function()
-          -- Setup some globals for debugging (lazy-loaded)
-          _G.dd = function(...)
-            Snacks.debug.inspect(...)
+          local notify = Snacks.notifier.notify
+          ---@diagnostic disable-next-line: duplicate-set-field
+          Snacks.notifier.notify = function(message, level, opts)
+            for _, msg in ipairs(filtered_message) do
+              if message == msg then
+                return nil
+              end
+            end
+            return notify(message, level, opts)
           end
-          _G.bt = function()
-            Snacks.debug.backtrace()
-          end
-          vim.print = _G.dd -- Override print to use snacks for `:=` command
+        end,
+      })
 
-          -- Create some toggle mappings
-          Snacks.toggle.option("spell", { name = "Spelling" }):map("<leader>us")
-          Snacks.toggle.option("wrap", { name = "Wrap" }):map("<leader>uw")
-          Snacks.toggle.option("relativenumber", { name = "Relative Number" }):map("<leader>uL")
-          Snacks.toggle.diagnostics():map("<leader>ud")
-          Snacks.toggle.line_number():map("<leader>ul")
-          Snacks.toggle
-            .option("conceallevel", { off = 0, on = vim.o.conceallevel > 0 and vim.o.conceallevel or 2 })
-            :map("<leader>uc")
-          Snacks.toggle.treesitter():map("<leader>uT")
-          Snacks.toggle.option("background", { off = "light", on = "dark", name = "Dark Background" }):map("<leader>ub")
-          Snacks.toggle.inlay_hints():map("<leader>uh")
-          Snacks.toggle.indent():map("<leader>ug")
-          Snacks.toggle.dim():map("<leader>uD")
+      vim.api.nvim_create_autocmd("User", {
+        pattern = "OilActionsPost",
+        callback = function(event)
+          if event.data.actions.type == "move" then
+            Snacks.rename.on_rename_file(event.data.actions.src_url, event.data.actions.dest_url)
+          end
         end,
       })
     end,
-  },
-  {
-    "neovim/nvim-lspconfig",
-    opts = function()
-      local Keys = require("plugins.lsp.keymaps").get()
-      -- stylua: ignore
-      vim.list_extend(Keys, {
-        { "gd", function() Snacks.picker.lsp_definitions() end, desc = "Goto Definition", has = "definition" },
-        { "gr", function() Snacks.picker.lsp_references() end, nowait = true, desc = "References" },
-        { "gI", function() Snacks.picker.lsp_implementations() end, desc = "Goto Implementation" },
-        { "gy", function() Snacks.picker.lsp_type_definitions() end, desc = "Goto T[y]pe Definition" },
-        { "<leader>ss", function() Snacks.picker.lsp_symbols({ filter = kind_filter }) end, desc = "LSP Symbols", has = "documentSymbol" },
-        { "<leader>sS", function() Snacks.picker.lsp_workspace_symbols({ filter = kind_filter }) end, desc = "LSP Workspace Symbols", has = "workspace/symbols" },
-      })
-    end,
-  },
-  {
-    "folke/todo-comments.nvim",
-    optional = true,
-    -- stylua: ignore
     keys = {
-      { "<leader>st", function() Snacks.picker.todo_comments() end, desc = "Todo" },
-      { "<leader>sT", function () Snacks.picker.todo_comments({ keywords = { "TODO", "FIX", "FIXME" } }) end, desc = "Todo/Fix/Fixme" },
-    },
-  },
-  {
-    "folke/flash.nvim",
-    optional = true,
-    specs = {
       {
-        "folke/snacks.nvim",
-        opts = {
-          picker = {
-            win = {
-              input = {
-                keys = {
-                  ["<a-s>"] = { "flash", mode = { "n", "i" } },
-                  ["s"] = { "flash" },
-                },
-              },
-            },
-            actions = {
-              flash = function(picker)
-                require("flash").jump({
-                  pattern = "^",
-                  label = { after = { 0, 0 } },
-                  search = {
-                    mode = "search",
-                    exclude = {
-                      function(win)
-                        return vim.bo[vim.api.nvim_win_get_buf(win)].filetype ~= "snacks_picker_list"
-                      end,
-                    },
-                  },
-                  action = function(match)
-                    local idx = picker.list:row2idx(match.pos[1])
-                    picker.list:_move(idx, true, true)
-                  end,
-                })
-              end,
-            },
-          },
-        },
+        "<leader>gg",
+        function()
+          Snacks.lazygit()
+        end,
+        desc = "Lazygit",
+      },
+      {
+        "<leader>bd",
+        function()
+          Snacks.bufdelete()
+        end,
+        desc = "[B]uffer [D]elete",
+      },
+      {
+        "<leader>og",
+        function()
+          Snacks.gitbrowse()
+        end,
+        desc = "[O]pen [G]it",
+        mode = { "n", "v" },
+      },
+      {
+        "<leader>nh",
+        function()
+          Snacks.notifier.show_history()
+        end,
+        desc = "[N]otification [H]istory",
+      },
+      {
+        "<leader>nd",
+        function()
+          Snacks.notifier.hide()
+        end,
+        desc = "[N]otifications [D]ismiss",
+      },
+      {
+        "<leader>nh",
+        function()
+          Snacks.notifier.show_history()
+        end,
+        desc = "[N]otification [H]istory",
+      },
+      {
+        "<leader>ln",
+        function()
+          Snacks.toggle.option("relativenumber", { name = "Relative Number" }):toggle()
+        end,
+        desc = "Toggle Relative [L]ine [N]umbers",
+      },
+      {
+        "<leader>cl",
+        function()
+          Snacks.toggle.option("cursorline", { name = "Cursor Line" }):toggle()
+        end,
+        desc = "Toggle [C]ursor [L]ine",
+      },
+      {
+        "<leader>td",
+        function()
+          Snacks.toggle.diagnostics():toggle()
+        end,
+        desc = "[T]oggle [D]iagnostics",
+      },
+      {
+        "<leader>zm",
+        function()
+          Snacks.toggle.dim():toggle()
+        end,
+        desc = "Toggle Dim Mode",
+      },
+      {
+        "<leader>tw",
+        function()
+          Snacks.toggle.option("wrap"):toggle()
+        end,
+        desc = "[T]oggle line [W]rap",
+      },
+      {
+        "<leader>tx",
+        function()
+          local tsc = require("treesitter-context")
+          Snacks.toggle({
+            name = "Treesitter Context",
+            get = tsc.enabled,
+            set = function(state)
+              if state then
+                tsc.enable()
+              else
+                tsc.disable()
+              end
+            end,
+          }):toggle()
+        end,
+        desc = "Toggle [T]reesitter Conte[x]t",
+      },
+      {
+        "<leader>ih",
+        function()
+          Snacks.toggle({
+            name = "Inlay Hints",
+            get = function()
+              return vim.lsp.inlay_hint.is_enabled()
+            end,
+            set = function(state)
+              if state then
+                vim.lsp.inlay_hint.enable(true)
+              else
+                vim.lsp.inlay_hint.enable(false)
+              end
+            end,
+          }):toggle()
+        end,
+        desc = "Toggle [I]nlay [H]ints",
+      },
+      {
+        "<leader>hl",
+        function()
+          local hc = require("nvim-highlight-colors")
+          Snacks.toggle({
+            name = "Highlight Colors",
+            get = function()
+              return hc.is_active()
+            end,
+            set = function(state)
+              if state then
+                hc.turnOn()
+              else
+                hc.turnOff()
+              end
+            end,
+          }):toggle()
+        end,
+        desc = "Toggle [H]igh[L]ight Colors",
+      },
+      {
+        "<leader>.",
+        function()
+          Snacks.scratch()
+        end,
+        desc = "Toggle Scratch Buffer",
+      },
+      {
+        "<leader>s.",
+        function()
+          Snacks.scratch.select()
+        end,
+
+        desc = "Search Scratch Buffers",
       },
     },
   },
