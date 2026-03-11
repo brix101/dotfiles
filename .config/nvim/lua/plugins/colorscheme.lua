@@ -16,12 +16,15 @@ return {
       },
       integrations = {
         blink_cmp = true,
+        diffview = true,
+        fidget = true,
         gitsigns = true,
+        harpoon = true,
         illuminate = true,
-        indent_blankline = { 
-          enabled = false;
-          scope_color = "sapphire";
-          colored_indent_levels = false;
+        indent_blankline = {
+          enabled = false,
+          scope_color = "sapphire",
+          colored_indent_levels = false,
         },
         native_lsp = {
           enabled = true,
@@ -32,7 +35,11 @@ return {
             information = { "undercurl" },
           },
         },
-        neotree = true,
+        snacks = {
+          enabled = true,
+          indent_scope_color = "mauve",
+        },
+        telescope = true,
         semantic_tokens = true,
         treesitter = true,
         treesitter_context = true,

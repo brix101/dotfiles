@@ -29,9 +29,9 @@ return {
           },
           file_ignore_patterns = {
             "node_modules",
-            "yarn.lock",
-            ".git",
-            ".sl",
+            -- "yarn.lock",
+            -- ".git",
+            -- ".sl",
             "_build",
             ".next",
           },
@@ -70,79 +70,31 @@ return {
       -- See `:help telescope.builtin`
       local builtin = require("telescope.builtin")
 
-      vim.keymap.set("n", "<leader>ff", builtin.find_files, { desc = "[F]ind [F]iles" })
-      vim.keymap.set("n", "<leader>fr", builtin.oldfiles, { desc = '[F]ind Recent Files ("." for repeat)' })
+      -- find
+      vim.keymap.set(
+        "n",
+        "<leader>fb",
+        "<cmd>Telescope buffers sort_mru=true sort_lastused=true ignore_current_buffer=true<cr>",
+        { desc = "Buffers" }
+      )
+      vim.keymap.set("n", "<leader>ff", builtin.find_files, { desc = "Find Files" })
+      vim.keymap.set("n", "<leader>fg", builtin.git_files, { desc = "Find Files (git-files)" })
+      vim.keymap.set("n", "<leader>fr", builtin.oldfiles, { desc = "Recent" })
       vim.keymap.set("n", "<leader>fh", builtin.help_tags, { desc = "[F]ind [H]elp" })
       vim.keymap.set("n", "<leader>fk", builtin.keymaps, { desc = "[F]ind [K]eymaps" })
-      vim.keymap.set("n", "<leader>fs", builtin.builtin, { desc = "[F]ind [S]elect Telescope" })
-      vim.keymap.set({ "n", "v" }, "<leader>fw", builtin.grep_string, { desc = "[F]ind current [W]ord" })
-      vim.keymap.set("n", "<leader>fg", builtin.live_grep, { desc = "[F]ind by [G]rep" })
-      vim.keymap.set("n", "<leader>fd", builtin.diagnostics, { desc = "[F]ind [D]iagnostics" })
-      -- vim.keymap.set('n', '<leader>fr', builtin.resume, { desc = '[F]ind [R]esume' })
-      vim.keymap.set("n", "<leader>fc", builtin.commands, { desc = "[F]ind [C]ommands" })
-      vim.keymap.set("n", "<leader>fb", builtin.buffers, { desc = "[F]ind [B]uffers" })
-
-      -- This runs on LSP attach per buffer (see main LSP attach function in 'neovim/nvim-lspconfig' config for more info,
-      -- it is better explained there). This allows easily switching between pickers if you prefer using something else!
-      vim.api.nvim_create_autocmd("LspAttach", {
-        group = vim.api.nvim_create_augroup("telescope-lsp-attach", { clear = true }),
-        callback = function(event)
-          local buf = event.buf
-
-          -- Find references for the word under your cursor.
-          vim.keymap.set("n", "grr", builtin.lsp_references, { buffer = buf, desc = "[G]oto [R]eferences" })
-
-          -- Jump to the implementation of the word under your cursor.
-          -- Useful when your language has ways of declaring types without an actual implementation.
-          vim.keymap.set("n", "gri", builtin.lsp_implementations, { buffer = buf, desc = "[G]oto [I]mplementation" })
-
-          -- Jump to the definition of the word under your cursor.
-          -- This is where a variable was first declared, or where a function is defined, etc.
-          -- To jump back, press <C-t>.
-          vim.keymap.set("n", "grd", builtin.lsp_definitions, { buffer = buf, desc = "[G]oto [D]efinition" })
-
-          -- Fuzzy find all the symbols in your current document.
-          -- Symbols are things like variables, functions, types, etc.
-          vim.keymap.set("n", "gO", builtin.lsp_document_symbols, { buffer = buf, desc = "Open Document Symbols" })
-
-          -- Fuzzy find all the symbols in your current workspace.
-          -- Similar to document symbols, except searches over your entire project.
-          vim.keymap.set(
-            "n",
-            "gW",
-            builtin.lsp_dynamic_workspace_symbols,
-            { buffer = buf, desc = "Open Workspace Symbols" }
-          )
-
-          -- Jump to the type of the word under your cursor.
-          -- Useful when you're not sure what type a variable is and you want to see
-          -- the definition of its *type*, not where it was *defined*.
-          vim.keymap.set("n", "grt", builtin.lsp_type_definitions, { buffer = buf, desc = "[G]oto [T]ype Definition" })
-        end,
-      })
-
-      -- Override default behavior and theme when searching
-      vim.keymap.set("n", "<leader>/", function()
-        -- You can pass additional configuration to Telescope to change the theme, layout, etc.
-        builtin.current_buffer_fuzzy_find(require("telescope.themes").get_dropdown({
-          winblend = 10,
-          previewer = false,
-        }))
-      end, { desc = "[/] Fuzzily search in current buffer" })
-
-      -- It's also possible to pass additional configuration options.
-      --  See `:help telescope.builtin.live_grep()` for information about particular keys
-      vim.keymap.set("n", "<leader>f/", function()
-        builtin.live_grep({
-          grep_open_files = true,
-          prompt_title = "Live Grep in Open Files",
-        })
-      end, { desc = "[F]ind [/] in Open Files" })
-
-      -- Shortcut for searching your Neovim configuration files
-      vim.keymap.set("n", "<leader>fn", function()
-        builtin.find_files({ cwd = vim.fn.stdpath("config") })
-      end, { desc = "[F]earch [N]eovim files" })
+      -- search
+      vim.keymap.set("n", "<leader>s", builtin.registers, { desc = "Registers" })
+      vim.keymap.set("n", "<leader>s/", builtin.search_history, { desc = "Search History" })
+      vim.keymap.set("n", "<leader>sa", builtin.autocommands, { desc = "Auto Commands" })
+      vim.keymap.set("n", "<leader>sc", builtin.command_history, { desc = "Command History" })
+      vim.keymap.set("n", "<leader>sC", builtin.commands, { desc = "Commands" })
+      vim.keymap.set("n", "<leader>sd", builtin.diagnostics, { desc = "Diagnostics" })
+      vim.keymap.set("n", "<leader>sD", "<cmd>Telescope diagnostics bufnr=0<cr>", { desc = "Buffer Diagnostics" })
+      vim.keymap.set("n", "<leader>sg", builtin.live_grep, { desc = "Grep" })
+      vim.keymap.set("n", "<leader>sh", builtin.help_tags, { desc = "Help" })
+      vim.keymap.set("n", "<leader>sk", builtin.keymaps, { desc = "Keymaps" })
+      vim.keymap.set("n", "<leader>sm", builtin.marks, { desc = "Jump to Mark" })
+      vim.keymap.set("n", "<leader>sq", builtin.quickfix, { desc = "Quickfix List" })
     end,
   },
 }

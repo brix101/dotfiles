@@ -24,12 +24,12 @@ return {
     cmd = { "ConformInfo" },
     keys = {
       {
-        "<leader>fm",
+        "<leader>cf",
         function()
           require("conform").format({ async = true, lsp_format = "fallback" })
         end,
         mode = "",
-        desc = "[F]or[m]at buffer",
+        desc = "Format buffer",
       },
     },
     ---@module 'conform'

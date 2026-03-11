@@ -2,22 +2,42 @@ return {
   {
     "nvim-treesitter/nvim-treesitter",
     lazy = false,
-    build = ':TSUpdate',
-    branch = 'main',
+    build = ":TSUpdate",
+    branch = "main",
     event = { "BufEnter" },
     config = function()
-      local parser = {"bash", "css", "go", "html", "javascript", "json", "lua", "markdown", "markdown_inline", "rust", "svelte", "tsx", "typescript", "vimdoc", "yaml"}
-      require('nvim-treesitter').install(parsers)
+      local parsers = {
+        "bash",
+        "css",
+        "go",
+        "html",
+        "javascript",
+        "json",
+        "lua",
+        "markdown",
+        "markdown_inline",
+        "rust",
+        "svelte",
+        "tsx",
+        "typescript",
+        "vimdoc",
+        "yaml",
+      }
+      require("nvim-treesitter").install(parsers)
 
-      vim.api.nvim_create_autocmd('FileType', {
+      vim.api.nvim_create_autocmd("FileType", {
         callback = function(args)
           local buf, filetype = args.buf, args.match
 
           local language = vim.treesitter.language.get_lang(filetype)
-          if not language then return end
+          if not language then
+            return
+          end
 
           -- check if parser exists and load it
-          if not vim.treesitter.language.add(language) then return end
+          if not vim.treesitter.language.add(language) then
+            return
+          end
           -- enables syntax highlighting and other treesitter features
           vim.treesitter.start(buf, language)
 

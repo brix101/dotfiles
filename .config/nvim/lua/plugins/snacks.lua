@@ -13,15 +13,16 @@ return {
       dim = { enabled = true },
       gitbrowse = { enabled = true },
       indent = { enabled = true },
-      input = { enabled = true },
+      input = { enabled = false },
       notifier = {
         enabled = true,
         timeout = 3000,
         style = "fancy",
       },
-      rename = { enabled = true },
+      rename = { enabled = false },
       toggle = { enabled = true },
       scratch = { enabled = true },
+      scroll = { enabled = true },
       statuscolumn = { enabled = true },
       words = { enabled = true },
     },
@@ -97,19 +98,19 @@ return {
         desc = "[N]otification [H]istory",
       },
       {
-        "<leader>ln",
+        "<leader>tL",
         function()
           Snacks.toggle.option("relativenumber", { name = "Relative Number" }):toggle()
         end,
-        desc = "Toggle Relative [L]ine [N]umbers",
+        desc = "[T]oggle Relative [L]ine Numbers",
       },
-      {
-        "<leader>cl",
-        function()
-          Snacks.toggle.option("cursorline", { name = "Cursor Line" }):toggle()
-        end,
-        desc = "Toggle [C]ursor [L]ine",
-      },
+      -- {
+      --   "<leader>cl",
+      --   function()
+      --     Snacks.toggle.option("cursorline", { name = "Cursor Line" }):toggle()
+      --   end,
+      --   desc = "Toggle Cursor  L ine",
+      -- },
       {
         "<leader>td",
         function()
@@ -117,13 +118,13 @@ return {
         end,
         desc = "[T]oggle [D]iagnostics",
       },
-      {
-        "<leader>zm",
-        function()
-          Snacks.toggle.dim():toggle()
-        end,
-        desc = "Toggle Dim Mode",
-      },
+      -- {
+      --   "<leader>zm",
+      --   function()
+      --     Snacks.toggle.dim():toggle()
+      --   end,
+      --   desc = "Toggle Dim Mode",
+      -- },
       {
         "<leader>tw",
         function()
@@ -131,26 +132,26 @@ return {
         end,
         desc = "[T]oggle line [W]rap",
       },
+      -- {
+      --   "<leader>tx",
+      --   function()
+      --     local tsc = require("treesitter-context")
+      --     Snacks.toggle({
+      --       name = "Treesitter Context",
+      --       get = tsc.enabled,
+      --       set = function(state)
+      --         if state then
+      --           tsc.enable()
+      --         else
+      --           tsc.disable()
+      --         end
+      --       end,
+      --     }):toggle()
+      --   end,
+      --   desc = "Toggle [T]reesitter Conte[x]t",
+      -- },
       {
-        "<leader>tx",
-        function()
-          local tsc = require("treesitter-context")
-          Snacks.toggle({
-            name = "Treesitter Context",
-            get = tsc.enabled,
-            set = function(state)
-              if state then
-                tsc.enable()
-              else
-                tsc.disable()
-              end
-            end,
-          }):toggle()
-        end,
-        desc = "Toggle [T]reesitter Conte[x]t",
-      },
-      {
-        "<leader>ih",
+        "<leader>th",
         function()
           Snacks.toggle({
             name = "Inlay Hints",
@@ -166,43 +167,42 @@ return {
             end,
           }):toggle()
         end,
-        desc = "Toggle [I]nlay [H]ints",
+        desc = "[T]oggle [I]nlay Hints",
       },
-      {
-        "<leader>hl",
-        function()
-          local hc = require("nvim-highlight-colors")
-          Snacks.toggle({
-            name = "Highlight Colors",
-            get = function()
-              return hc.is_active()
-            end,
-            set = function(state)
-              if state then
-                hc.turnOn()
-              else
-                hc.turnOff()
-              end
-            end,
-          }):toggle()
-        end,
-        desc = "Toggle [H]igh[L]ight Colors",
-      },
-      {
-        "<leader>.",
-        function()
-          Snacks.scratch()
-        end,
-        desc = "Toggle Scratch Buffer",
-      },
-      {
-        "<leader>s.",
-        function()
-          Snacks.scratch.select()
-        end,
-
-        desc = "Search Scratch Buffers",
-      },
+      -- {
+      --   "<leader>hl",
+      --   function()
+      --     local hc = require("nvim-highlight-colors")
+      --     Snacks.toggle(--       name = "Highlight Colors",
+      --       get = function()
+      --         return hc.is_active()
+      --       end,
+      --       set = function(state)
+      --         if state then
+      --           hc.turnOn()
+      --         else
+      --           hc.turnOff()
+      --         end
+      --       end,
+      --):toggle()
+      --   end,
+      --   desc = "Toggle [H]igh[L]ight Colors",
+      -- },
+      -- {
+      --   "<leader>.",
+      --   function()
+      --     Snacks.scratch()
+      --   end,
+      --   desc = "Toggle Scratch Buffer",
+      -- },
+      -- {
+      --   "<leader>s.",
+      --   function()
+      --     Snacks.scratch.select()
+      --   end,
+      --
+      --   desc = "Search Scratch Buffers",
+      -- },
     },
   },
 }

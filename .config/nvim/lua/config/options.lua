@@ -3,6 +3,13 @@ vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 vim.g.have_nerd_font = true
 
+-- if the completion engine supports the AI source,
+-- use that instead of inline suggestions
+vim.g.ai_cmp = true
+
+-- disable inlay hints by default, since they can be distracting
+vim.lsp.inlay_hint.enable(false)
+
 local opt = vim.opt
 
 opt.relativenumber = true -- Show relative line numbers
