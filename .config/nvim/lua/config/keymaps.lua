@@ -60,6 +60,22 @@ set("v", "<", "<gv")
 set("v", ">", ">gv")
 
 M.map_lsp_keymaps = function(bufnr)
+  local kind_filter = {
+    "Class",
+    "Constructor",
+    "Enum",
+    "Field",
+    "Function",
+    "Interface",
+    "Method",
+    "Module",
+    "Namespace",
+    "Package",
+    "Property",
+    "Struct",
+    "Trait",
+  }
+
   local map = function(keys, func, desc, mode)
     mode = mode or "n"
     vim.keymap.set(mode, keys, func, { buffer = bufnr, desc = "LSP: " .. desc })
@@ -88,6 +104,17 @@ M.map_lsp_keymaps = function(bufnr)
   end, "Goto Type Definition")
   map("gO", require("telescope.builtin").lsp_document_symbols, "Open Document Symbols")
   map("gW", require("telescope.builtin").lsp_dynamic_workspace_symbols, "Open Workspace Symbols")
+
+  map("<leader>ss", function()
+    require("telescope.builtin").lsp_document_symbols({
+      symbols = kind_filter,
+    })
+  end, "Goto Symbol")
+  map("<leader>sS", function()
+    require("telescope.builtin").lsp_dynamic_workspace_symbols({
+      symbols = kind_filter,
+    })
+  end, "Goto Symbol (Workspace)")
 end
 
 return M

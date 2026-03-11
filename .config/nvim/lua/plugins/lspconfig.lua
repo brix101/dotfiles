@@ -15,55 +15,36 @@ return {
 
     "saghen/blink.cmp",
   },
-  config = function()
-    local map_lsp_keymaps = require("config.keymaps").map_lsp_keymaps
-
-    vim.api.nvim_create_autocmd("LspAttach", {
-      group = vim.api.nvim_create_augroup("lsp-attach", { clear = true }),
-      callback = function(event)
-        local bufnr = event.buf
-        local bufname = vim.api.nvim_buf_get_name(bufnr)
-
-        -- Detach from non-file buffers (diffview, fugitive, etc.)
-        if bufname == "" or bufname:match("^diffview://") or bufname:match("^fugitive://") then
-          vim.schedule(function()
-            vim.lsp.buf_detach_client(bufnr, event.data.client_id)
-          end)
-          return
-        end
-
-        map_lsp_keymaps(bufnr)
-
-        -- When you move your cursor, the highlights will be cleared (the second autocommand).
-        local client = vim.lsp.get_client_by_id(event.data.client_id)
-        if client and client:supports_method("textDocument/documentHighlight", event.buf) then
-          local highlight_augroup = vim.api.nvim_create_augroup("lsp-highlight", { clear = false })
-          vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
-            buffer = event.buf,
-            group = highlight_augroup,
-            callback = vim.lsp.buf.document_highlight,
-          })
-
-          vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI" }, {
-            buffer = event.buf,
-            group = highlight_augroup,
-            callback = vim.lsp.buf.clear_references,
-          })
-
-          vim.api.nvim_create_autocmd("LspDetach", {
-            group = vim.api.nvim_create_augroup("lsp-detach", { clear = true }),
-            callback = function(event2)
-              vim.lsp.buf.clear_references()
-              vim.api.nvim_clear_autocmds({ group = "lsp-highlight", buffer = event2.buf })
-            end,
-          })
-        end
-      end,
-    })
-
+  ---@class PluginLspOpts
+  opts = {
+    diagnostics = {
+      underline = true,
+      update_in_insert = false,
+      virtual_text = {
+        spacing = 4,
+        source = "if_many",
+        prefix = "●",
+        -- this will set set the prefix to a function that returns the diagnostics icon based on the severity
+        -- this only works on a recent 0.10.0 build. Will be set to "●" when not supported
+        -- prefix = "icons",
+      },
+      severity_sort = true,
+      signs = {
+        text = {
+          [vim.diagnostic.severity.ERROR] = " ",
+          [vim.diagnostic.severity.WARN] = " ",
+          [vim.diagnostic.severity.HINT] = " ",
+          [vim.diagnostic.severity.INFO] = " ",
+        },
+      },
+    },
+    inlay_hints = {
+      enabled = false,
+      exclude = { "vue" }, -- filetypes for which you don't want to enable inlay hints
+    },
     -- Enable the following language servers
     ---@type table<string, vim.lsp.Config>
-    local servers = {
+    servers = {
       bashls = {},
       biome = {},
       cssls = {},
@@ -122,6 +103,7 @@ return {
             end
           end
 
+          ---@diagnostic disable-next-line: param-type-mismatch
           client.config.settings.Lua = vim.tbl_deep_extend("force", client.config.settings.Lua, {
             runtime = {
               version = "LuaJIT",
@@ -153,18 +135,86 @@ return {
       yamlls = {},
       svelte = {},
       vue_ls = {},
-    }
-
-    local formatters = {
+    },
+    formatters = {
       prettierd = {},
       stylua = {},
-    }
+    },
+  },
+  config = function(_, opts)
+    local map_lsp_keymaps = require("config.keymaps").map_lsp_keymaps
 
-    local ensure_installed = vim.tbl_keys(vim.tbl_deep_extend("force", {}, servers, formatters))
+    -- inlay hints
+    if opts.inlay_hints.enabled then
+      Snacks.util.lsp.on({ method = "textDocument/inlayHint" }, function(buffer)
+        if
+          vim.api.nvim_buf_is_valid(buffer)
+          and vim.bo[buffer].buftype == ""
+          and not vim.tbl_contains(opts.inlay_hints.exclude, vim.bo[buffer].filetype)
+        then
+          vim.lsp.inlay_hint.enable(true, { bufnr = buffer })
+        end
+      end)
+    end
+
+    -- diagnostics
+    if type(opts.diagnostics.virtual_text) == "table" and opts.diagnostics.virtual_text.prefix == "icons" then
+      local diagnostic_icons = opts.diagnostics.signs.text
+      opts.diagnostics.virtual_text.prefix = function(diagnostic)
+        return diagnostic_icons[diagnostic.severity] or "●"
+      end
+    end
+
+    vim.diagnostic.config(vim.deepcopy(opts.diagnostics))
+
+    vim.api.nvim_create_autocmd("LspAttach", {
+      group = vim.api.nvim_create_augroup("lsp-attach", { clear = true }),
+      callback = function(event)
+        local bufnr = event.buf
+        local bufname = vim.api.nvim_buf_get_name(bufnr)
+
+        -- Detach from non-file buffers (diffview, fugitive, etc.)
+        if bufname == "" or bufname:match("^diffview://") or bufname:match("^fugitive://") then
+          vim.schedule(function()
+            vim.lsp.buf_detach_client(bufnr, event.data.client_id)
+          end)
+          return
+        end
+
+        map_lsp_keymaps(bufnr)
+
+        -- When you move your cursor, the highlights will be cleared (the second autocommand).
+        local client = vim.lsp.get_client_by_id(event.data.client_id)
+        if client and client:supports_method("textDocument/documentHighlight", event.buf) then
+          local highlight_augroup = vim.api.nvim_create_augroup("lsp-highlight", { clear = false })
+          vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
+            buffer = event.buf,
+            group = highlight_augroup,
+            callback = vim.lsp.buf.document_highlight,
+          })
+
+          vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI" }, {
+            buffer = event.buf,
+            group = highlight_augroup,
+            callback = vim.lsp.buf.clear_references,
+          })
+
+          vim.api.nvim_create_autocmd("LspDetach", {
+            group = vim.api.nvim_create_augroup("lsp-detach", { clear = true }),
+            callback = function(event2)
+              vim.lsp.buf.clear_references()
+              vim.api.nvim_clear_autocmds({ group = "lsp-highlight", buffer = event2.buf })
+            end,
+          })
+        end
+      end,
+    })
+
+    local ensure_installed = vim.tbl_keys(vim.tbl_deep_extend("force", {}, opts.servers, opts.formatters))
 
     require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
 
-    for name, server in pairs(servers) do
+    for name, server in pairs(opts.servers) do
       vim.lsp.config(name, server)
       vim.lsp.enable(name)
     end

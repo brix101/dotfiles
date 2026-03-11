@@ -13,18 +13,10 @@ local icons = {
 }
 
 return {
-  -- statusline
   {
     "nvim-lualine/lualine.nvim",
-    dependencies = {
-      "meuter/lualine-so-fancy.nvim",
-      "AndreM222/copilot-lualine",
-    },
     event = "VeryLazy",
     opts = function()
-      local lualine_require = require("lualine_require")
-      lualine_require.require = require
-
       local harpoon = require("harpoon")
 
       local function truncate_branch_name(branch)
@@ -84,8 +76,7 @@ return {
 
       local function harpoon_component()
         local list = harpoon:list()
-        local total_marks = #list.items
-
+        local total_marks = list:length()
         if total_marks == 0 then
           return ""
         end
@@ -94,14 +85,81 @@ return {
         local current_index = "—"
 
         for i, item in ipairs(list.items) do
-          if item.value == current_file then
-            current_index = tostring(i)
-            break
+          if item and item.value then
+            local mark_path = vim.fn.fnamemodify(item.value, ":p")
+
+            if mark_path == current_file then
+              current_index = tostring(i)
+              break
+            end
           end
         end
 
         return string.format("󱡅 %s/%d", current_index, total_marks)
       end
+
+      local function copilot_status()
+        local clients = package.loaded["copilot"] and vim.lsp.get_clients({ name = "copilot", bufnr = 0 }) or {}
+        if #clients == 0 then
+          return nil
+        end
+        return require("copilot.status").data.status or ""
+      end
+
+      -- Use Copilot's native status strings as keys
+      local copilot_colors = {
+        [""] = "Comment",
+        Normal = "DiagnosticOk",
+        Warning = "DiagnosticError",
+        InProgress = "DiagnosticWarn",
+      }
+
+      local copilot_icons = {
+        [""] = " ",
+        Normal = " ",
+        Warning = " ",
+        InProgress = " ",
+      }
+
+      local copilot_component = {
+        function()
+          local status = copilot_status()
+          return copilot_icons[status] or copilot_icons[""]
+        end,
+        cond = function()
+          return copilot_status() ~= nil
+        end,
+        color = function()
+          local status = copilot_status()
+          local hl_group = copilot_colors[status] or copilot_colors[""]
+          return { fg = Snacks.util.color(hl_group) }
+        end,
+      }
+
+      local lsp_servers_component = {
+        function()
+          local clients = vim.lsp.get_clients({ bufnr = 0 })
+          if #clients == 0 then
+            return ""
+          end
+
+          local names = {}
+          local seen = {}
+
+          for _, client in ipairs(clients) do
+            if client.name ~= "copilot" and not seen[client.name] then
+              table.insert(names, client.name)
+              seen[client.name] = true
+            end
+          end
+
+          if #names == 0 then
+            return ""
+          end
+
+          return table.concat(names, ",")
+        end,
+      }
 
       local opts = {
         options = {
@@ -116,22 +174,8 @@ return {
             { get_vcs_info, icon = "" },
             harpoon_component,
           },
-
           lualine_c = {
             { "filename", path = 1 },
-            {
-              "diagnostics",
-              symbols = {
-                error = icons.diagnostics.Error,
-                warn = icons.diagnostics.Warn,
-                info = icons.diagnostics.Info,
-                hint = icons.diagnostics.Hint,
-              },
-            },
-            { "filetype", icon_only = true, separator = "", padding = { left = 1, right = 0 } },
-          },
-          lualine_x = {
-            -- stylua: ignore
             {
               "diff",
               symbols = {
@@ -152,25 +196,29 @@ return {
                 return nil
               end,
             },
-
-            "copilot",
-            -- stylua: ignore
             {
-              "fancy_lsp_servers",
-              color = function() return { fg = "#89b4fa" } end,
+              "diagnostics",
+              symbols = {
+                error = icons.diagnostics.Error,
+                warn = icons.diagnostics.Warn,
+                info = icons.diagnostics.Info,
+                hint = icons.diagnostics.Hint,
+              },
             },
+            { "filetype", icon_only = true, separator = "", padding = { left = 1, right = 0 } },
+          },
+          lualine_x = {
+            copilot_component,
           },
           lualine_y = {
+            lsp_servers_component,
+          },
+          lualine_z = {
             { "progress", separator = " ", padding = { left = 1, right = 0 } },
             { "location", padding = { left = 0, right = 1 } },
           },
-          lualine_z = {
-            -- function()
-            --   return " " .. os.date("%R")
-            -- end,
-          },
         },
-        extensions = { "neo-tree", "lazy", "fzf" },
+        extensions = { "lazy", "fzf" },
       }
 
       -- do not add trouble symbols if aerial is enabled

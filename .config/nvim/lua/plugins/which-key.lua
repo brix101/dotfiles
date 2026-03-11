@@ -13,19 +13,29 @@ return {
 
       -- Document existing key chains
       spec = {
-        { "<leader>b", group = "Buffer" },
-        { "<leader>c", group = "Code" },
-        { "<leader>f", group = "Find", mode = { "n", "v" } },
-        { "<leader>t", group = "Toggle" },
-        { "<leader>g", group = "Git" },
-        { "<leader>gh", group = "Git Hunk", mode = { "n", "v" } },
+        { "<leader>c", group = "code" },
+        { "<leader>f", group = "find" },
+        { "<leader>g", group = "git" },
+        { "<leader>gh", group = "hunks" },
+        { "<leader>n", group = "notification" },
+        { "<leader>q", group = "quit/session" },
+        { "<leader>r", group = "rename" },
+        { "<leader>s", group = "search" },
+        { "<leader>u", group = "ui", icon = { icon = "󰙵 ", color = "cyan" } },
         { "<leader>x", group = "diagnostics/quickfix", icon = { icon = "󱖫 ", color = "green" } },
-        { "gr", group = "LSP Actions", mode = { "n" } },
+        { "gr", group = "lsp actions", mode = { "n" } },
         { "[", group = "prev" },
         { "]", group = "next" },
         { "g", group = "goto" },
-        { "gs", group = "Surround" },
+        { "gs", group = "surround" },
         { "z", group = "fold" },
+        {
+          "<leader>b",
+          group = "buffer",
+          expand = function()
+            return require("which-key.extras").expand.buf()
+          end,
+        },
       },
     },
   },
