@@ -54,7 +54,7 @@ return {
       end,
       formatters_by_ft = {
         lua = { "stylua" },
-        go = { "goimports", "gofumpt" },
+      go = { "goimports", "gofumpt" },
         astro = { "oxfmt", "biome", "prettierd", stop_after_first = true },
         javascript = { "oxfmt", "biome", "prettierd", stop_after_first = true },
         typescript = { "oxfmt", "biome", "prettierd", stop_after_first = true },

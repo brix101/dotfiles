@@ -95,6 +95,7 @@ return {
       vim.keymap.set("n", "<leader>sk", builtin.keymaps, { desc = "Keymaps" })
       vim.keymap.set("n", "<leader>sm", builtin.marks, { desc = "Jump to Mark" })
       vim.keymap.set("n", "<leader>sq", builtin.quickfix, { desc = "Quickfix List" })
+      vim.keymap.set("n", "<leader>sw", builtin.grep_string, { desc = "Grep Word" })
     end,
   },
 }

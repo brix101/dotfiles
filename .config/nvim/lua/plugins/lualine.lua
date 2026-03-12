@@ -171,11 +171,9 @@ return {
         sections = {
           lualine_a = { "mode" },
           lualine_b = {
-            { get_vcs_info, icon = "" },
+            { get_vcs_info, icon = "" },
             harpoon_component,
-          },
-          lualine_c = {
-            { "filename", path = 1 },
+
             {
               "diff",
               symbols = {
@@ -184,16 +182,14 @@ return {
                 removed = icons.git.removed,
               },
               source = function()
-                local bufnr = vim.api.nvim_get_current_buf()
-                local summary = vim.b[bufnr].vcsigns_summary
-                if summary then
+                local gitsigns = vim.b.gitsigns_status_dict
+                if gitsigns then
                   return {
-                    added = summary.added or 0,
-                    modified = summary.modified or 0,
-                    removed = summary.removed or 0,
+                    added = gitsigns.added,
+                    modified = gitsigns.changed,
+                    removed = gitsigns.removed,
                   }
                 end
-                return nil
               end,
             },
             {
@@ -205,7 +201,10 @@ return {
                 hint = icons.diagnostics.Hint,
               },
             },
-            { "filetype", icon_only = true, separator = "", padding = { left = 1, right = 0 } },
+          },
+          lualine_c = {
+            { "filename", path = 1 },
+            { "filetype" },
           },
           lualine_x = {
             copilot_component,
