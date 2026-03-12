@@ -1,3 +1,10 @@
+local diagnostic_icons = {
+  Error = " ",
+  Warn = " ",
+  Hint = " ",
+  Info = " ",
+}
+
 return {
   "neovim/nvim-lspconfig",
   dependencies = {
@@ -17,6 +24,8 @@ return {
   },
   ---@class PluginLspOpts
   opts = {
+    -- options for vim.diagnostic.config()
+    ---@type vim.diagnostic.Opts
     diagnostics = {
       underline = true,
       update_in_insert = false,
@@ -25,22 +34,24 @@ return {
         source = "if_many",
         prefix = "●",
         -- this will set set the prefix to a function that returns the diagnostics icon based on the severity
-        -- this only works on a recent 0.10.0 build. Will be set to "●" when not supported
         -- prefix = "icons",
       },
       severity_sort = true,
       signs = {
         text = {
-          [vim.diagnostic.severity.ERROR] = " ",
-          [vim.diagnostic.severity.WARN] = " ",
-          [vim.diagnostic.severity.HINT] = " ",
-          [vim.diagnostic.severity.INFO] = " ",
+          [vim.diagnostic.severity.ERROR] = diagnostic_icons.Error,
+          [vim.diagnostic.severity.WARN] = diagnostic_icons.Warn,
+          [vim.diagnostic.severity.HINT] = diagnostic_icons.Hint,
+          [vim.diagnostic.severity.INFO] = diagnostic_icons.Info,
         },
       },
     },
     inlay_hints = {
       enabled = false,
       exclude = { "vue" }, -- filetypes for which you don't want to enable inlay hints
+    },
+    codelens = {
+      enabled = false,
     },
     -- Enable the following language servers
     ---@type table<string, vim.lsp.Config>
@@ -159,12 +170,16 @@ return {
 
     -- diagnostics
     if type(opts.diagnostics.virtual_text) == "table" and opts.diagnostics.virtual_text.prefix == "icons" then
-      local diagnostic_icons = opts.diagnostics.signs.text
       opts.diagnostics.virtual_text.prefix = function(diagnostic)
-        return diagnostic_icons[diagnostic.severity] or "●"
+        local icons = diagnostic_icons
+        for d, icon in pairs(icons) do
+          if diagnostic.severity == vim.diagnostic.severity[d:upper()] then
+            return icon
+          end
+        end
+        return "●"
       end
     end
-
     vim.diagnostic.config(vim.deepcopy(opts.diagnostics))
 
     vim.api.nvim_create_autocmd("LspAttach", {
