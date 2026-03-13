@@ -13,6 +13,7 @@ vim.lsp.inlay_hint.enable(false)
 local opt = vim.opt
 
 opt.relativenumber = true -- Show relative line numbers
+opt.number = true -- cursorline number
 
 opt.mouse = "a" -- Enable mouse support in all modes
 opt.showmode = false -- Don't show the mode, since it's already in the status line
@@ -24,7 +25,6 @@ opt.breakindent = false
 -- Save undo history
 opt.swapfile = false
 opt.backup = false
--- opt.undodir = string.format("%s/undodir", vim.fn.stdpath("cache"))
 opt.undodir = os.getenv("HOME") .. "/.vim/undodir"
 opt.undofile = true
 
