@@ -62,7 +62,7 @@ return {
       },
     },
     inlay_hints = {
-      enabled = false,
+      enabled = true,
       exclude = { "vue" }, -- filetypes for which you don't want to enable inlay hints
     },
     codelens = {
@@ -176,7 +176,9 @@ return {
           })
         end,
         settings = {
-          Lua = {},
+          Lua = {
+            -- hint = { enable = false },
+          },
         },
       },
       marksman = {},
