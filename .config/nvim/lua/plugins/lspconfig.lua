@@ -113,7 +113,6 @@ return {
       },
       gopls = {
         analyses = {
-          fieldalignment = false,
           nilness = true,
           unusedparams = true,
           unusedwrite = true,
@@ -140,9 +139,11 @@ return {
           rangeVariableTypes = true,
         },
         gofumpt = true,
-        semanticTokens = true,
-        -- staticcheck = true,
         usePlaceholders = true,
+        completeUnimported = true,
+        staticcheck = true,
+        directoryFilters = { "-.git", "-.vscode", "-.idea", "-.vscode-test", "-node_modules" },
+        semanticTokens = true,
       },
       html = {},
       jsonls = {},
@@ -196,6 +197,8 @@ return {
     formatters = {
       prettierd = {},
       stylua = {},
+      goimports = {},
+      gofumpt = {},
     },
   },
   config = function(_, opts)

@@ -17,6 +17,7 @@ return {
         { "<leader>f", group = "find" },
         { "<leader>g", group = "git" },
         { "<leader>gh", group = "hunks" },
+        { "<leader>h", group = "harpoon", icon = { icon = "󱡅 " } },
         { "<leader>n", group = "notification" },
         { "<leader>q", group = "quit/session" },
         { "<leader>r", group = "rename" },
