@@ -1,3 +1,10 @@
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "oil",
+  callback = function()
+    vim.opt_local.colorcolumn = ""
+  end,
+})
+
 return {
   {
     "stevearc/oil.nvim",
@@ -5,6 +12,12 @@ return {
     config = function()
       require("oil").setup({
         columns = { "icon" },
+        confirmation = {
+          border = "rounded",
+        },
+        float = {
+          border = "rounded",
+        },
         keymaps = {
           ["<C-h>"] = false,
           ["<M-h>"] = "actions.select_split",
@@ -18,7 +31,7 @@ return {
       vim.keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
 
       -- Open parent directory in floating window
-      vim.keymap.set("n", "<space>-", require("oil").toggle_float, { desc = "Open directory in floating window" })
+      vim.keymap.set("n", "<leader>e", require("oil").toggle_float, { desc = "Open Oil file explorer" })
     end,
   },
 }

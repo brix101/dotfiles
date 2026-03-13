@@ -78,4 +78,3 @@ opt.cursorline = true
 opt.confirm = true -- Confirm before closing modified buffers
 
 opt.wrap = false -- Disable line wrapping
-opt.smoothscroll = true -- Smooth scrolling

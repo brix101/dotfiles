@@ -4,6 +4,21 @@ local diagnostic_icons = {
   Hint = " ",
   Info = " ",
 }
+local kind_filter = {
+  "Class",
+  "Constructor",
+  "Enum",
+  "Field",
+  "Function",
+  "Interface",
+  "Method",
+  "Module",
+  "Namespace",
+  "Package",
+  "Property",
+  "Struct",
+  "Trait",
+}
 
 return {
   "neovim/nvim-lspconfig",
@@ -56,6 +71,35 @@ return {
     -- Enable the following language servers
     ---@type table<string, vim.lsp.Config>
     servers = {
+      ["*"] = {
+        capabilities = {
+          workspace = {
+            fileOperations = {
+              didRename = true,
+              willRename = true,
+            },
+          },
+        },
+        -- stylua: ignore
+        keys = {
+          { "<leader>cl", function() Snacks.picker.lsp_config() end, desc = "Lsp Info" },
+          { "gd", vim.lsp.buf.definition, desc = "Goto Definition", has = "definition" },
+          { "gr", vim.lsp.buf.references, desc = "References", nowait = true },
+          { "gI", vim.lsp.buf.implementation, desc = "Goto Implementation" },
+          { "gy", vim.lsp.buf.type_definition, desc = "Goto T[y]pe Definition" },
+          { "gD", vim.lsp.buf.declaration, desc = "Goto Declaration" },
+          { "K", function() return vim.lsp.buf.hover({ border = "rounded" }) end, desc = "Hover" },
+          { "<C-k>", function() return vim.lsp.buf.signature_help({ border = "rounded" }) end, mode = "i", desc = "Signature Help", has = "signatureHelp" },
+          { "<leader>ca", vim.lsp.buf.code_action, desc = "Code Action", mode = { "n", "x" }, has = "codeAction" },
+          { "<leader>rn", vim.lsp.buf.rename, desc = "Rename", has = "rename" },
+          { "gd", function() require('telescope.builtin').lsp_definitions() end, desc = "Goto Definition" },
+          { "gr", function() require('telescope.builtin').lsp_references() end, nowait = true, desc = "References" },
+          { "gI", function() require('telescope.builtin').lsp_implementations() end, desc = "Goto Implementation" },
+          { "gt", function() require('telescope.builtin').lsp_type_definitions() end, desc = "Goto T[y]pe Definition" },
+          { "<leader>ss", function() require('telescope.builtin').lsp_document_symbols({ filter = kind_filter }) end, desc = "LSP Symbols" },
+          { "<leader>sS", function() require('telescope.builtin').lsp_dynamic_workspace_symbols({ filter = kind_filter }) end, desc = "LSP Workspace Symbols" },
+        },
+      },
       bashls = {},
       biome = {},
       cssls = {},
@@ -153,7 +197,38 @@ return {
     },
   },
   config = function(_, opts)
-    local map_lsp_keymaps = require("config.keymaps").map_lsp_keymaps
+    ---@param filter vim.lsp.get_clients.Filter
+    ---@param spec LazyKeysLspSpec[]
+    local function keymap_set(filter, spec)
+      local Keys = require("lazy.core.handler.keys")
+      for _, keys in pairs(Keys.resolve(spec)) do
+        ---@cast keys LazyKeysLsp
+        local filters = {} ---@type vim.lsp.get_clients.Filter[]
+        if keys.has then
+          local methods = type(keys.has) == "string" and { keys.has } or keys.has --[[@as string[] ]]
+          for _, method in ipairs(methods) do
+            method = method:find("/") and method or ("textDocument/" .. method)
+            filters[#filters + 1] = vim.tbl_extend("force", vim.deepcopy(filter), { method = method })
+          end
+        else
+          filters[#filters + 1] = filter
+        end
+
+        for _, f in ipairs(filters) do
+          local opts = Keys.opts(keys)
+          ---@cast opts snacks.keymap.set.Opts
+          opts.lsp = f
+          opts.enabled = keys.enabled
+          Snacks.keymap.set(keys.mode or "n", keys.lhs, keys.rhs, opts)
+        end
+      end
+    end
+
+    for server, server_opts in pairs(opts.servers) do
+      if type(server_opts) == "table" and server_opts.keys then
+        keymap_set({ name = server ~= "*" and server or nil }, server_opts.keys)
+      end
+    end
 
     -- inlay hints
     if opts.inlay_hints.enabled then
@@ -182,6 +257,10 @@ return {
     end
     vim.diagnostic.config(vim.deepcopy(opts.diagnostics))
 
+    if opts.servers["*"] then
+      vim.lsp.config("*", opts.servers["*"])
+    end
+
     -- LSP servers and clients are able to communicate to each other what features they support.
     --  By default, Neovim doesn't support everything that is in the LSP specification.
     --  When you add nvim-cmp, luasnip, etc. Neovim now has *more* capabilities.
@@ -198,50 +277,9 @@ return {
       end
     end
 
-    vim.api.nvim_create_autocmd("LspAttach", {
-      group = vim.api.nvim_create_augroup("lsp-attach", { clear = true }),
-      callback = function(event)
-        local bufnr = event.buf
-        local bufname = vim.api.nvim_buf_get_name(bufnr)
-
-        -- Detach from non-file buffers (diffview, fugitive, etc.)
-        if bufname == "" or bufname:match("^diffview://") or bufname:match("^fugitive://") then
-          vim.schedule(function()
-            vim.lsp.buf_detach_client(bufnr, event.data.client_id)
-          end)
-          return
-        end
-
-        map_lsp_keymaps(bufnr)
-
-        -- When you move your cursor, the highlights will be cleared (the second autocommand).
-        local client = vim.lsp.get_client_by_id(event.data.client_id)
-        if client and client:supports_method("textDocument/documentHighlight", event.buf) then
-          local highlight_augroup = vim.api.nvim_create_augroup("lsp-highlight", { clear = false })
-          vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
-            buffer = event.buf,
-            group = highlight_augroup,
-            callback = vim.lsp.buf.document_highlight,
-          })
-
-          vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI" }, {
-            buffer = event.buf,
-            group = highlight_augroup,
-            callback = vim.lsp.buf.clear_references,
-          })
-
-          vim.api.nvim_create_autocmd("LspDetach", {
-            group = vim.api.nvim_create_augroup("lsp-detach", { clear = true }),
-            callback = function(event2)
-              vim.lsp.buf.clear_references()
-              vim.api.nvim_clear_autocmds({ group = "lsp-highlight", buffer = event2.buf })
-            end,
-          })
-        end
-      end,
-    })
-
-    local install = vim.tbl_keys(vim.tbl_deep_extend("force", {}, opts.servers, opts.formatters))
+    local install = vim.tbl_filter(function(server)
+      return server ~= "*"
+    end, vim.tbl_keys(vim.tbl_deep_extend("force", {}, opts.servers, opts.formatters)))
 
     require("mason-tool-installer").setup({
       auto_update = true,
@@ -252,6 +290,10 @@ return {
     })
 
     for name, server in pairs(opts.servers) do
+      if name == "*" then
+        return
+      end
+
       -- Configure the server
       vim.lsp.config(name, {
         cmd = server.cmd,
@@ -260,6 +302,7 @@ return {
         settings = server.settings,
         root_dir = server.root_dir,
         root_markers = server.root_markers,
+        keys = server.keys,
       })
 
       vim.lsp.config(name, server)
