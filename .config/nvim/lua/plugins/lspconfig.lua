@@ -182,6 +182,22 @@ return {
     end
     vim.diagnostic.config(vim.deepcopy(opts.diagnostics))
 
+    -- LSP servers and clients are able to communicate to each other what features they support.
+    --  By default, Neovim doesn't support everything that is in the LSP specification.
+    --  When you add nvim-cmp, luasnip, etc. Neovim now has *more* capabilities.
+    --  So, we create new capabilities with nvim cmp, and then broadcast that to the servers.
+    local capabilities = vim.lsp.protocol.make_client_capabilities()
+    -- Use Blink.cmp capabilities if available, fallback to cmp_nvim_lsp
+    local has_blink, blink = pcall(require, "blink.cmp")
+    if has_blink then
+      capabilities = vim.tbl_deep_extend("force", capabilities, blink.get_lsp_capabilities())
+    else
+      local has_cmp, cmp_lsp = pcall(require, "cmp_nvim_lsp")
+      if has_cmp then
+        capabilities = vim.tbl_deep_extend("force", capabilities, cmp_lsp.default_capabilities())
+      end
+    end
+
     vim.api.nvim_create_autocmd("LspAttach", {
       group = vim.api.nvim_create_augroup("lsp-attach", { clear = true }),
       callback = function(event)
@@ -225,13 +241,39 @@ return {
       end,
     })
 
-    local ensure_installed = vim.tbl_keys(vim.tbl_deep_extend("force", {}, opts.servers, opts.formatters))
+    local install = vim.tbl_keys(vim.tbl_deep_extend("force", {}, opts.servers, opts.formatters))
 
-    require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
+    require("mason-tool-installer").setup({
+      auto_update = true,
+      run_on_start = true,
+      start_delay = 3000,
+      debounce_hours = 12,
+      ensure_installed = install,
+    })
 
     for name, server in pairs(opts.servers) do
+      -- Configure the server
+      vim.lsp.config(name, {
+        cmd = server.cmd,
+        capabilities = capabilities,
+        filetypes = server.filetypes,
+        settings = server.settings,
+        root_dir = server.root_dir,
+        root_markers = server.root_markers,
+      })
+
       vim.lsp.config(name, server)
-      vim.lsp.enable(name)
+      -- Enable the server (with autostart setting if specified)
+      if server.autostart == false then
+        -- Don't auto-enable servers with autostart = false
+        -- Users can manually enable with :lua vim.lsp.enable(name)
+      else
+        vim.lsp.enable(name)
+      end
     end
+
+    -- Setup Mason for managing external LSP servers
+    require("mason").setup({ ui = { border = "rounded" } })
+    require("mason-lspconfig").setup()
   end,
 }
