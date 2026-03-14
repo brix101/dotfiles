@@ -146,37 +146,33 @@ return {
       html = {},
       jsonls = {},
       lua_ls = {
-        on_init = function(client)
-          if client.workspace_folders then
-            local path = client.workspace_folders[1].name
-            if
-              path ~= vim.fn.stdpath("config")
-              and (vim.uv.fs_stat(path .. "/.luarc.json") or vim.uv.fs_stat(path .. "/.luarc.jsonc"))
-            then
-              return
-            end
-          end
-
-          ---@diagnostic disable-next-line: param-type-mismatch
-          client.config.settings.Lua = vim.tbl_deep_extend("force", client.config.settings.Lua, {
-            runtime = {
-              version = "LuaJIT",
-              path = { "lua/?.lua", "lua/?/init.lua" },
-            },
-            workspace = {
-              checkThirdParty = false,
-              -- NOTE: this is a lot slower and will cause issues when working on your own configuration.
-              --  See https://github.com/neovim/nvim-lspconfig/issues/3189
-              library = vim.tbl_extend("force", vim.api.nvim_get_runtime_file("", true), {
-                "${3rd}/luv/library",
-                "${3rd}/busted/library",
-              }),
-            },
-          })
-        end,
+        -- mason = false, -- set to false if you don't want this server to be installed with mason
+        -- Use this to add any additional keymaps
+        -- for specific lsp servers
+        -- ---@type LazyKeysSpec[]
+        -- keys = {},
         settings = {
           Lua = {
-            -- hint = { enable = false },
+            workspace = {
+              checkThirdParty = false,
+            },
+            codeLens = {
+              enable = true,
+            },
+            completion = {
+              callSnippet = "Replace",
+            },
+            doc = {
+              privateName = { "^_" },
+            },
+            hint = {
+              enable = true,
+              setType = false,
+              paramType = true,
+              paramName = "Disable",
+              semicolon = "Disable",
+              arrayIndex = "Disable",
+            },
           },
         },
       },
@@ -286,10 +282,10 @@ return {
     end, vim.tbl_keys(opts.servers))
 
     require("mason-tool-installer").setup({
-      -- auto_update = true,
-      -- run_on_start = true,
-      -- start_delay = 3000,
-      -- debounce_hours = 12,
+      auto_update = true,
+      run_on_start = true,
+      start_delay = 3000,
+      debounce_hours = 12,
       ensure_installed = vim.list_extend(install, vim.tbl_keys(opts.formatters)),
     })
 
