@@ -33,8 +33,7 @@ return {
     "mason-org/mason-lspconfig.nvim",
     "WhoIsSethDaniel/mason-tool-installer.nvim",
 
-    { "j-hui/fidget.nvim", opts = {} },
-
+    { "j-hui/fidget.nvim" },
     "saghen/blink.cmp",
   },
   ---@class PluginLspOpts
@@ -101,7 +100,6 @@ return {
         },
       },
       bashls = {},
-      biome = {},
       cssls = {},
       eslint = {
         autostart = false,
@@ -195,6 +193,7 @@ return {
       vue_ls = {},
     },
     formatters = {
+      biome = {},
       prettierd = {},
       stylua = {},
       goimports = {},
@@ -284,14 +283,14 @@ return {
 
     local install = vim.tbl_filter(function(server)
       return server ~= "*"
-    end, vim.tbl_keys(vim.tbl_deep_extend("force", {}, opts.servers, opts.formatters)))
+    end, vim.tbl_keys(opts.servers))
 
     require("mason-tool-installer").setup({
-      auto_update = true,
-      run_on_start = true,
-      start_delay = 3000,
-      debounce_hours = 12,
-      ensure_installed = install,
+      -- auto_update = true,
+      -- run_on_start = true,
+      -- start_delay = 3000,
+      -- debounce_hours = 12,
+      ensure_installed = vim.list_extend(install, vim.tbl_keys(opts.formatters)),
     })
 
     for name, server in pairs(opts.servers) do
@@ -307,10 +306,8 @@ return {
         settings = server.settings,
         root_dir = server.root_dir,
         root_markers = server.root_markers,
-        keys = server.keys,
       })
 
-      vim.lsp.config(name, server)
       -- Enable the server (with autostart setting if specified)
       if server.autostart == false then
         -- Don't auto-enable servers with autostart = false
