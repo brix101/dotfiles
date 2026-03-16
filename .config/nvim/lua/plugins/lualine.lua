@@ -98,6 +98,77 @@ return {
         return string.format("󱡅 %s/%d", current_index, total_marks)
       end
 
+      local opts = {
+        options = {
+          theme = "auto",
+          globalstatus = true,
+          component_separators = { left = "", right = "" },
+          section_separators = { left = "█", right = "█" },
+        },
+        sections = {
+          lualine_a = { "mode" },
+          lualine_b = {
+            { get_vcs_info, icon = "" },
+            harpoon_component,
+            {
+              "diff",
+              symbols = {
+                added = icons.git.added,
+                modified = icons.git.modified,
+                removed = icons.git.removed,
+              },
+              source = function()
+                local gitsigns = vim.b.gitsigns_status_dict
+                if gitsigns then
+                  return {
+                    added = gitsigns.added,
+                    modified = gitsigns.changed,
+                    removed = gitsigns.removed,
+                  }
+                end
+              end,
+            },
+            {
+              "diagnostics",
+              symbols = {
+                error = icons.diagnostics.Error,
+                warn = icons.diagnostics.Warn,
+                info = icons.diagnostics.Info,
+                hint = icons.diagnostics.Hint,
+              },
+            },
+          },
+          lualine_c = {
+            { "filename", path = 1 },
+          },
+          lualine_x = {},
+          lualine_y = {
+            { "filetype" },
+          },
+          lualine_z = {
+            { "progress", separator = " ", padding = { left = 1, right = 0 } },
+            { "location", padding = { left = 0, right = 1 } },
+          },
+        },
+        extensions = { "lazy", "oil", "trouble" },
+      }
+
+      -- local trouble = require("trouble")
+      -- local symbols = trouble.statusline({
+      --   mode = "symbols",
+      --   groups = {},
+      --   title = false,
+      --   filter = { range = true },
+      --   format = "{kind_icon}{symbol.name:Normal}",
+      --   hl_group = "lualine_c_normal",
+      -- })
+      -- table.insert(opts.sections.lualine_c, {
+      --   symbols and symbols.get,
+      --   cond = function()
+      --     return vim.b.trouble_lualine ~= false and symbols.has()
+      --   end,
+      -- })
+
       local function copilot_status()
         local clients = package.loaded["copilot"] and vim.lsp.get_clients({ name = "copilot", bufnr = 0 }) or {}
         if #clients == 0 then
@@ -135,108 +206,7 @@ return {
           return { fg = Snacks.util.color(hl_group) }
         end,
       }
-
-      local lsp_servers_component = {
-        function()
-          local clients = vim.lsp.get_clients({ bufnr = 0 })
-          if #clients == 0 then
-            return ""
-          end
-
-          local names = {}
-          local seen = {}
-
-          for _, client in ipairs(clients) do
-            if client.name ~= "copilot" and not seen[client.name] then
-              table.insert(names, client.name)
-              seen[client.name] = true
-            end
-          end
-
-          if #names == 0 then
-            return ""
-          end
-
-          return table.concat(names, ",")
-        end,
-      }
-
-      local opts = {
-        options = {
-          theme = "auto",
-          globalstatus = true,
-          component_separators = { left = "", right = "" },
-          section_separators = { left = "█", right = "█" },
-        },
-        sections = {
-          lualine_a = { "mode" },
-          lualine_b = {
-            { get_vcs_info, icon = "" },
-            harpoon_component,
-
-            {
-              "diff",
-              symbols = {
-                added = icons.git.added,
-                modified = icons.git.modified,
-                removed = icons.git.removed,
-              },
-              source = function()
-                local gitsigns = vim.b.gitsigns_status_dict
-                if gitsigns then
-                  return {
-                    added = gitsigns.added,
-                    modified = gitsigns.changed,
-                    removed = gitsigns.removed,
-                  }
-                end
-              end,
-            },
-            {
-              "diagnostics",
-              symbols = {
-                error = icons.diagnostics.Error,
-                warn = icons.diagnostics.Warn,
-                info = icons.diagnostics.Info,
-                hint = icons.diagnostics.Hint,
-              },
-            },
-          },
-          lualine_c = {
-            { "filename", path = 1 },
-            { "filetype" },
-          },
-          lualine_x = {
-            copilot_component,
-          },
-          lualine_y = {
-            lsp_servers_component,
-          },
-          lualine_z = {
-            { "progress", separator = " ", padding = { left = 1, right = 0 } },
-            { "location", padding = { left = 0, right = 1 } },
-          },
-        },
-        extensions = { "lazy", "fzf" },
-      }
-
-      -- do not add trouble symbols if aerial is enabled
-      -- And allow it to be overriden for some buffer types (see autocmds)
-      local trouble = require("trouble")
-      local symbols = trouble.statusline({
-        mode = "symbols",
-        groups = {},
-        title = false,
-        filter = { range = true },
-        format = "{kind_icon}{symbol.name:Normal}",
-        hl_group = "lualine_c_normal",
-      })
-      table.insert(opts.sections.lualine_c, {
-        symbols and symbols.get,
-        cond = function()
-          return vim.b.trouble_lualine ~= false and symbols.has()
-        end,
-      })
+      table.insert(opts.sections.lualine_x, copilot_component)
 
       return opts
     end,

@@ -23,7 +23,7 @@ macos-option-as-alt = true
 macos-titlebar-proxy-icon = hidden
 
 # Always show ghostty as the title
-title = ghostty 
+title = ghostty
 
 # Window settings
 window-width = 90
