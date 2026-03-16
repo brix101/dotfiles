@@ -4,26 +4,8 @@ return {
     event = "VimEnter",
     version = "1.*",
     dependencies = {
-      {
-        "L3MON4D3/LuaSnip",
-        version = "2.*",
-        build = (function()
-          if vim.fn.has("win32") == 1 or vim.fn.executable("make") == 0 then
-            return
-          end
-          return "make install_jsregexp"
-        end)(),
-        dependencies = {
-          {
-            "rafamadriz/friendly-snippets",
-            config = function()
-              require("luasnip.loaders.from_vscode").lazy_load()
-            end,
-          },
-        },
-        opts = {},
-      },
-      "folke/lazydev.nvim",
+      "rafamadriz/friendly-snippets",
+      "L3MON4D3/LuaSnip",
       "fang2hou/blink-copilot",
     },
     ---@module 'blink.cmp'
@@ -122,12 +104,22 @@ return {
         },
       },
       sources = {
-        default = { "lsp", "path", "snippets", "buffer", "lazydev", "copilot" },
+        default = { "lsp", "path", "snippets", "buffer", "copilot" },
         providers = {
-          lazydev = {
-            name = "LazyDev",
-            module = "lazydev.integrations.blink",
-            score_offset = 100,
+          lsp = {
+            score_offset = 1000, -- Extreme priority to override fuzzy matching
+          },
+          path = {
+            score_offset = 3, -- File paths moderate priority
+          },
+          snippets = {
+            score_offset = -100, -- Much lower priority
+            max_items = 2, -- Limit snippet suggestions
+            min_keyword_length = 3, -- Don't show for single chars
+          },
+          buffer = {
+            score_offset = -150, -- Lowest priority
+            min_keyword_length = 3, -- Only show after 3 chars
           },
           copilot = {
             name = "copilot",
