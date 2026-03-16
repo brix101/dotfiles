@@ -2,8 +2,9 @@
 theme = catppuccin-mocha
 
 term = xterm-256color
-clipboard-read = allow
 copy-on-select = true
+clipboard-read = allow
+clipboard-write = allow
 
 # Opacity of split windows
 unfocused-split-opacity = 0.97  
@@ -16,3 +17,22 @@ font-family = JetBrains Mono Light
 font-family-bold = JetBrains Mono Bold
 font-family-italic = JetBrains Mono Italic
 font-family-bold-italic = JetBrains Mono Bold Italic
+
+# macos options
+macos-option-as-alt = true
+macos-titlebar-proxy-icon = hidden
+
+# Always show ghostty as the title
+title = ghostty 
+
+# Window settings
+window-width = 90
+window-height = 30
+window-colorspace = display-p3
+window-padding-color = background
+window-padding-balance = true
+window-padding-x = 0
+window-padding-y = 0
+
+# Decrease scroll sensitivity
+mouse-scroll-multiplier = 0.4
