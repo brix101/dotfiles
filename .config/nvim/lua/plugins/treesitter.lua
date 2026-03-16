@@ -4,6 +4,7 @@ return {
     lazy = false,
     build = ":TSUpdate",
     branch = "main",
+    version = false,
     event = { "BufEnter" },
     config = function()
       local parsers = {
@@ -16,7 +17,6 @@ return {
         "lua",
         "markdown",
         "markdown_inline",
-        "rust",
         "svelte",
         "tsx",
         "typescript",
@@ -51,5 +51,11 @@ return {
         end,
       })
     end,
+  },
+
+  -- Automatically add closing tags for HTML and JSX
+  {
+    "windwp/nvim-ts-autotag",
+    opts = {},
   },
 }

@@ -38,7 +38,6 @@ return {
   },
   ---@class PluginLspOpts
   opts = {
-    -- options for vim.diagnostic.config()
     ---@type vim.diagnostic.Opts
     diagnostics = {
       underline = true,
@@ -47,8 +46,6 @@ return {
         spacing = 4,
         source = "if_many",
         prefix = "●",
-        -- this will set set the prefix to a function that returns the diagnostics icon based on the severity
-        -- prefix = "icons",
       },
       severity_sort = true,
       signs = {
@@ -63,9 +60,6 @@ return {
     inlay_hints = {
       enabled = true,
       exclude = { "vue" }, -- filetypes for which you don't want to enable inlay hints
-    },
-    codelens = {
-      enabled = false,
     },
     -- Enable the following language servers
     ---@type table<string, vim.lsp.Config>
@@ -194,6 +188,7 @@ return {
       stylua = {},
       goimports = {},
       gofumpt = {},
+      sqlfluff = {},
     },
   },
   config = function(_, opts)
@@ -230,6 +225,9 @@ return {
       end
     end
 
+    -- diagnostics
+    vim.diagnostic.config(vim.deepcopy(opts.diagnostics))
+
     -- inlay hints
     if opts.inlay_hints.enabled then
       Snacks.util.lsp.on({ method = "textDocument/inlayHint" }, function(buffer)
@@ -242,20 +240,6 @@ return {
         end
       end)
     end
-
-    -- diagnostics
-    if type(opts.diagnostics.virtual_text) == "table" and opts.diagnostics.virtual_text.prefix == "icons" then
-      opts.diagnostics.virtual_text.prefix = function(diagnostic)
-        local icons = diagnostic_icons
-        for d, icon in pairs(icons) do
-          if diagnostic.severity == vim.diagnostic.severity[d:upper()] then
-            return icon
-          end
-        end
-        return "●"
-      end
-    end
-    vim.diagnostic.config(vim.deepcopy(opts.diagnostics))
 
     if opts.servers["*"] then
       vim.lsp.config("*", opts.servers["*"])
@@ -270,11 +254,6 @@ return {
     local has_blink, blink = pcall(require, "blink.cmp")
     if has_blink then
       capabilities = vim.tbl_deep_extend("force", capabilities, blink.get_lsp_capabilities())
-    else
-      local has_cmp, cmp_lsp = pcall(require, "cmp_nvim_lsp")
-      if has_cmp then
-        capabilities = vim.tbl_deep_extend("force", capabilities, cmp_lsp.default_capabilities())
-      end
     end
 
     local install = vim.tbl_filter(function(server)
@@ -289,27 +268,25 @@ return {
       ensure_installed = vim.list_extend(install, vim.tbl_keys(opts.formatters)),
     })
 
-    for name, server in pairs(opts.servers) do
-      if name == "*" then
-        return
-      end
+    for name, config in pairs(opts.servers) do
+      if name ~= "*" then
+        -- Configure the server
+        vim.lsp.config(name, {
+          cmd = config.cmd,
+          capabilities = capabilities,
+          filetypes = config.filetypes,
+          settings = config.settings,
+          root_dir = config.root_dir,
+          root_markers = config.root_markers,
+        })
 
-      -- Configure the server
-      vim.lsp.config(name, {
-        cmd = server.cmd,
-        capabilities = capabilities,
-        filetypes = server.filetypes,
-        settings = server.settings,
-        root_dir = server.root_dir,
-        root_markers = server.root_markers,
-      })
-
-      -- Enable the server (with autostart setting if specified)
-      if server.autostart == false then
-        -- Don't auto-enable servers with autostart = false
-        -- Users can manually enable with :lua vim.lsp.enable(name)
-      else
-        vim.lsp.enable(name)
+        -- Enable the server (with autostart setting if specified)
+        if config.autostart == false then
+          -- Don't auto-enable servers with autostart = false
+          -- Users can manually enable with :lua vim.lsp.enable(name)
+        else
+          vim.lsp.enable(name)
+        end
       end
     end
 

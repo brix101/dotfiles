@@ -60,6 +60,7 @@ return {
         typescript = { "oxfmt", "biome", "prettierd", stop_after_first = true },
         typescriptreact = { "oxfmt", "biome", "prettierd", stop_after_first = true },
         svelte = { "oxfmt", "prettierd", stop_after_first = true },
+        sql = { "sqlfluff" },
       },
       formatters = {
         oxfmt = {
@@ -97,6 +98,9 @@ return {
               stop = vim.uv.os_homedir(),
             })[1] ~= nil
           end,
+        },
+        sqlfluff = {
+          args = { "format", "--dialect=ansi", "-" },
         },
       },
     },

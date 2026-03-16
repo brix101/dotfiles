@@ -1,5 +1,4 @@
 local set = vim.keymap.set
-local M = {}
 
 -- TIP: Disable arrow keys in normal mode
 set("n", "<left>", '<cmd>echo "Use h to move left!!"<CR>')
@@ -27,7 +26,7 @@ set("v", "<A-k>", ":<C-u>execute \"'<,'>move '<-\" . (v:count1 + 1)<cr>gv=gv", {
 
 -- Save and Quit
 set("n", "<leader>w", "<cmd>w<cr>", { silent = false, desc = "Save current buffer" })
-set("n", "<leader>q", "<cmd>q<cr>", { silent = false, desc = "Quit current buffer" })
+set("n", "<leader>qq", "<cmd>q<cr>", { silent = false, desc = "Quit all" })
 
 -- Clear search and stop snippet on escape
 set("n", "<Esc>", "<cmd>nohlsearch<CR>", { desc = "Escape and Clear hlsearch" })
