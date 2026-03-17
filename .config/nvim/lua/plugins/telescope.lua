@@ -12,7 +12,7 @@ return {
           return vim.fn.executable("make") == 1
         end,
       },
-      { "nvim-telescope/telescope-ui-select.nvim" },
+      -- { "nvim-telescope/telescope-ui-select.nvim" },
       { "nvim-tree/nvim-web-devicons", enabled = vim.g.have_nerd_font },
     },
     config = function()
@@ -20,6 +20,22 @@ return {
 
       require("telescope").setup({
         defaults = {
+          path_display = { "smart" },
+          prompt_prefix = " ",
+          selection_caret = " ",
+          -- open files in the first window that is an actual file.
+          -- use the current window if no other window is available.
+          get_selection_window = function()
+            local wins = vim.api.nvim_list_wins()
+            table.insert(wins, 1, vim.api.nvim_get_current_win())
+            for _, win in ipairs(wins) do
+              local buf = vim.api.nvim_win_get_buf(win)
+              if vim.bo[buf].buftype == "" then
+                return win
+              end
+            end
+            return 0
+          end,
           mappings = {
             i = {
               ["<C-k>"] = actions.move_selection_previous, -- move to prev result
@@ -29,16 +45,16 @@ return {
           },
           file_ignore_patterns = {
             "node_modules",
-            -- "yarn.lock",
-            -- ".git",
-            -- ".sl",
+            "yarn.lock",
+            ".git",
+            ".sst",
             "_build",
             ".next",
           },
           hidden = true,
-          path_display = {
-            "filename_first",
-          },
+          -- path_display = {
+          --   "filename_first",
+          -- },
         },
         pickers = {
           oldfiles = {
@@ -46,6 +62,7 @@ return {
           },
           find_files = {
             hidden = true,
+            cwd_only = true,
           },
           live_grep = {
             additional_args = function()
@@ -58,14 +75,14 @@ return {
             end,
           },
         },
-        extensions = {
-          ["ui-select"] = { require("telescope.themes").get_dropdown() },
-        },
+        -- extensions = {
+        --   ["ui-select"] = { require("telescope.themes").get_dropdown() },
+        -- },
       })
 
       -- Enable Telescope extensions if they are installed
       pcall(require("telescope").load_extension, "fzf")
-      pcall(require("telescope").load_extension, "ui-select")
+      -- pcall(require("telescope").load_extension, "ui-select")
 
       -- See `:help telescope.builtin`
       local builtin = require("telescope.builtin")

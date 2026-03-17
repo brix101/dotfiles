@@ -60,3 +60,7 @@ end, { desc = "Line Diagnostics" })
 -- better indenting
 set("v", "<", "<gv")
 set("v", ">", ">gv")
+
+set("n", "<leader>-", "<C-W>s", { desc = "Split Window Below", remap = true })
+set("n", "<leader>|", "<C-W>v", { desc = "Split Window Right", remap = true })
+set("n", "<leader>wd", "<C-W>c", { desc = "Delete Window", remap = true })
