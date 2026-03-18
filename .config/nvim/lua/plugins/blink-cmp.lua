@@ -62,6 +62,9 @@ return {
             end
           end,
           "snippet_forward",
+          function() -- sidekick next edit suggestion
+            return require("sidekick").nes_jump_or_apply()
+          end,
           function()
             if vim.g.ai_cmp and require("copilot.suggestion").is_visible() then
               require("copilot.suggestion").accept()
@@ -81,15 +84,36 @@ return {
           border = "rounded",
           draw = {
             columns = {
+              { "kind_icon" },
               { "label", "label_description", gap = 1 },
-              { "kind_icon", "kind" },
+              { "source_name" },
+            },
+            components = {
+              -- Native icon support (no lspkind needed)
+              source_name = {
+                text = function(ctx)
+                  local source_names = {
+                    lsp = "[LSP]",
+                    buffer = "[Buffer]",
+                    path = "[Path]",
+                    snippets = "[Snippet]",
+                    copilot = "[Copilot]",
+                  }
+                  return (source_names[ctx.source_name] or "[") .. ctx.source_name .. "]"
+                end,
+                highlight = "CmpItemMenu",
+              },
             },
             treesitter = { "lsp" },
           },
+          auto_show = true,
         },
         documentation = {
           auto_show = true,
-          auto_show_delay_ms = 100,
+          -- auto_show_delay_ms = 100,
+          window = {
+            border = "rounded",
+          },
         },
         ghost_text = {
           enabled = vim.g.ai_cmp,
@@ -104,7 +128,7 @@ return {
         },
       },
       sources = {
-        default = { "lsp", "path", "snippets", "buffer", "copilot" },
+        default = { "lsp", "path", "snippets", "buffer" },
         providers = {
           lsp = {
             score_offset = 1000, -- Extreme priority to override fuzzy matching

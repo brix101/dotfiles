@@ -111,6 +111,20 @@ return {
             { get_vcs_info, icon = "" },
             harpoon_component,
             {
+              "diagnostics",
+              symbols = {
+                error = icons.diagnostics.Error,
+                warn = icons.diagnostics.Warn,
+                info = icons.diagnostics.Info,
+                hint = icons.diagnostics.Hint,
+              },
+            },
+          },
+          lualine_c = {
+            { "filename", path = 1 },
+          },
+          lualine_x = {
+            {
               "diff",
               symbols = {
                 added = icons.git.added,
@@ -128,20 +142,7 @@ return {
                 end
               end,
             },
-            {
-              "diagnostics",
-              symbols = {
-                error = icons.diagnostics.Error,
-                warn = icons.diagnostics.Warn,
-                info = icons.diagnostics.Info,
-                hint = icons.diagnostics.Hint,
-              },
-            },
           },
-          lualine_c = {
-            { "filename", path = 1 },
-          },
-          lualine_x = {},
           lualine_y = {
             { "filetype" },
           },
@@ -171,42 +172,32 @@ return {
 
       local function copilot_status()
         local clients = package.loaded["copilot"] and vim.lsp.get_clients({ name = "copilot", bufnr = 0 }) or {}
-        if #clients == 0 then
-          return nil
+        if #clients > 0 then
+          return require("copilot.status").data.status or ""
         end
-        return require("copilot.status").data.status or ""
       end
 
-      -- Use Copilot's native status strings as keys
-      local copilot_colors = {
-        [""] = "Comment",
-        Normal = "DiagnosticOk",
-        Warning = "DiagnosticError",
-        InProgress = "DiagnosticWarn",
-      }
-
       local copilot_icons = {
-        [""] = " ",
-        Normal = " ",
-        Warning = " ",
-        InProgress = " ",
+        [""] = { " ", "MsgArea" },
+        Normal = { " ", "DiagnosticOk" },
+        Warning = { " ", "DiagnosticError" },
+        InProgress = { " ", "DiagnosticWarn" },
       }
 
-      local copilot_component = {
+      table.insert(opts.sections.lualine_x, 2, {
         function()
           local status = copilot_status()
-          return copilot_icons[status] or copilot_icons[""]
+          return vim.tbl_get(copilot_icons, status, 1) .. status
         end,
         cond = function()
           return copilot_status() ~= nil
         end,
         color = function()
           local status = copilot_status()
-          local hl_group = copilot_colors[status] or copilot_colors[""]
-          return { fg = Snacks.util.color(hl_group) }
+          local hl = vim.tbl_get(copilot_icons, status, 2)
+          return { fg = Snacks.util.color(hl) }
         end,
-      }
-      table.insert(opts.sections.lualine_x, copilot_component)
+      })
 
       return opts
     end,

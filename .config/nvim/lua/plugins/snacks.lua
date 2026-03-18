@@ -106,6 +106,15 @@ return {
               require("gitsigns").toggle_signs(state)
             end,
           }):map("<leader>uG")
+          Snacks.toggle({
+            name = "Highlight color",
+            get = function()
+              return require("nvim-highlight-colors").is_active()
+            end,
+            set = function()
+              require("nvim-highlight-colors").toggle()
+            end,
+          }):map("<leader>uH")
         end,
       })
     end,
