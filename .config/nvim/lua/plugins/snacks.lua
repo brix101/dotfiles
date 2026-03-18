@@ -1,18 +1,22 @@
 local filtered_message = { "No information available" }
 local kind_filter = {
-  "Class",
-  "Constructor",
-  "Enum",
-  "Field",
-  "Function",
-  "Interface",
-  "Method",
-  "Module",
-  "Namespace",
-  "Package",
-  "Property",
-  "Struct",
-  "Trait",
+  default = {
+    "Class",
+    "Constructor",
+    "Enum",
+    "Field",
+    "Function",
+    "Interface",
+    "Method",
+    "Module",
+    "Namespace",
+    "Package",
+    "Property",
+    "Struct",
+    "Trait",
+  },
+  markdown = false,
+  help = false,
 }
 
 return {
@@ -170,6 +174,15 @@ return {
           },
         },
       },
+    },
+  },
+  {
+    "folke/todo-comments.nvim",
+    optional = true,
+    -- stylua: ignore
+    keys = {
+      { "<leader>st", function() Snacks.picker.todo_comments() end, desc = "Todo" },
+      { "<leader>sT", function () Snacks.picker.todo_comments({ keywords = { "TODO", "FIX", "FIXME" } }) end, desc = "Todo/Fix/Fixme" },
     },
   },
 }
