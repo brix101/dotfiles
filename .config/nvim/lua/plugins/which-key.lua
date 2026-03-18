@@ -1,17 +1,12 @@
 return {
-  { -- Useful plugin to show you pending keybinds.
+  {
     "folke/which-key.nvim",
     event = "VimEnter",
-    ---@module 'which-key'
-    ---@type wk.Opts
-    ---@diagnostic disable-next-line: missing-fields
     opts = {
       -- delay between pressing a key and opening which-key (milliseconds)
       delay = 400,
       icons = { mappings = vim.g.have_nerd_font },
       preset = "classic",
-
-      -- Document existing key chains
       spec = {
         { "<leader>c", group = "code" },
         { "<leader>f", group = "find" },
