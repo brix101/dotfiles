@@ -30,6 +30,7 @@ return {
       { "j-hui/fidget.nvim" },
       "saghen/blink.cmp",
     },
+    opts_extend = { "servers.*.keys" },
     ---@class PluginLspOpts
     opts = function()
       local mason_path = vim.fn.stdpath("data") .. "/mason/packages/"
@@ -83,12 +84,13 @@ return {
           { "<C-k>", function() return vim.lsp.buf.signature_help({ border = "rounded" }) end, mode = "i", desc = "Signature Help", has = "signatureHelp" },
           { "<leader>ca", vim.lsp.buf.code_action, desc = "Code Action", mode = { "n", "x" }, has = "codeAction" },
           { "<leader>rn", vim.lsp.buf.rename, desc = "Rename", has = "rename" },
-          { "gd", function() require('telescope.builtin').lsp_definitions() end, desc = "Goto Definition" },
-          { "gr", function() require('telescope.builtin').lsp_references() end, nowait = true, desc = "References" },
-          { "gI", function() require('telescope.builtin').lsp_implementations() end, desc = "Goto Implementation" },
-          { "gt", function() require('telescope.builtin').lsp_type_definitions() end, desc = "Goto T[y]pe Definition" },
-          { "<leader>ss", function() require('telescope.builtin').lsp_document_symbols({ filter = kind_filter }) end, desc = "LSP Symbols" },
-          { "<leader>sS", function() require('telescope.builtin').lsp_dynamic_workspace_symbols({ filter = kind_filter }) end, desc = "LSP Workspace Symbols" },
+          -- { "gd", function() require('telescope.builtin').lsp_definitions() end, desc = "Goto Definition" },
+          -- { "gd", function() Snacks.picker.lsp_definitions() end, desc = "Goto Definition", has = "definition" },
+          -- { "gr", function() require('telescope.builtin').lsp_references() end, nowait = true, desc = "References" },
+          -- { "gI", function() require('telescope.builtin').lsp_implementations() end, desc = "Goto Implementation" },
+          -- { "gt", function() require('telescope.builtin').lsp_type_definitions() end, desc = "Goto T[y]pe Definition" },
+          -- { "<leader>ss", function() require('telescope.builtin').lsp_document_symbols({ filter = kind_filter }) end, desc = "LSP Symbols" },
+          -- { "<leader>sS", function() require('telescope.builtin').lsp_dynamic_workspace_symbols({ filter = kind_filter }) end, desc = "LSP Workspace Symbols" },
         },
           },
           bashls = {},
