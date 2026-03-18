@@ -286,19 +286,20 @@ return {
           return false
         end
         local sopts = opts.servers[server]
-        sopts = sopts == true and {} or (not sopts) and { enabled = false } or sopts --[[@as lazyvim.lsp.Config]]
+        sopts = sopts == true and {} or (not sopts) and { enabled = false } or sopts
 
         if sopts.enabled == false then
           mason_exclude[#mason_exclude + 1] = server
           return
         end
 
+        local use_mason = sopts.mason ~= false and vim.tbl_contains(mason_all, server)
+
         vim.lsp.config(server, sopts) -- configure the server
         if not use_mason then
           vim.lsp.enable(server)
         end
 
-        local use_mason = sopts.mason ~= false and vim.tbl_contains(mason_all, server)
         return use_mason
       end
 
