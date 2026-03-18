@@ -199,6 +199,7 @@ return {
                       location = mason_path .. "vue-language-server" .. "/node_modules/@vue/language-server",
                       languages = { "vue" },
                       configNamespace = "typescript",
+                      enableForWorkspaceTypeScriptVersions = true,
                     },
                   },
                 },
@@ -232,7 +233,6 @@ return {
                 },
               },
             },
-            keys = {},
           },
           vue_ls = {},
         },
@@ -315,7 +315,6 @@ return {
 
   -- cmdline tools and lsp servers
   {
-
     "mason-org/mason.nvim",
     cmd = "Mason",
     keys = { { "<leader>cm", "<cmd>Mason<cr>", desc = "Mason" } },
