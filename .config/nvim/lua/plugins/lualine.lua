@@ -169,42 +169,13 @@ return {
       --   end,
       -- })
 
-      local function copilot_status()
-        local clients = package.loaded["copilot"] and vim.lsp.get_clients({ name = "copilot", bufnr = 0 }) or {}
-        if #clients > 0 then
-          return require("copilot.status").data.status or ""
-        end
-      end
-
-      local copilot_icons = {
-        [""] = { " ", "MsgArea" },
-        Normal = { " ", "DiagnosticOk" },
-        Warning = { " ", "DiagnosticError" },
-        InProgress = { " ", "DiagnosticWarn" },
-      }
-
-      table.insert(opts.sections.lualine_x, {
-        function()
-          local status = copilot_status()
-          return vim.tbl_get(copilot_icons, status, 1)
-        end,
-        cond = function()
-          return copilot_status() ~= nil
-        end,
-        color = function()
-          local status = copilot_status()
-          local hl = vim.tbl_get(copilot_icons, status, 2)
-          return { fg = Snacks.util.color(hl) }
-        end,
-      })
-
       local sidekick_icons = {
         Error = { " ", "DiagnosticError" },
         Inactive = { " ", "MsgArea" },
         Warning = { " ", "DiagnosticWarn" },
-        Normal = { " ", "Special" },
+        Normal = { " ", "DiagnosticOk" },
       }
-      table.insert(opts.sections.lualine_x, 2, {
+      table.insert(opts.sections.lualine_x, {
         function()
           local status = require("sidekick.status").get()
           return status and vim.tbl_get(sidekick_icons, status.kind, 1)

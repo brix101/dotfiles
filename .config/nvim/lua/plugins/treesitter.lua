@@ -11,6 +11,7 @@ return {
       ensure_installed = {
         "bash",
         "css",
+        "diff",
         "go",
         "html",
         "javascript",
@@ -21,6 +22,7 @@ return {
         "svelte",
         "tsx",
         "typescript",
+        "vim",
         "vimdoc",
         "yaml",
         "vue",
@@ -84,8 +86,10 @@ return {
       },
     },
     config = function(_, opts)
-      ---@diagnostic disable: missing-fields
-      require("nvim-treesitter").setup(opts)
+      local TS = require("nvim-treesitter")
+
+      TS.setup(opts)
+      TS.install(opts.ensure_installed)
 
       vim.api.nvim_create_autocmd("FileType", {
         callback = function(args)
