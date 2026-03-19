@@ -70,6 +70,36 @@ return {
           end
         end,
       })
+
+      vim.api.nvim_create_autocmd("User", {
+        pattern = "VeryLazy",
+        callback = function()
+          Snacks.toggle.option("spell", { name = "Spelling" }):map("<leader>us")
+          Snacks.toggle.diagnostics():map("<leader>ud")
+          Snacks.toggle.treesitter():map("<leader>ut")
+          Snacks.toggle.inlay_hints():map("<leader>ui")
+
+          Snacks.toggle({
+            name = "Git Signs",
+            get = function()
+              return require("gitsigns.config").config.signcolumn
+            end,
+            set = function(state)
+              require("gitsigns").toggle_signs(state)
+            end,
+          }):map("<leader>ug")
+
+          Snacks.toggle({
+            name = "Highlight color",
+            get = function()
+              return require("nvim-highlight-colors").is_active()
+            end,
+            set = function()
+              require("nvim-highlight-colors").toggle()
+            end,
+          }):map("<leader>uh")
+        end,
+      })
     end,
     -- stylua: ignore
     keys = {
@@ -116,39 +146,6 @@ return {
       { "<leader>sR", function() Snacks.picker.resume() end, desc = "Resume" },
       { "<leader>sq", function() Snacks.picker.qflist() end, desc = "Quickfix List" },
       { "<leader>su", function() Snacks.picker.undo() end, desc = "Undotree" },
-      -- toggle
-      { "<leader>ud", function() Snacks.toggle.diagnostics() end, desc = "Toggle Diagnostics" },
-      { "<leader>ui", function() Snacks.toggle.inlay_hints() end, desc = "Toggle Inlay Hints" },
-      { "<leader>us", function() Snacks.toggle.spell() end, desc = "Toggle Spelling" },
-      { "<leader>ut", function() Snacks.toggle.treesitter() end, desc = "Toggle Treesitter" },
-      
-      { "<leader>ug", 
-        function() 
-          Snacks.toggle({
-            name = "Git Signs",
-            get = function()
-              return require("gitsigns.config").config.signcolumn
-            end,
-            set = function(state)
-              require("gitsigns").toggle_signs(state)
-            end,
-          }) 
-        end,
-        desc = "Toggle Git Signs"
-      },
-      {
-        "<leader>uh",
-        Snacks.toggle({
-          name = "Highlight color",
-          get = function()
-            return require("nvim-highlight-colors").is_active()
-          end,
-          set = function()
-            require("nvim-highlight-colors").toggle()
-          end,
-        }),
-        desc = "Toggle Highlight Colors",
-      }
     },
   },
   {
