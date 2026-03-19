@@ -84,7 +84,7 @@ return {
                 highlight = "CmpItemMenu",
               },
             },
-            treesitter = { "lsp", "copilot" },
+            treesitter = { "lsp" },
           },
           auto_show = true,
         },
