@@ -29,7 +29,7 @@ return {
             end
           end,
           "snippet_forward",
-          function() -- sidekick next edit suggestion
+          function()
             return require("sidekick").nes_jump_or_apply()
           end,
           function()
@@ -71,7 +71,7 @@ return {
                 highlight = "CmpItemMenu",
               },
             },
-            treesitter = { "lsp" },
+            treesitter = { "lsp", "copilot" },
           },
           auto_show = true,
         },
@@ -96,7 +96,7 @@ return {
         },
       },
       sources = {
-        default = { "lsp", "path", "snippets", "buffer" },
+        default = { "lsp", "path", "snippets", "buffer", "copilot" },
         providers = {
           lsp = {
             score_offset = 1000, -- Extreme priority to override fuzzy matching
@@ -114,9 +114,9 @@ return {
             min_keyword_length = 3, -- Only show after 3 chars
           },
           copilot = {
-            name = "copilot",
+            -- name = "copilot",
             module = "blink-copilot",
-            -- score_offset = 100,
+            score_offset = 100,
             async = true,
           },
         },

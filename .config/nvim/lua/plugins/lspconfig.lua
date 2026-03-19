@@ -1,26 +1,4 @@
 -- https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/plugins/lsp/init.lua
-local diagnostic_icons = {
-  Error = " ",
-  Warn = " ",
-  Hint = " ",
-  Info = " ",
-}
-local kind_filter = {
-  "Class",
-  "Constructor",
-  "Enum",
-  "Field",
-  "Function",
-  "Interface",
-  "Method",
-  "Module",
-  "Namespace",
-  "Package",
-  "Property",
-  "Struct",
-  "Trait",
-}
-
 return {
   {
     "neovim/nvim-lspconfig",
@@ -49,10 +27,10 @@ return {
           severity_sort = true,
           signs = {
             text = {
-              [vim.diagnostic.severity.ERROR] = diagnostic_icons.Error,
-              [vim.diagnostic.severity.WARN] = diagnostic_icons.Warn,
-              [vim.diagnostic.severity.HINT] = diagnostic_icons.Hint,
-              [vim.diagnostic.severity.INFO] = diagnostic_icons.Info,
+              [vim.diagnostic.severity.ERROR] = " ",
+              [vim.diagnostic.severity.WARN] = " ",
+              [vim.diagnostic.severity.HINT] = " ",
+              [vim.diagnostic.severity.INFO] = " ",
             },
           },
         },
@@ -84,13 +62,6 @@ return {
           { "<C-k>", function() return vim.lsp.buf.signature_help({ border = "rounded" }) end, mode = "i", desc = "Signature Help", has = "signatureHelp" },
           { "<leader>ca", vim.lsp.buf.code_action, desc = "Code Action", mode = { "n", "x" }, has = "codeAction" },
           { "<leader>rn", vim.lsp.buf.rename, desc = "Rename", has = "rename" },
-          -- { "gd", function() require('telescope.builtin').lsp_definitions() end, desc = "Goto Definition" },
-          -- { "gd", function() Snacks.picker.lsp_definitions() end, desc = "Goto Definition", has = "definition" },
-          -- { "gr", function() require('telescope.builtin').lsp_references() end, nowait = true, desc = "References" },
-          -- { "gI", function() require('telescope.builtin').lsp_implementations() end, desc = "Goto Implementation" },
-          -- { "gt", function() require('telescope.builtin').lsp_type_definitions() end, desc = "Goto T[y]pe Definition" },
-          -- { "<leader>ss", function() require('telescope.builtin').lsp_document_symbols({ filter = kind_filter }) end, desc = "LSP Symbols" },
-          -- { "<leader>sS", function() require('telescope.builtin').lsp_dynamic_workspace_symbols({ filter = kind_filter }) end, desc = "LSP Workspace Symbols" },
         },
           },
           bashls = {},
@@ -270,7 +241,6 @@ return {
       end
 
       local capabilities = vim.lsp.protocol.make_client_capabilities()
-      -- Use Blink.cmp capabilities if available, fallback to cmp_nvim_lsp
       local has_blink, blink = pcall(require, "blink.cmp")
       if has_blink then
         capabilities = vim.tbl_deep_extend("force", capabilities, blink.get_lsp_capabilities())
@@ -307,7 +277,7 @@ return {
 
       local install = vim.tbl_filter(configure, vim.tbl_keys(opts.servers))
       if have_mason then
-        require("mason-lspconfig").setup({
+        mlsp.setup({
           ensure_installed = install,
           automatic_enable = { exclude = mason_exclude },
         })
