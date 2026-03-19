@@ -111,20 +111,6 @@ return {
             { get_vcs_info, icon = "" },
             harpoon_component,
             {
-              "diagnostics",
-              symbols = {
-                error = icons.diagnostics.Error,
-                warn = icons.diagnostics.Warn,
-                info = icons.diagnostics.Info,
-                hint = icons.diagnostics.Hint,
-              },
-            },
-          },
-          lualine_c = {
-            { "filename", path = 1 },
-          },
-          lualine_x = {
-            {
               "diff",
               symbols = {
                 added = icons.git.added,
@@ -142,7 +128,20 @@ return {
                 end
               end,
             },
+            {
+              "diagnostics",
+              symbols = {
+                error = icons.diagnostics.Error,
+                warn = icons.diagnostics.Warn,
+                info = icons.diagnostics.Info,
+                hint = icons.diagnostics.Hint,
+              },
+            },
           },
+          lualine_c = {
+            { "filename", path = 1 },
+          },
+          lualine_x = {},
           lualine_y = {
             { "filetype" },
           },
@@ -184,10 +183,10 @@ return {
         InProgress = { " ", "DiagnosticWarn" },
       }
 
-      table.insert(opts.sections.lualine_x, 2, {
+      table.insert(opts.sections.lualine_x, {
         function()
           local status = copilot_status()
-          return vim.tbl_get(copilot_icons, status, 1) .. status
+          return vim.tbl_get(copilot_icons, status, 1)
         end,
         cond = function()
           return copilot_status() ~= nil
@@ -196,6 +195,40 @@ return {
           local status = copilot_status()
           local hl = vim.tbl_get(copilot_icons, status, 2)
           return { fg = Snacks.util.color(hl) }
+        end,
+      })
+
+      local sidekick_icons = {
+        Error = { " ", "DiagnosticError" },
+        Inactive = { " ", "MsgArea" },
+        Warning = { " ", "DiagnosticWarn" },
+        Normal = { " ", "Special" },
+      }
+      table.insert(opts.sections.lualine_x, 2, {
+        function()
+          local status = require("sidekick.status").get()
+          return status and vim.tbl_get(sidekick_icons, status.kind, 1)
+        end,
+        cond = function()
+          return require("sidekick.status").get() ~= nil
+        end,
+        color = function()
+          local status = require("sidekick.status").get()
+          local hl = status and (status.busy and "DiagnosticWarn" or vim.tbl_get(sidekick_icons, status.kind, 2))
+          return { fg = Snacks.util.color(hl) }
+        end,
+      })
+
+      table.insert(opts.sections.lualine_x, 2, {
+        function()
+          local status = require("sidekick.status").cli()
+          return " " .. (#status > 1 and #status or "")
+        end,
+        cond = function()
+          return #require("sidekick.status").cli() > 0
+        end,
+        color = function()
+          return { fg = Snacks.util.color("Special") }
         end,
       })
 
