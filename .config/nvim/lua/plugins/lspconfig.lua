@@ -113,6 +113,9 @@ return {
           lua_ls = {
             settings = {
               Lua = {
+                hint = {
+                  enable = false,
+                },
                 runtime = {
                   version = "LuaJIT",
                 },

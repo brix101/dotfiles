@@ -25,7 +25,7 @@ set("v", "<A-j>", ":<C-u>execute \"'<,'>move '>+\" . v:count1<cr>gv=gv", { desc 
 set("v", "<A-k>", ":<C-u>execute \"'<,'>move '<-\" . (v:count1 + 1)<cr>gv=gv", { desc = "Move Up" })
 
 -- Save and Quit
-set("n", "<leader>w", "<cmd>w<cr>", { silent = false, desc = "Save current buffer" })
+set("n", "<leader>ws", "<cmd>w<cr>", { silent = false, desc = "Save current buffer" })
 set("n", "<leader>qq", "<cmd>q<cr>", { silent = false, desc = "Quit all" })
 
 -- Clear search and stop snippet on escape

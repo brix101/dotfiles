@@ -11,12 +11,6 @@ return {
     ---@module 'blink.cmp'
     ---@type blink.cmp.Config
     opts = {
-      appearance = {
-        nerd_font_variant = "mono",
-      },
-      snippets = { preset = "luasnip" },
-      fuzzy = { implementation = "lua" },
-      signature = { enabled = true, window = { border = "rounded" } },
       keymap = {
         preset = "super-tab",
         ["<CR>"] = { "accept", "fallback" },
@@ -41,7 +35,25 @@ return {
           "fallback",
         },
       },
+      appearance = {
+        nerd_font_variant = "mono",
+      },
+      snippets = {
+        preset = "luasnip",
+      },
+      signature = {
+        enabled = true,
+        trigger = {
+          show_on_trigger_character = false,
+          show_on_insert_on_trigger_character = false,
+        },
+        window = {
+          border = "rounded",
+          show_documentation = true,
+        },
+      },
       completion = {
+
         accept = {
           auto_brackets = {
             enabled = true,
@@ -49,6 +61,7 @@ return {
         },
         menu = {
           border = "rounded",
+          max_height = 10,
           draw = {
             columns = {
               { "kind_icon" },
@@ -77,13 +90,12 @@ return {
         },
         documentation = {
           auto_show = true,
-          -- auto_show_delay_ms = 100,
+          auto_show_delay_ms = 200,
           window = {
             border = "rounded",
           },
         },
         ghost_text = {
-          -- enabled = vim.g.ai_cmp,
           enabled = true,
         },
         list = {
