@@ -27,4 +27,18 @@ function M.lsp_keymap(filter, spec)
   end
 end
 
+M.lsp_action = setmetatable({}, {
+  __index = function(_, action)
+    return function()
+      vim.lsp.buf.code_action({
+        apply = true,
+        context = {
+          only = { action },
+          diagnostics = {},
+        },
+      })
+    end
+  end,
+})
+
 return M

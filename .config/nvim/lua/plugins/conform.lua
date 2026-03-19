@@ -38,7 +38,7 @@ return {
       notify_on_error = false,
       default_format_opts = {
         async = true,
-        timeout_ms = 500,
+        timeout_ms = 3000,
         lsp_format = "fallback",
       },
       format_on_save = function(bufnr)
@@ -47,7 +47,7 @@ return {
           return nil
         else
           return {
-            timeout_ms = 500,
+            timeout_ms = 2500,
             lsp_format = "fallback",
           }
         end
@@ -100,7 +100,11 @@ return {
           end,
         },
         sqlfluff = {
-          args = { "format", "--dialect=ansi", "-" },
+          -- args = { "format", "--dialect=ansi", "-" },
+          args = { "format", "--dialect=postgres", "-" },
+          cwd = function()
+            return vim.fn.getcwd()
+          end,
         },
       },
     },

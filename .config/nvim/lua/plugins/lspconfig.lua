@@ -190,18 +190,12 @@ return {
                   autoImports = true, -- Adding this as it is the standard VS Code/vtsls equivalent
                 },
                 inlayHints = {
-                  parameterNames = {
-                    enabled = "all",
-                    suppressWhenArgumentMatchesName = false, -- Translated from includeInlayParameterNameHintsWhenArgumentMatchesName
-                  },
-                  parameterTypes = { enabled = true },
-                  variableTypes = {
-                    enabled = true,
-                    suppressWhenTypeMatchesName = false, -- Translated from includeInlayVariableTypeHintsWhenTypeMatchesName
-                  },
-                  propertyDeclarationTypes = { enabled = true },
-                  functionLikeReturnTypes = { enabled = true },
                   enumMemberValues = { enabled = true },
+                  functionLikeReturnTypes = { enabled = true },
+                  parameterNames = { enabled = "literals" },
+                  parameterTypes = { enabled = true },
+                  propertyDeclarationTypes = { enabled = true },
+                  variableTypes = { enabled = false },
                 },
               },
               javascript = {
@@ -214,19 +208,43 @@ return {
                   autoImports = true, -- Adding this as it is the standard VS Code/vtsls equivalent
                 },
                 inlayHints = {
-                  parameterNames = {
-                    enabled = "all",
-                    suppressWhenArgumentMatchesName = false, -- Translated from includeInlayParameterNameHintsWhenArgumentMatchesName
-                  },
-                  parameterTypes = { enabled = true },
-                  variableTypes = {
-                    enabled = true,
-                    suppressWhenTypeMatchesName = false, -- Translated from includeInlayVariableTypeHintsWhenTypeMatchesName
-                  },
-                  propertyDeclarationTypes = { enabled = true },
-                  functionLikeReturnTypes = { enabled = true },
                   enumMemberValues = { enabled = true },
+                  functionLikeReturnTypes = { enabled = true },
+                  parameterNames = { enabled = "literals" },
+                  parameterTypes = { enabled = true },
+                  propertyDeclarationTypes = { enabled = true },
+                  variableTypes = { enabled = false },
                 },
+              },
+            },
+            keys = {
+              {
+                "<leader>co",
+                function()
+                  require("utils").lsp_action["source.organizeImports"]()
+                end,
+                desc = "Organize Imports",
+              },
+              {
+                "<leader>cM",
+                function()
+                  require("utils").lsp_action["source.addMissingImports.ts"]()
+                end,
+                desc = "Add missing imports",
+              },
+              {
+                "<leader>cu",
+                function()
+                  require("utils").lsp_action["source.removeUnused.ts"]()
+                end,
+                desc = "Remove unused imports",
+              },
+              {
+                "<leader>cD",
+                function()
+                  require("utils").lsp_action["source.fixAll.ts"]()
+                end,
+                desc = "Fix all diagnostics",
               },
             },
           },
