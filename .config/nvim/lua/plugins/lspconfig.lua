@@ -181,28 +181,48 @@ return {
                 updateImportsOnFileMove = { enabled = "always" },
                 suggest = {
                   completeFunctionCalls = true,
+                  -- Enable auto imports
+                  includeCompletionsForModuleExports = true,
+                  includeCompletionsForImportStatements = true,
+                  autoImports = true, -- Adding this as it is the standard VS Code/vtsls equivalent
                 },
                 inlayHints = {
-                  enumMemberValues = { enabled = true },
-                  functionLikeReturnTypes = { enabled = true },
-                  parameterNames = { enabled = "literals" },
+                  parameterNames = {
+                    enabled = "all",
+                    suppressWhenArgumentMatchesName = false, -- Translated from includeInlayParameterNameHintsWhenArgumentMatchesName
+                  },
                   parameterTypes = { enabled = true },
+                  variableTypes = {
+                    enabled = true,
+                    suppressWhenTypeMatchesName = false, -- Translated from includeInlayVariableTypeHintsWhenTypeMatchesName
+                  },
                   propertyDeclarationTypes = { enabled = true },
-                  variableTypes = { enabled = false },
+                  functionLikeReturnTypes = { enabled = true },
+                  enumMemberValues = { enabled = true },
                 },
               },
               javascript = {
                 updateImportsOnFileMove = { enabled = "always" },
                 suggest = {
                   completeFunctionCalls = true,
+                  -- Enable auto imports
+                  includeCompletionsForModuleExports = true,
+                  includeCompletionsForImportStatements = true,
+                  autoImports = true, -- Adding this as it is the standard VS Code/vtsls equivalent
                 },
                 inlayHints = {
-                  enumMemberValues = { enabled = true },
-                  functionLikeReturnTypes = { enabled = true },
-                  parameterNames = { enabled = "literals" },
+                  parameterNames = {
+                    enabled = "all",
+                    suppressWhenArgumentMatchesName = false, -- Translated from includeInlayParameterNameHintsWhenArgumentMatchesName
+                  },
                   parameterTypes = { enabled = true },
+                  variableTypes = {
+                    enabled = true,
+                    suppressWhenTypeMatchesName = false, -- Translated from includeInlayVariableTypeHintsWhenTypeMatchesName
+                  },
                   propertyDeclarationTypes = { enabled = true },
-                  variableTypes = { enabled = false },
+                  functionLikeReturnTypes = { enabled = true },
+                  enumMemberValues = { enabled = true },
                 },
               },
             },
