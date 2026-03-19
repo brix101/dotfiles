@@ -26,12 +26,6 @@ return {
           function()
             return require("sidekick").nes_jump_or_apply()
           end,
-          function()
-            if vim.g.ai_cmp and require("copilot.suggestion").is_visible() then
-              require("copilot.suggestion").accept()
-              return true
-            end
-          end,
           "fallback",
         },
       },
