@@ -1,4 +1,3 @@
--- TODO: move this file into the extra folders to make the lualina extendable
 return {
   {
     "neovim/nvim-lspconfig",
@@ -68,7 +67,7 @@ return {
         "<tab>",
         function()
           -- if there is a next edit, jump to it, otherwise apply it if any
-          if not require("lua.plugins.extras.sidekick").nes_jump_or_apply() then
+          if not require("sidekick").nes_jump_or_apply() then
             return "<Tab>" -- fallback to normal tab
           end
         end,
@@ -139,6 +138,7 @@ return {
       },
     },
   },
+
   {
     "folke/snacks.nvim",
     optional = true,

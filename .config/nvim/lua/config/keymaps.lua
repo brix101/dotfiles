@@ -45,17 +45,18 @@ local diagnostic_goto = function(next, severity)
     })
   end
 end
-set("n", "<leader>cd", vim.diagnostic.open_float, { desc = "Line Diagnostics" })
+local open_float = function()
+  vim.diagnostic.open_float({ border = "rounded" })
+end
+
+set("n", "<leader>d", open_float, { desc = "Line Diagnostics" })
+-- set("n", "<leader>cd", open_float, { desc = "Line Diagnostics" })
 set("n", "]d", diagnostic_goto(true), { desc = "Next Diagnostic" })
 set("n", "[d", diagnostic_goto(false), { desc = "Prev Diagnostic" })
 set("n", "]e", diagnostic_goto(true, "ERROR"), { desc = "Next Error" })
 set("n", "[e", diagnostic_goto(false, "ERROR"), { desc = "Prev Error" })
 set("n", "]w", diagnostic_goto(true, "WARN"), { desc = "Next Warning" })
 set("n", "[w", diagnostic_goto(false, "WARN"), { desc = "Prev Warning" })
-
-set("n", "<leader>d", function()
-  vim.diagnostic.open_float({ border = "rounded" })
-end, { desc = "Line Diagnostics" })
 
 -- better indenting
 set("v", "<", "<gv")

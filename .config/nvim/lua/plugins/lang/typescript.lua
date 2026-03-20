@@ -74,6 +74,30 @@ return {
           },
           keys = {
             {
+              "gD",
+              function()
+                local win = vim.api.nvim_get_current_win()
+                local params = vim.lsp.util.make_position_params(win, "utf-16")
+                require("utils").lsp_execute({
+                  command = "typescript.goToSourceDefinition",
+                  arguments = { params.textDocument.uri, params.position },
+                  open = true,
+                })
+              end,
+              desc = "Goto Source Definition",
+            },
+            {
+              "gR",
+              function()
+                require("utils").lsp_execute({
+                  command = "typescript.findAllFileReferences",
+                  arguments = { vim.uri_from_bufnr(0) },
+                  open = true,
+                })
+              end,
+              desc = "File References",
+            },
+            {
               "<leader>co",
               function()
                 require("utils").lsp_action["source.organizeImports"]()
@@ -100,6 +124,17 @@ return {
                 require("utils").lsp_action["source.fixAll.ts"]()
               end,
               desc = "Fix all diagnostics",
+            },
+            {
+              "<leader>cV",
+              function()
+                require("utils").lsp_execute({
+                  title = "Select TypeScript Version",
+                  filter = "vtsls",
+                  command = "typescript.selectTypeScriptVersion",
+                })
+              end,
+              desc = "Select TS workspace version",
             },
           },
         },
@@ -212,6 +247,14 @@ return {
           })[1] ~= nil
         end,
       }
+    end,
+  },
+
+  {
+    "dmmulroy/ts-error-translator.nvim",
+    event = "VeryLazy",
+    config = function()
+      require("ts-error-translator").setup()
     end,
   },
 }
