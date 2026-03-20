@@ -41,33 +41,33 @@ return {
       require("oil").setup(opts)
       require("oil-git-status").setup({
         -- show_ignored = false,
+        -- symbols = {
+        --   index = {
+        --     ["!"] = " ", -- Ignored
+        --     ["?"] = " ", -- Untracked
+        --     ["A"] = " ", -- Added
+        --     ["C"] = " ", -- Copied
+        --     ["D"] = " ", -- Deleted
+        --     ["M"] = "󰄗 ", -- Modified
+        --     ["R"] = "󰁯 ", -- Renamed
+        --     ["T"] = "󰉺 ", -- Type changed
+        --     ["U"] = "󰇼 ", -- Unmerged
+        --     [" "] = " ", -- Unchanged
+        --   },
+        --   working_tree = {
+        --     ["!"] = " ",
+        --     ["?"] = " ",
+        --     ["A"] = "󰐖 ",
+        --     ["C"] = " ",
+        --     ["D"] = " ",
+        --     ["M"] = " ", -- Subtle dot for unstaged changes
+        --     ["R"] = "󰁯 ",
+        --     ["T"] = "󰉺 ",
+        --     ["U"] = "󰇼 ",
+        --     [" "] = " ",
+        --   },
+        -- },
       })
-      -- symbols = {
-      --   index = {
-      --     ["!"] = " ", -- Ignored
-      --     ["?"] = " ", -- Untracked
-      --     ["A"] = " ", -- Added
-      --     ["C"] = " ", -- Copied
-      --     ["D"] = " ", -- Deleted
-      --     ["M"] = "󰄗 ", -- Modified
-      --     ["R"] = "󰁯 ", -- Renamed
-      --     ["T"] = "󰉺 ", -- Type changed
-      --     ["U"] = "󰇼 ", -- Unmerged
-      --     [" "] = " ", -- Unchanged
-      --   },
-      --   working_tree = {
-      --     ["!"] = " ",
-      --     ["?"] = " ",
-      --     ["A"] = "󰐖 ",
-      --     ["C"] = " ",
-      --     ["D"] = " ",
-      --     ["M"] = " ", -- Subtle dot for unstaged changes
-      --     ["R"] = "󰁯 ",
-      --     ["T"] = "󰉺 ",
-      --     ["U"] = "󰇼 ",
-      --     [" "] = " ",
-      --   },
-      -- },
     end,
   },
 }

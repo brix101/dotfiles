@@ -18,6 +18,8 @@ require("config.autocmds")
 require("lazy").setup({
   spec = {
     { import = "plugins" },
+    { import = "plugins.lang" },
+    { import = "plugins.extras" },
   },
   checker = {
     enabled = true,

@@ -153,56 +153,6 @@ return {
         extensions = { "lazy", "oil", "trouble" },
       }
 
-      -- local trouble = require("trouble")
-      -- local symbols = trouble.statusline({
-      --   mode = "symbols",
-      --   groups = {},
-      --   title = false,
-      --   filter = { range = true },
-      --   format = "{kind_icon}{symbol.name:Normal}",
-      --   hl_group = "lualine_c_normal",
-      -- })
-      -- table.insert(opts.sections.lualine_c, {
-      --   symbols and symbols.get,
-      --   cond = function()
-      --     return vim.b.trouble_lualine ~= false and symbols.has()
-      --   end,
-      -- })
-
-      local sidekick_icons = {
-        Error = { " ", "DiagnosticError" },
-        Inactive = { " ", "MsgArea" },
-        Warning = { " ", "DiagnosticWarn" },
-        Normal = { " ", "DiagnosticOk" },
-      }
-      table.insert(opts.sections.lualine_x, {
-        function()
-          local status = require("sidekick.status").get()
-          return status and vim.tbl_get(sidekick_icons, status.kind, 1)
-        end,
-        cond = function()
-          return require("sidekick.status").get() ~= nil
-        end,
-        color = function()
-          local status = require("sidekick.status").get()
-          local hl = status and (status.busy and "DiagnosticWarn" or vim.tbl_get(sidekick_icons, status.kind, 2))
-          return { fg = Snacks.util.color(hl) }
-        end,
-      })
-
-      table.insert(opts.sections.lualine_x, 2, {
-        function()
-          local status = require("sidekick.status").cli()
-          return " " .. (#status > 1 and #status or "")
-        end,
-        cond = function()
-          return #require("sidekick.status").cli() > 0
-        end,
-        color = function()
-          return { fg = Snacks.util.color("Special") }
-        end,
-      })
-
       return opts
     end,
   },

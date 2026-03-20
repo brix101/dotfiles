@@ -22,9 +22,10 @@ return {
     "stevearc/conform.nvim",
     event = { "BufWritePre" },
     cmd = { "ConformInfo" },
+    lazy = true,
     keys = {
       {
-        "<leader>cf",
+        "<leader>cF",
         function()
           require("conform").format({ async = true, lsp_format = "fallback" })
         end,
@@ -38,6 +39,7 @@ return {
       notify_on_error = false,
       default_format_opts = {
         async = true,
+        quiet = false, -- not recommended to change
         timeout_ms = 3000,
         lsp_format = "fallback",
       },
@@ -54,59 +56,30 @@ return {
       end,
       formatters_by_ft = {
         lua = { "stylua" },
-        go = { "goimports", "gofumpt" },
-        astro = { "oxfmt", "biome", "prettierd", stop_after_first = true },
-        javascript = { "oxfmt", "biome", "prettierd", stop_after_first = true },
-        typescript = { "oxfmt", "biome", "prettierd", stop_after_first = true },
-        typescriptreact = { "oxfmt", "biome", "prettierd", stop_after_first = true },
-        svelte = { "oxfmt", "prettierd", stop_after_first = true },
-        sql = { "sqlfluff" },
+        sh = { "shfmt" },
+        -- astro = { "oxfmt", "biome", "prettierd", stop_after_first = true },
+        -- svelte = { "oxfmt", "prettierd", stop_after_first = true },
       },
+      -- The options you set here will be merged with the builtin formatters.
+      -- You can also define any custom formatters here.
+      ---@type table<string, conform.FormatterConfigOverride|fun(bufnr: integer): nil|conform.FormatterConfigOverride>
       formatters = {
-        oxfmt = {
-          condition = function(_, ctx)
-            return vim.fs.find({ ".oxfmtrc.json", ".oxfmtrc.jsonc" }, {
-              path = ctx.filename,
-              upward = true,
-              stop = vim.uv.os_homedir(),
-            })[1] ~= nil
-          end,
-        },
-        biome = {
-          condition = function(_, ctx)
-            return vim.fs.find({ "biome.json", "biome.jsonc" }, {
-              path = ctx.filename,
-              upward = true,
-              stop = vim.uv.os_homedir(),
-            })[1] ~= nil
-          end,
-        },
-        prettierd = {
-          condition = function(_, ctx)
-            return vim.fs.find({
-              ".prettierrc",
-              ".prettierrc.json",
-              ".prettierrc.js",
-              ".prettierrc.cjs",
-              ".prettierrc.mjs",
-              "prettier.config.js",
-              "prettier.config.cjs",
-              "prettier.config.mjs",
-            }, {
-              path = ctx.filename,
-              upward = true,
-              stop = vim.uv.os_homedir(),
-            })[1] ~= nil
-          end,
-        },
-        sqlfluff = {
-          -- args = { "format", "--dialect=ansi", "-" },
-          args = { "format", "--dialect=postgres", "-" },
-          cwd = function()
-            return vim.fn.getcwd()
-          end,
-        },
+        injected = { options = { ignore_errors = true } },
+        -- # Example of using dprint only when a dprint.json file is present
+        -- dprint = {
+        --   condition = function(ctx)
+        --     return vim.fs.find({ "dprint.json" }, { path = ctx.filename, upward = true })[1]
+        --   end,
+        -- },
+        --
+        -- # Example of using shfmt with extra args
+        -- shfmt = {
+        --   prepend_args = { "-i", "2", "-ci" },
+        -- },
       },
     },
+    -- config = function(_, opts)
+    --   require("conform").setup(opts)
+    -- end,
   },
 }

@@ -69,51 +69,6 @@ return {
               { "<leader>rn", vim.lsp.buf.rename, desc = "Rename", has = "rename" },
             },
           },
-          bashls = {},
-          cssls = {},
-          eslint = {
-            -- enable = false,
-            cmd = { "vscode-eslint-language-server", "--stdio", "--max-old-space-size=12288" },
-            settings = { format = false },
-          },
-          graphql = {
-            filetypes = { "graphql", "gql", "typescriptreact", "javascriptreact" },
-          },
-          gopls = {
-            analyses = {
-              nilness = true,
-              unusedparams = true,
-              unusedwrite = true,
-              useany = true,
-            },
-            codelenses = {
-              gc_details = false,
-              generate = true,
-              regenerate_cgo = true,
-              run_govulncheck = true,
-              test = true,
-              tidy = true,
-              upgrade_dependency = true,
-              vendor = true,
-            },
-            experimentalPostfixCompletions = true,
-            hints = {
-              assignVariableTypes = true,
-              compositeLiteralFields = true,
-              compositeLiteralTypes = true,
-              constantValues = true,
-              functionTypeParameters = true,
-              parameterNames = true,
-              rangeVariableTypes = true,
-            },
-            gofumpt = true,
-            usePlaceholders = true,
-            completeUnimported = true,
-            staticcheck = true,
-            directoryFilters = { "-.git", "-.vscode", "-.idea", "-.vscode-test", "-node_modules" },
-            semanticTokens = true,
-          },
-          html = {},
           jsonls = {},
           lua_ls = {
             settings = {
@@ -140,121 +95,12 @@ return {
               },
             },
           },
-          marksman = {},
-          oxlint = {
-            root_markers = { ".oxlintrc.json" },
-          },
-          sqls = {},
-          tailwindcss = {
-            filetypes = { "typescriptreact", "javascriptreact", "html", "svelte", "astro", "vue" },
-          },
-          yamlls = {},
-          svelte = {},
-          vtsls = {
-            enable = true,
-            filetypes = {
-              "javascript",
-              "javascriptreact",
-              "javascript.jsx",
-              "typescript",
-              "typescriptreact",
-              "typescript.tsx",
-              "vue",
-            },
-            settings = {
-              complete_function_calls = true,
-              vtsls = {
-                enableMoveToFileCodeAction = true,
-                autoUseWorkspaceTsdk = true,
-                experimental = {
-                  maxInlayHintLength = 30,
-                  completion = {
-                    enableServerSideFuzzyMatch = true,
-                  },
-                },
-                tsserver = {
-                  maxTsServerMemory = 12288,
-                  globalPlugins = {
-                    {
-                      name = "@vue/typescript-plugin",
-                      location = mason_path .. "vue-language-server" .. "/node_modules/@vue/language-server",
-                      languages = { "vue" },
-                      configNamespace = "typescript",
-                      enableForWorkspaceTypeScriptVersions = true,
-                    },
-                  },
-                },
-              },
-              typescript = {
-                updateImportsOnFileMove = { enabled = "always" },
-                suggest = {
-                  completeFunctionCalls = true,
-                  -- Enable auto imports
-                  includeCompletionsForModuleExports = true,
-                  includeCompletionsForImportStatements = true,
-                  autoImports = true, -- Adding this as it is the standard VS Code/vtsls equivalent
-                },
-                inlayHints = {
-                  enumMemberValues = { enabled = true },
-                  functionLikeReturnTypes = { enabled = true },
-                  parameterNames = { enabled = "literals" },
-                  parameterTypes = { enabled = true },
-                  propertyDeclarationTypes = { enabled = true },
-                  variableTypes = { enabled = false },
-                },
-              },
-              javascript = {
-                updateImportsOnFileMove = { enabled = "always" },
-                suggest = {
-                  completeFunctionCalls = true,
-                  -- Enable auto imports
-                  includeCompletionsForModuleExports = true,
-                  includeCompletionsForImportStatements = true,
-                  autoImports = true, -- Adding this as it is the standard VS Code/vtsls equivalent
-                },
-                inlayHints = {
-                  enumMemberValues = { enabled = true },
-                  functionLikeReturnTypes = { enabled = true },
-                  parameterNames = { enabled = "literals" },
-                  parameterTypes = { enabled = true },
-                  propertyDeclarationTypes = { enabled = true },
-                  variableTypes = { enabled = false },
-                },
-              },
-            },
-            keys = {
-              {
-                "<leader>co",
-                function()
-                  require("utils").lsp_action["source.organizeImports"]()
-                end,
-                desc = "Organize Imports",
-              },
-              {
-                "<leader>cM",
-                function()
-                  require("utils").lsp_action["source.addMissingImports.ts"]()
-                end,
-                desc = "Add missing imports",
-              },
-              {
-                "<leader>cu",
-                function()
-                  require("utils").lsp_action["source.removeUnused.ts"]()
-                end,
-                desc = "Remove unused imports",
-              },
-              {
-                "<leader>cD",
-                function()
-                  require("utils").lsp_action["source.fixAll.ts"]()
-                end,
-                desc = "Fix all diagnostics",
-              },
-            },
-          },
-          vue_ls = {},
         },
+
+        -- you can do any additional lsp server setup here
+        -- return true if you don't want this server to be setup with lspconfig
+        ---@type table<string, fun(server:string, opts: vim.lsp.Config):boolean?>
+        setup = {},
       }
 
       return ret
@@ -323,10 +169,14 @@ return {
         end
 
         local use_mason = sopts.mason ~= false and vim.tbl_contains(mason_all, server)
-
-        vim.lsp.config(server, sopts) -- configure the server
-        if not use_mason then
-          vim.lsp.enable(server)
+        local setup = opts.setup[server] or opts.setup["*"]
+        if setup and setup(server, sopts) then
+          mason_exclude[#mason_exclude + 1] = server
+        else
+          vim.lsp.config(server, sopts) -- configure the server
+          if not use_mason then
+            vim.lsp.enable(server)
+          end
         end
 
         return use_mason
@@ -348,15 +198,11 @@ return {
     cmd = "Mason",
     -- keys = { { "<leader>cm", "<cmd>Mason<cr>", desc = "Mason" } },
     build = ":MasonUpdate",
+    opts_extend = { "ensure_installed" },
     opts = {
       ensure_installed = {
-        "biome",
-        "goimports",
-        "gofumpt",
-        "prettierd",
         "stylua",
         "shfmt",
-        "sqlfluff",
       },
     },
     ---@param opts MasonSettings | {ensure_installed: string[]}
