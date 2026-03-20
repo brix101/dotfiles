@@ -53,21 +53,21 @@ return {
                 },
               },
             },
-        -- stylua: ignore
-        keys = {
-          { "<leader>cl", function() Snacks.picker.lsp_config() end, desc = "Lsp Info" },
-          { "gd", vim.lsp.buf.definition, desc = "Goto Definition", has = "definition" },
-          { "gr", vim.lsp.buf.references, desc = "References", nowait = true },
-          { "gi", vim.lsp.buf.implementation, desc = "Goto Implementation" },
-          { "gt", vim.lsp.buf.type_definition, desc = "Goto Type Definition" },
-          { "gD", vim.lsp.buf.declaration, desc = "Goto Declaration" },
-          { "K", function() return vim.lsp.buf.hover({ border = "rounded" }) end, desc = "Hover" },
-          { "<C-k>", function() return vim.lsp.buf.signature_help({ border = "rounded" }) end, mode = "i", desc = "Signature Help", has = "signatureHelp" },
-          { "<leader>ca", vim.lsp.buf.code_action, desc = "Code Action", mode = { "n", "x" }, has = "codeAction" },
-          { "<leader>cc", vim.lsp.codelens.run, desc = "Run Codelens", mode = { "n", "x" }, has = "codeLens" },
-          { "<leader>cC", vim.lsp.codelens.refresh, desc = "Refresh & Display Codelens", mode = { "n" }, has = "codeLens" },
-          { "<leader>rn", vim.lsp.buf.rename, desc = "Rename", has = "rename" },
-        },
+            -- stylua: ignore
+            keys = {
+              { "<leader>cl", function() Snacks.picker.lsp_config() end, desc = "Lsp Info" },
+              { "gd", vim.lsp.buf.definition, desc = "Goto Definition", has = "definition" },
+              { "gr", vim.lsp.buf.references, desc = "References", nowait = true },
+              { "gi", vim.lsp.buf.implementation, desc = "Goto Implementation" },
+              { "gt", vim.lsp.buf.type_definition, desc = "Goto Type Definition" },
+              { "gD", vim.lsp.buf.declaration, desc = "Goto Declaration" },
+              { "K", function() return vim.lsp.buf.hover({ border = "rounded" }) end, desc = "Hover" },
+              { "<C-k>", function() return vim.lsp.buf.signature_help({ border = "rounded" }) end, mode = "i", desc = "Signature Help", has = "signatureHelp" },
+              { "<leader>ca", vim.lsp.buf.code_action, desc = "Code Action", mode = { "n", "x" }, has = "codeAction" },
+              { "<leader>cc", vim.lsp.codelens.run, desc = "Run Codelens", mode = { "n", "x" }, has = "codeLens" },
+              { "<leader>cC", vim.lsp.codelens.refresh, desc = "Refresh & Display Codelens", mode = { "n" }, has = "codeLens" },
+              { "<leader>rn", vim.lsp.buf.rename, desc = "Rename", has = "rename" },
+            },
           },
           bashls = {},
           cssls = {},
@@ -346,7 +346,7 @@ return {
   {
     "mason-org/mason.nvim",
     cmd = "Mason",
-    keys = { { "<leader>cm", "<cmd>Mason<cr>", desc = "Mason" } },
+    -- keys = { { "<leader>cm", "<cmd>Mason<cr>", desc = "Mason" } },
     build = ":MasonUpdate",
     opts = {
       ensure_installed = {
