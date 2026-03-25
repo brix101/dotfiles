@@ -4,9 +4,9 @@ return {
     event = "VimEnter",
     opts = {
       -- delay between pressing a key and opening which-key (milliseconds)
-      delay = 400,
-      icons = { mappings = vim.g.have_nerd_font },
-      preset = "classic",
+      -- delay = 400,
+      preset = "helix",
+      defaults = {},
       spec = {
         { "<leader>c", group = "code" },
         { "<leader>f", group = "find" },

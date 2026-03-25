@@ -9,69 +9,64 @@ vim.g.ai_cmp = true
 
 local opt = vim.opt
 
-opt.relativenumber = true -- Show relative line numbers
-opt.number = true -- cursorline number
-
-opt.mouse = "a" -- Enable mouse support in all modes
-opt.showmode = false -- Don't show the mode, since it's already in the status line
-opt.clipboard = "unnamedplus" -- Use the system clipboard for all yank, delete, change and put operations
-
--- Enable break indent
-opt.breakindent = false
-
--- Save undo history
-opt.swapfile = false
-opt.backup = false
+opt.autoindent = true -- copy indent from current line when starting new one
+opt.autowrite = true -- Enable auto write
+-- only set clipboard if not in ssh, to make sure the OSC 52
+-- integration works automatically.
+opt.clipboard = vim.env.SSH_CONNECTION and "" or "unnamedplus" -- Sync with system clipboard
+opt.confirm = true -- Confirm to save changes before exiting modified buffer
+opt.colorcolumn = "80" -- Highlight column 80
+opt.cursorline = true -- Enable highlighting of the current line
+opt.expandtab = true -- Use spaces instead of tabs
+opt.fillchars = {
+  foldopen = "",
+  foldclose = "",
+  --   fold = " ",
+  foldsep = " ",
+  diff = "╱",
+  eob = " ",
+}
+opt.foldlevel = 99
+-- opt.foldmethod = "indent"
+opt.foldtext = ""
+-- opt.grepformat = "%f:%l:%c:%m"
+-- opt.grepprg = "rg --vimgrep"
+opt.ignorecase = true -- Ignore case
+opt.inccommand = "nosplit" -- preview incremental substitute
+opt.jumpoptions = "view"
+opt.laststatus = 3 -- global statusline
+opt.linebreak = true -- Wrap lines at convenient points
+opt.list = true -- Show some invisible characters (tabs...
+opt.mouse = "a" -- Enable mouse mode
+opt.number = true -- Print line number
+opt.pumblend = 10 -- Popup blend
+opt.pumheight = 10 -- Maximum number of entries in a popup
+opt.relativenumber = true -- Relative line numbers
+opt.ruler = false -- Disable the default ruler
+opt.scrolloff = 8 -- Lines of context
+opt.sessionoptions = { "buffers", "curdir", "tabpages", "winsize", "help", "globals", "skiprtp", "folds" }
+opt.shiftround = true -- Round indent
+opt.shiftwidth = 2 -- Size of an indent
+opt.shortmess:append({ W = true, I = true, c = true, C = true })
+opt.showmode = false -- Dont show mode since we have a statusline
+opt.sidescrolloff = 8 -- Columns of context
+opt.signcolumn = "yes" -- Always show the signcolumn, otherwise it would shift the text each time
+opt.smartcase = true -- Don't ignore case with capitals
+opt.smartindent = true -- Insert indents automatically
+opt.smoothscroll = true
+opt.spelllang = { "en" }
+opt.splitbelow = true -- Put new windows below current
+opt.splitkeep = "screen"
+opt.splitright = true -- Put new windows right of current
+opt.statuscolumn = [[%!v:lua.LazyVim.statuscolumn()]]
+opt.tabstop = 2 -- Number of spaces tabs count for
+opt.termguicolors = true -- True color support
+opt.timeoutlen = vim.g.vscode and 1000 or 300 -- Lower than default (1000) to quickly trigger which-key
 opt.undodir = os.getenv("HOME") .. "/.vim/undodir"
 opt.undofile = true
-
--- Case-insensitive searching UNLESS \C or one or more capital letters in the search term
-opt.ignorecase = true
-opt.smartcase = true
-
--- tabs & indentation
-opt.tabstop = 2 -- 2 spaces for tabs (prettier default)
-opt.shiftwidth = 2 -- 2 spaces for indent width
-opt.expandtab = true -- expand tab to spaces
-opt.autoindent = true -- copy indent from current line when starting new one
-
-opt.smoothscroll = true -- Smooth scrolling
-opt.scrolloff = 8 -- maintain 8 lines of context when scrolling
-opt.colorcolumn = "80" -- Highlight column 80
-
--- Show which line your cursor is on
-opt.cursorline = true
--- Keep signcolumn on by default
-opt.signcolumn = "yes"
--- Decrease update time
-opt.updatetime = 250
-
--- Decrease mapped sequence wait time
-opt.timeoutlen = 300
-
--- Configure how new splits should be opened
-opt.splitright = true
-opt.splitbelow = true
-
--- Sets how neovim will display certain whitespace characters in the editor.
---  See `:help 'list'`
---  and `:help 'listchars'`
---
---  Notice listchars is set using `vim.opt` instead of `vim.o`.
---  It is very similar to `vim.o` but offers an interface for conveniently interacting with tables.
---   See `:help lua-options`
---   and `:help lua-options-guide`
-opt.list = true
-opt.listchars = { tab = "» ", trail = "·", nbsp = "␣" }
-
--- Preview substitutions live, as you type!
-opt.inccommand = "split"
-
--- Show which line your cursor is on
-opt.cursorline = true
-
--- Show which line your cursor is on
-opt.cursorline = true
-opt.confirm = true -- Confirm before closing modified buffers
-
-opt.wrap = false -- Disable line wrapping
+opt.undolevels = 10000
+opt.updatetime = 200 -- Save swap file and trigger CursorHold
+opt.virtualedit = "block" -- Allow cursor to move where there is no text in visual block mode
+opt.wildmode = "longest:full,full" -- Command-line completion mode
+opt.winminwidth = 5 -- Minimum window width
+opt.wrap = false -- Disable line wrap
