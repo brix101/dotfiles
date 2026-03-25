@@ -31,14 +31,14 @@ return {
       dim = { enabled = true },
       gitbrowse = { enabled = true },
       indent = { enabled = true },
-      input = { enabled = false },
+      input = { enabled = true },
       notifier = {
         enabled = true,
         timeout = 3000,
         style = "fancy",
       },
       picker = { enabled = true, ui_select = true },
-      rename = { enabled = false },
+      rename = { enabled = true },
       toggle = { enabled = true },
       scratch = { enabled = true },
       scroll = { enabled = true },
@@ -46,6 +46,13 @@ return {
       words = { enabled = true },
     },
     init = function()
+      _G.dd = function(...)
+        Snacks.debug.inspect(...)
+      end
+      _G.bt = function()
+        Snacks.debug.backtrace()
+      end
+
       vim.api.nvim_create_autocmd("User", {
         pattern = "VeryLazy",
         callback = function()

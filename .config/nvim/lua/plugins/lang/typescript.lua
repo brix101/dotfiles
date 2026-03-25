@@ -28,7 +28,7 @@ return {
       servers = {
         eslint = {
           cmd = { "vscode-eslint-language-server", "--stdio", "--max-old-space-size=12288" },
-          settings = { format = false },
+          settings = { workingDirectories = { mode = "auto" }, format = false },
         },
         vtsls = {
           filetypes = {
@@ -38,7 +38,6 @@ return {
             "typescript",
             "typescriptreact",
             "typescript.tsx",
-            "vue",
           },
           settings = {
             complete_function_calls = true,
@@ -252,13 +251,13 @@ return {
     end,
   },
 
-  -- {
-  --   "dmmulroy/ts-error-translator.nvim",
-  --   event = "VeryLazy",
-  --   config = function()
-  --     require("ts-error-translator").setup()
-  --   end,
-  -- },
+  {
+    "dmmulroy/ts-error-translator.nvim",
+    event = "VeryLazy",
+    config = function()
+      require("ts-error-translator").setup()
+    end,
+  },
 
   -- Filetype icons
   {
