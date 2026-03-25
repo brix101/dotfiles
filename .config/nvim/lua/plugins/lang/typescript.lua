@@ -1,4 +1,4 @@
-local prettierd = {
+local supported = {
   "css",
   "graphql",
   "handlebars",
@@ -6,9 +6,6 @@ local prettierd = {
   "markdown",
   "markdown.mdx",
   "yaml",
-}
-
-local oxc = {
   "javascript",
   "javascriptreact",
   "typescript",
@@ -219,13 +216,8 @@ return {
     ---@param opts ConformOpts
     opts = function(_, opts)
       opts.formatters_by_ft = opts.formatters_by_ft or {}
-      for _, ft in ipairs(oxc) do
+      for _, ft in ipairs(supported) do
         opts.formatters_by_ft[ft] = { "oxfmt", "prettierd", stop_after_first = true }
-      end
-
-      for _, ft in ipairs(prettierd) do
-        opts.formatters_by_ft[ft] = opts.formatters_by_ft[ft] or {}
-        table.insert(opts.formatters_by_ft[ft], "prettierd")
       end
 
       opts.formatters = opts.formatters or {}
@@ -260,13 +252,13 @@ return {
     end,
   },
 
-  {
-    "dmmulroy/ts-error-translator.nvim",
-    event = "VeryLazy",
-    config = function()
-      require("ts-error-translator").setup()
-    end,
-  },
+  -- {
+  --   "dmmulroy/ts-error-translator.nvim",
+  --   event = "VeryLazy",
+  --   config = function()
+  --     require("ts-error-translator").setup()
+  --   end,
+  -- },
 
   -- Filetype icons
   {

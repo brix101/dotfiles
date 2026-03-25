@@ -17,7 +17,7 @@ return {
       keymap = {
         preset = "super-tab",
         -- ["<CR>"] = { "accept", "fallback" },
-        -- ["<CR>"] = { "select_and_accept" },
+        -- ["<CR>"] = { "select_and_accept", "fallback" },
         ["<C-y>"] = { "select_and_accept" },
       },
       appearance = {
@@ -81,14 +81,14 @@ return {
         ghost_text = {
           enabled = vim.g.ai_cmp,
         },
-        -- list = {
-        --   selection = {
-        --     preselect = function()
-        --       return not require("blink.cmp").snippet_active({ direction = 1 })
-        --     end,
-        --     -- auto_insert = true,
-        --   },
-        -- },
+        list = {
+          selection = {
+            preselect = function()
+              return not require("blink.cmp").snippet_active({ direction = 1 })
+            end,
+            -- auto_insert = true,
+          },
+        },
       },
       sources = {
         default = { "lsp", "path", "snippets", "buffer" },
