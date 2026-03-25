@@ -3,34 +3,22 @@ return {
     "saghen/blink.cmp",
     event = "VimEnter",
     version = "1.*",
+    opts_extend = {
+      "sources.completion.enabled_providers",
+      "sources.default",
+    },
     dependencies = {
       "rafamadriz/friendly-snippets",
       "L3MON4D3/LuaSnip",
-      "fang2hou/blink-copilot",
     },
     ---@module 'blink.cmp'
     ---@type blink.cmp.Config
     opts = {
       keymap = {
         preset = "super-tab",
-        ["<CR>"] = { "accept", "fallback" },
-        ["<Tab>"] = {
-          function(cmp)
-            if cmp.snippet_active() then
-              return cmp.accept()
-            else
-              return cmp.select_and_accept()
-            end
-          end,
-          "snippet_forward",
-          function()
-            return require("sidekick").nes_jump_or_apply()
-          end,
-          function()
-            return vim.lsp.inline_completion.get()
-          end,
-          "fallback",
-        },
+        -- ["<CR>"] = { "accept", "fallback" },
+        -- ["<CR>"] = { "select_and_accept" },
+        ["<C-y>"] = { "select_and_accept" },
       },
       appearance = {
         nerd_font_variant = "mono",
@@ -50,7 +38,6 @@ return {
         },
       },
       completion = {
-
         accept = {
           auto_brackets = {
             enabled = true,
@@ -74,7 +61,6 @@ return {
                     buffer = "[Buffer]",
                     path = "[Path]",
                     snippets = "[Snippet]",
-                    copilot = "[Copilot]",
                   }
                   return (source_names[ctx.source_name] or "[") .. ctx.source_name .. "]"
                 end,
@@ -93,19 +79,19 @@ return {
           },
         },
         ghost_text = {
-          enabled = true,
+          enabled = vim.g.ai_cmp,
         },
-        list = {
-          selection = {
-            preselect = function()
-              return not require("blink.cmp").snippet_active({ direction = 1 })
-            end,
-            -- auto_insert = true,
-          },
-        },
+        -- list = {
+        --   selection = {
+        --     preselect = function()
+        --       return not require("blink.cmp").snippet_active({ direction = 1 })
+        --     end,
+        --     -- auto_insert = true,
+        --   },
+        -- },
       },
       sources = {
-        default = { "lsp", "path", "snippets", "buffer", "copilot" },
+        default = { "lsp", "path", "snippets", "buffer" },
         providers = {
           lsp = {
             score_offset = 1000, -- Extreme priority to override fuzzy matching
@@ -122,14 +108,31 @@ return {
             score_offset = -150, -- Lowest priority
             min_keyword_length = 3, -- Only show after 3 chars
           },
-          copilot = {
-            -- name = "copilot",
-            module = "blink-copilot",
-            score_offset = 100,
-            async = true,
-          },
         },
       },
     },
+    ---@param opts blink.cmp.Config | { sources: { compat: string[] } }
+    config = function(_, opts)
+      -- -- setup compat sources
+      -- local enabled = opts.sources.default
+      -- for _, source in ipairs(opts.sources.compat or {}) do
+      --   opts.sources.providers[source] = vim.tbl_deep_extend(
+      --     "force",
+      --     { name = source, module = "blink.compat.source" },
+      --     opts.sources.providers[source] or {}
+      --   )
+      --   if type(enabled) == "table" and not vim.tbl_contains(enabled, source) then
+      --     table.insert(enabled, source)
+      --   end
+      -- end
+
+      opts.keymap["<Tab>"] = {
+        require("blink.cmp.keymap.presets").get("super-tab")["<Tab>"][1],
+        require("utils").cmp_map({ "snippet_forward", "ai_nes", "ai_accept" }),
+        "fallback",
+      }
+
+      require("blink.cmp").setup(opts)
+    end,
   },
 }

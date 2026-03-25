@@ -78,4 +78,37 @@ function M.extend(t, key, values)
   return vim.list_extend(t, values)
 end
 
+M.cmp_actions = {
+  -- Native Snippets
+  snippet_forward = function()
+    if vim.snippet.active({ direction = 1 }) then
+      vim.schedule(function()
+        vim.snippet.jump(1)
+      end)
+      return true
+    end
+  end,
+  snippet_stop = function()
+    if vim.snippet then
+      vim.snippet.stop()
+    end
+  end,
+}
+
+---@param actions string[]
+---@param fallback? string|fun()
+function M.cmp_map(actions, fallback)
+  return function()
+    for _, name in ipairs(actions) do
+      if M.cmp_actions[name] then
+        local ret = M.cmp_actions[name]()
+        if ret then
+          return true
+        end
+      end
+    end
+    return type(fallback) == "function" and fallback() or fallback
+  end
+end
+
 return M

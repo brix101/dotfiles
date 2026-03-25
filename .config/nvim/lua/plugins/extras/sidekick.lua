@@ -52,6 +52,13 @@ return {
   {
     "folke/sidekick.nvim",
     opts = function()
+      require("utils").cmp_actions.ai_nes = function()
+        local Nes = require("sidekick.nes")
+        if Nes.have() and (Nes.jump() or Nes.apply()) then
+          return true
+        end
+      end
+
       Snacks.toggle({
         name = "Sidekick NES",
         get = function()
@@ -72,7 +79,6 @@ return {
           end
         end,
         expr = true,
-        desc = "Goto/Apply Next Edit Suggestion",
       },
       {
         "<c-.>",
@@ -157,6 +163,25 @@ return {
                 mode = { "n", "i" },
               },
             },
+          },
+        },
+      },
+    },
+  },
+
+  {
+    "saghen/blink.cmp",
+    optional = true,
+    dependencies = { "fang2hou/blink-copilot" },
+    opts = {
+      sources = {
+        default = { "copilot" },
+        providers = {
+          copilot = {
+            -- name = "copilot",
+            module = "blink-copilot",
+            score_offset = 100,
+            async = true,
           },
         },
       },

@@ -11,8 +11,6 @@ return {
     opts_extend = { "servers.*.keys" },
     ---@class PluginLspOpts
     opts = function()
-      local mason_path = vim.fn.stdpath("data") .. "/mason/packages/"
-
       ---@class PluginLspOpts
       local ret = {
         ---@type vim.diagnostic.Opts
@@ -123,7 +121,7 @@ return {
             and vim.bo[buffer].buftype == ""
             and not vim.tbl_contains(opts.inlay_hints.exclude, vim.bo[buffer].filetype)
           then
-            vim.lsp.inlay_hint.enable(true, { bufnr = buffer })
+            vim.lsp.inlay_hint.enable(false, { bufnr = buffer })
           end
         end)
       end

@@ -74,10 +74,10 @@ return {
       vim.api.nvim_create_autocmd("User", {
         pattern = "VeryLazy",
         callback = function()
-          Snacks.toggle.option("spell", { name = "Spelling" }):map("<leader>us")
-          Snacks.toggle.diagnostics():map("<leader>ud")
-          Snacks.toggle.treesitter():map("<leader>ut")
-          Snacks.toggle.inlay_hints():map("<leader>ui")
+          Snacks.toggle.option("spell", { name = "Spelling" }):map("<leader>ts")
+          Snacks.toggle.diagnostics():map("<leader>td")
+          Snacks.toggle.treesitter():map("<leader>tt")
+          Snacks.toggle.inlay_hints():map("<leader>ti")
 
           Snacks.toggle({
             name = "Git Signs",
@@ -87,7 +87,7 @@ return {
             set = function(state)
               require("gitsigns").toggle_signs(state)
             end,
-          }):map("<leader>ug")
+          }):map("<leader>tg")
 
           Snacks.toggle({
             name = "Highlight color",
@@ -97,7 +97,7 @@ return {
             set = function()
               require("nvim-highlight-colors").toggle()
             end,
-          }):map("<leader>uh")
+          }):map("<leader>th")
         end,
       })
     end,
