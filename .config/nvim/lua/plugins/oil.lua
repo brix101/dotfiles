@@ -10,7 +10,15 @@ return {
     "stevearc/oil.nvim",
     dependencies = {
       "nvim-tree/nvim-web-devicons",
-      "refractalize/oil-git-status.nvim",
+      {
+        "malewicz1337/oil-git.nvim",
+        dependencies = { "stevearc/oil.nvim" },
+        opts = {
+          show_file_highlights = true,
+          show_directory_highlights = false,
+          show_ignored_files = true,
+        },
+      },
     },
     ---@type oil.SetupOpts
     opts = {
@@ -37,37 +45,5 @@ return {
       { "-", "<CMD>Oil<CR>", desc = "Open parent directory" },
       { "<leader>e", function() require("oil").toggle_float() end, desc = "Open Oil file explorer" },
     },
-    config = function(_, opts)
-      require("oil").setup(opts)
-      require("oil-git-status").setup({
-        -- show_ignored = false,
-        -- symbols = {
-        --   index = {
-        --     ["!"] = " ", -- Ignored
-        --     ["?"] = " ", -- Untracked
-        --     ["A"] = " ", -- Added
-        --     ["C"] = " ", -- Copied
-        --     ["D"] = " ", -- Deleted
-        --     ["M"] = "󰄗 ", -- Modified
-        --     ["R"] = "󰁯 ", -- Renamed
-        --     ["T"] = "󰉺 ", -- Type changed
-        --     ["U"] = "󰇼 ", -- Unmerged
-        --     [" "] = " ", -- Unchanged
-        --   },
-        --   working_tree = {
-        --     ["!"] = " ",
-        --     ["?"] = " ",
-        --     ["A"] = "󰐖 ",
-        --     ["C"] = " ",
-        --     ["D"] = " ",
-        --     ["M"] = " ", -- Subtle dot for unstaged changes
-        --     ["R"] = "󰁯 ",
-        --     ["T"] = "󰉺 ",
-        --     ["U"] = "󰇼 ",
-        --     [" "] = " ",
-        --   },
-        -- },
-      })
-    end,
   },
 }
