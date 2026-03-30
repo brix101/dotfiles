@@ -114,3 +114,4 @@ dsql-token () {
 # else
 #     echo "$(date): SSH_AUTH_SOCK is NOT set" >> ~/.ssh/agent_history.log
 # fi
+export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
