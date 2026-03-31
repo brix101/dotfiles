@@ -59,11 +59,11 @@ return {
               { "gi", vim.lsp.buf.implementation, desc = "Goto Implementation" },
               { "gt", vim.lsp.buf.type_definition, desc = "Goto Type Definition" },
               { "gD", vim.lsp.buf.declaration, desc = "Goto Declaration" },
-              { "K", function() return vim.lsp.buf.hover({ border = "rounded" }) end, desc = "Hover" },
-              { "<C-k>", function() return vim.lsp.buf.signature_help({ border = "rounded" }) end, mode = "i", desc = "Signature Help", has = "signatureHelp" },
+              { "K", function() return vim.lsp.buf.hover() end, desc = "Hover" },
+              { "<C-k>", function() return vim.lsp.buf.signature_help() end, mode = "i", desc = "Signature Help", has = "signatureHelp" },
               { "<leader>ca", vim.lsp.buf.code_action, desc = "Code Action", mode = { "n", "x" }, has = "codeAction" },
               { "<leader>cc", vim.lsp.codelens.run, desc = "Run Codelens", mode = { "n", "x" }, has = "codeLens" },
-              { "<leader>cC", vim.lsp.codelens.refresh, desc = "Refresh & Display Codelens", mode = { "n" }, has = "codeLens" },
+              { "<leader>cC", vim.lsp.codelens.enable, desc = "Refresh & Display Codelens", mode = { "n" }, has = "codeLens" },
               { "<leader>rn", vim.lsp.buf.rename, desc = "Rename", has = "rename" },
             },
           },
@@ -129,10 +129,10 @@ return {
       -- code lens
       if opts.codelens.enabled and vim.lsp.codelens then
         Snacks.util.lsp.on({ method = "textDocument/codeLens" }, function(buffer)
-          vim.lsp.codelens.refresh()
+          vim.lsp.codelens.enable(true, { bufnr = buffer })
           vim.api.nvim_create_autocmd({ "BufEnter", "CursorHold", "InsertLeave" }, {
             buffer = buffer,
-            callback = vim.lsp.codelens.refresh,
+            callback = vim.lsp.codelens.enable(true, { bufnr = buffer }),
           })
         end)
       end
