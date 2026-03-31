@@ -1,7 +1,7 @@
 -- This file is automatically loaded by plugins.core
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
-vim.g.have_nerd_font = true
+-- vim.g.have_nerd_font = true
 
 -- if the completion engine supports the AI source,
 -- use that instead of inline suggestions
@@ -33,7 +33,7 @@ opt.foldtext = ""
 -- opt.grepprg = "rg --vimgrep"
 opt.ignorecase = true -- Ignore case
 opt.inccommand = "nosplit" -- preview incremental substitute
-opt.jumpoptions = "view"
+opt.jumpoptions = "view" -- Keep the cursor vertically centered when jumping to a different location in the file
 opt.laststatus = 3 -- global statusline
 opt.linebreak = true -- Wrap lines at convenient points
 opt.list = true -- Show some invisible characters (tabs...
@@ -44,26 +44,26 @@ opt.pumheight = 10 -- Maximum number of entries in a popup
 opt.relativenumber = true -- Relative line numbers
 opt.ruler = false -- Disable the default ruler
 opt.scrolloff = 8 -- Lines of context
-opt.sessionoptions = { "buffers", "curdir", "tabpages", "winsize", "help", "globals", "skiprtp", "folds" }
+opt.sessionoptions = { "buffers", "curdir", "tabpages", "winsize", "help", "globals", "skiprtp", "folds" } -- Save all the things
 opt.shiftround = true -- Round indent
 opt.shiftwidth = 2 -- Size of an indent
-opt.shortmess:append({ W = true, I = true, c = true, C = true })
+opt.shortmess:append({ W = true, I = false, c = true, C = true }) -- W: Don't show "written" when writing, I: Don't show the intro message when starting Vim, c: Don't show completion messages, C: Don't show completion messages in command line
 opt.showmode = false -- Dont show mode since we have a statusline
 opt.sidescrolloff = 8 -- Columns of context
 opt.signcolumn = "yes" -- Always show the signcolumn, otherwise it would shift the text each time
 opt.smartcase = true -- Don't ignore case with capitals
 opt.smartindent = true -- Insert indents automatically
-opt.smoothscroll = true
-opt.spelllang = { "en" }
+opt.smoothscroll = true -- Smooth scrolling
+opt.spelllang = { "en" } -- Set the languages for spell checking
 opt.splitbelow = true -- Put new windows below current
-opt.splitkeep = "screen"
+opt.splitkeep = "screen" -- Keep the text on the same screen line when splitting
 opt.splitright = true -- Put new windows right of current
 opt.tabstop = 2 -- Number of spaces tabs count for
 opt.termguicolors = true -- True color support
 opt.timeoutlen = vim.g.vscode and 1000 or 300 -- Lower than default (1000) to quickly trigger which-key
 opt.undodir = os.getenv("HOME") .. "/.vim/undodir"
-opt.undofile = true
-opt.undolevels = 10000
+opt.undofile = true -- Enable persistent undo
+opt.undolevels = 10000 -- Number of undo levels
 opt.updatetime = 200 -- Save swap file and trigger CursorHold
 opt.virtualedit = "block" -- Allow cursor to move where there is no text in visual block mode
 opt.wildmode = "longest:full,full" -- Command-line completion mode
