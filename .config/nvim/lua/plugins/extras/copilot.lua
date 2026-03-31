@@ -1,37 +1,38 @@
 return {
-  -- -- copilot
-  -- {
-  --   "zbirenbaum/copilot.lua",
-  --   cmd = "Copilot",
-  --   build = ":Copilot auth",
-  --   event = "BufReadPost",
-  --   opts = {
-  --     suggestion = {
-  --       enabled = not vim.g.ai_cmp,
-  --       auto_trigger = true,
-  --       hide_during_completion = vim.g.ai_cmp,
-  --       keymap = {
-  --         accept = false, -- handled by nvim-cmp / blink.cmp
-  --         next = "<M-]>",
-  --         prev = "<M-[>",
-  --       },
-  --     },
-  --     panel = { enabled = false },
-  --     filetypes = {
-  --       markdown = true,
-  --       help = true,
-  --     },
-  --   },
-  -- },
-  --
-  -- -- copilot-language-server
-  -- {
-  --   "neovim/nvim-lspconfig",
-  --   opts = {
-  --     servers = {
-  --       -- copilot.lua only works with its own copilot lsp server
-  --       copilot = { enabled = false },
-  --     },
-  --   },
-  -- },
+  {
+    "neovim/nvim-lspconfig",
+    opts = {
+      servers = {
+        copilot = {
+          -- stylua: ignore
+          keys = {
+            {
+              "<M-]>",
+              function() vim.lsp.inline_completion.select({ count = 1 }) end,
+              desc = "Next Copilot Suggestion",
+              mode = { "i", "n" },
+            },
+            {
+              "<M-[>",
+              function() vim.lsp.inline_completion.select({ count = -1 }) end,
+              desc = "Prev Copilot Suggestion",
+              mode = { "i", "n" },
+            },
+          },
+        },
+      },
+      setup = {
+        copilot = function()
+          vim.schedule(function()
+            vim.lsp.inline_completion.enable()
+          end)
+          -- Accept inline suggestions or next edits
+          require("utils").cmp_actions.ai_accept = function()
+            vim.notify("Accepting Copilot suggestion", vim.log.levels.INFO, { title = "Sidekick" })
+            return vim.lsp.inline_completion.get()
+          end
+        end,
+      },
+    },
+  },
 }

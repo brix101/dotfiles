@@ -1,12 +1,4 @@
 return {
-  {
-    "neovim/nvim-lspconfig",
-    opts = function(_, opts)
-      opts.servers = opts.servers or {}
-      opts.servers.copilot = opts.servers.copilot or {}
-    end,
-  },
-
   -- lualine
   {
     "nvim-lualine/lualine.nvim",
@@ -163,25 +155,6 @@ return {
                 mode = { "n", "i" },
               },
             },
-          },
-        },
-      },
-    },
-  },
-
-  {
-    "saghen/blink.cmp",
-    optional = true,
-    dependencies = { "fang2hou/blink-copilot" },
-    opts = {
-      sources = {
-        default = { "copilot" },
-        providers = {
-          copilot = {
-            -- name = "copilot",
-            module = "blink-copilot",
-            score_offset = 100,
-            async = true,
           },
         },
       },
