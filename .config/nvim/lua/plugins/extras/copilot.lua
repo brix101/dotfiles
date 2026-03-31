@@ -28,7 +28,6 @@ return {
           end)
           -- Accept inline suggestions or next edits
           require("utils").cmp_actions.ai_accept = function()
-            vim.notify("Accepting Copilot suggestion", vim.log.levels.INFO, { title = "Sidekick" })
             return vim.lsp.inline_completion.get()
           end
         end,

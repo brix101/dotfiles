@@ -1,4 +1,12 @@
 return {
+  -- copilot-language-server
+  -- {
+  --   "neovim/nvim-lspconfig",
+  --   opts = function(_, opts)
+  --     opts.servers = opts.servers or {}
+  --     opts.servers.copilot = opts.servers.copilot or {}
+  --   end,
+  -- },
   -- lualine
   {
     "nvim-lualine/lualine.nvim",
