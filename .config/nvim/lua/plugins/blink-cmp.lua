@@ -14,18 +14,14 @@ return {
     ---@module 'blink.cmp'
     ---@type blink.cmp.Config
     opts = {
-      keymap = {
-        preset = "super-tab",
-        -- ["<CR>"] = { "accept", "fallback" },
-        -- ["<CR>"] = { "select_and_accept", "fallback" },
-        ["<C-y>"] = { "select_and_accept" },
-      },
-      appearance = {
-        nerd_font_variant = "mono",
-      },
       snippets = {
         preset = "luasnip",
       },
+
+      appearance = {
+        nerd_font_variant = "mono",
+      },
+
       signature = {
         enabled = true,
         trigger = {
@@ -37,6 +33,7 @@ return {
           show_documentation = true,
         },
       },
+
       completion = {
         accept = {
           auto_brackets = {
@@ -90,6 +87,7 @@ return {
           },
         },
       },
+
       sources = {
         default = { "lsp", "path", "snippets", "buffer" },
         providers = {
@@ -110,22 +108,15 @@ return {
           },
         },
       },
+
+      keymap = {
+        preset = "super-tab",
+        ["<CR>"] = { "accept", "fallback" },
+        ["<C-y>"] = { "accept", "fallback" },
+      },
     },
     ---@param opts blink.cmp.Config | { sources: { compat: string[] } }
     config = function(_, opts)
-      -- -- setup compat sources
-      -- local enabled = opts.sources.default
-      -- for _, source in ipairs(opts.sources.compat or {}) do
-      --   opts.sources.providers[source] = vim.tbl_deep_extend(
-      --     "force",
-      --     { name = source, module = "blink.compat.source" },
-      --     opts.sources.providers[source] or {}
-      --   )
-      --   if type(enabled) == "table" and not vim.tbl_contains(enabled, source) then
-      --     table.insert(enabled, source)
-      --   end
-      -- end
-
       opts.keymap["<Tab>"] = {
         require("blink.cmp.keymap.presets").get("super-tab")["<Tab>"][1],
         require("utils").cmp_map({ "snippet_forward", "ai_nes", "ai_accept" }),

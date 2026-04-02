@@ -86,6 +86,7 @@ return {
     dependencies = {
       "nvim-treesitter/nvim-treesitter",
       { "JoosepAlviste/nvim-ts-context-commentstring", opts = { enable_autocmd = false } },
+      { "folke/ts-comments.nvim", opts = {} },
     },
     opts = {
       options = {
