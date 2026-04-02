@@ -3,6 +3,7 @@
 local sql_ft = { "sql" }
 
 return {
+  -- TODO: uncomment when I have time to set up a database and test this out, for now I just want treesitter and sqlfluff
   -- {
   --   "kristijanhusak/vim-dadbod-ui",
   --   cmd = { "DBUI", "DBUIToggle", "DBUIAddConnection", "DBUIFindBuffer" },
@@ -29,12 +30,6 @@ return {
   --     -- default keymap: <leader>S
   --     vim.g.db_ui_execute_on_save = false
   --
-  --     -- vim.g.dbs = {
-  --     --   {
-  --     --     name = "dsql dev",
-  --     --     url = function() end,
-  --     --   },
-  --     -- }
   --   end,
   -- },
 

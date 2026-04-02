@@ -83,20 +83,13 @@ return {
       vim.api.nvim_create_autocmd("User", {
         pattern = "VeryLazy",
         callback = function()
-          Snacks.toggle.option("spell", { name = "Spelling" }):map("<leader>ts")
-          Snacks.toggle.diagnostics():map("<leader>td")
-          Snacks.toggle.treesitter():map("<leader>tt")
-          Snacks.toggle.inlay_hints():map("<leader>ti")
+          Snacks.toggle.option("spell", { name = "Spelling" }):map("<leader>us")
+          Snacks.toggle.diagnostics():map("<leader>ud")
+          Snacks.toggle.treesitter():map("<leader>ut")
 
-          Snacks.toggle({
-            name = "Git Signs",
-            get = function()
-              return require("gitsigns.config").config.signcolumn
-            end,
-            set = function(state)
-              require("gitsigns").toggle_signs(state)
-            end,
-          }):map("<leader>tg")
+          if vim.lsp.inlay_hint then
+            Snacks.toggle.inlay_hints():map("<leader>ui")
+          end
 
           Snacks.toggle({
             name = "Highlight color",
@@ -106,7 +99,7 @@ return {
             set = function()
               require("nvim-highlight-colors").toggle()
             end,
-          }):map("<leader>th")
+          }):map("<leader>uh")
         end,
       })
     end,
@@ -118,10 +111,8 @@ return {
       { "<leader>bd", function() Snacks.bufdelete() end, desc = "Delete Buffer" },
       { "<leader>un", function() Snacks.notifier.hide() end, desc = "Dismiss All Notifications" },
        -- find
-      { "<leader>fb", function() Snacks.picker.buffers() end, desc = "Buffers" },
       { "<leader>fc", function() Snacks.picker.files({ cwd = "~/.config/nvim" }) end, desc = "Find Config File" },
       { "<leader>ff", function() Snacks.picker.files() end, desc = "Find Files" },
-      { "<leader>fg", function() Snacks.picker.git_files() end, desc = "Find Git Files" },
       { "<leader>fr", function() Snacks.picker.recent({ filter={ cwd = true }}) end, desc = "Recent" },
       -- git
       { "<leader>gc", function() Snacks.picker.git_log() end, desc = "Git Log" },
@@ -132,28 +123,15 @@ return {
       { "<leader>gg", function() Snacks.lazygit() end, desc = "Lazygit" },
       { "<leader>gl", function() Snacks.lazygit.log() end, desc = "Lazygit Log (cwd)" },
       -- Grep
-      { "<leader>sb", function() Snacks.picker.lines() end, desc = "Buffer Lines" },
-      { "<leader>sB", function() Snacks.picker.grep_buffers() end, desc = "Grep Open Buffers" },
       { "<leader>sg", function() Snacks.picker.grep() end, desc = "Grep" },
       { "<leader>sw", function() Snacks.picker.grep_word() end, desc = "Visual selection or word", mode = { "n", "x" } },
       -- search
       { '<leader>s"', function() Snacks.picker.registers() end, desc = "Registers" },
       { '<leader>s/', function() Snacks.picker.search_history() end, desc = "Search History" },
-      { "<leader>sa", function() Snacks.picker.autocmds() end, desc = "Autocmds" },
-      { "<leader>sc", function() Snacks.picker.command_history() end, desc = "Command History" },
-      { "<leader>sC", function() Snacks.picker.commands() end, desc = "Commands" },
-      { "<leader>sd", function() Snacks.picker.diagnostics() end, desc = "Diagnostics" },
-      { "<leader>sD", function() Snacks.picker.diagnostics_buffer() end, desc = "Buffer Diagnostics" },
-      { "<leader>sh", function() Snacks.picker.help() end, desc = "Help Pages" },
-      { "<leader>sH", function() Snacks.picker.highlights() end, desc = "Highlights" },
       { "<leader>si", function() Snacks.picker.icons() end, desc = "Icons" },
-      { "<leader>sj", function() Snacks.picker.jumps() end, desc = "Jumps" },
       { "<leader>sk", function() Snacks.picker.keymaps() end, desc = "Keymaps" },
-      { "<leader>sl", function() Snacks.picker.loclist() end, desc = "Location List" },
       { "<leader>sM", function() Snacks.picker.man() end, desc = "Man Pages" },
       { "<leader>sm", function() Snacks.picker.marks() end, desc = "Marks" },
-      { "<leader>sR", function() Snacks.picker.resume() end, desc = "Resume" },
-      { "<leader>sq", function() Snacks.picker.qflist() end, desc = "Quickfix List" },
       { "<leader>su", function() Snacks.picker.undo() end, desc = "Undotree" },
     },
   },

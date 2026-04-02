@@ -34,6 +34,7 @@ set("n", "<Esc>", "<cmd>nohlsearch<CR>", { desc = "Escape and Clear hlsearch" })
 -- Insert Mode --
 set("i", "jj", "<esc>", { desc = "Exit insert mode (jj)" })
 set("i", "JJ", "<esc>", { desc = "Exit insert mode (JJ)" })
+set("i", "jk", "<esc>", { desc = "Exit insert mode (jk)" })
 
 -- diagnostic
 local diagnostic_goto = function(next, severity)
