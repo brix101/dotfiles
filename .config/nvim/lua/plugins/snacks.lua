@@ -1,23 +1,4 @@
 local filtered_message = { "No information available" }
-local kind_filter = {
-  default = {
-    "Class",
-    "Constructor",
-    "Enum",
-    "Field",
-    "Function",
-    "Interface",
-    "Method",
-    "Module",
-    "Namespace",
-    "Package",
-    "Property",
-    "Struct",
-    "Trait",
-  },
-  markdown = false,
-  help = false,
-}
 
 return {
   {
@@ -108,8 +89,8 @@ return {
       { "<leader>.",  function() Snacks.scratch() end, desc = "Toggle Scratch Buffer" },
       { "<leader>S",  function() Snacks.scratch.select() end, desc = "Select Scratch Buffer" },
       { "<leader>n",  function() Snacks.notifier.show_history() end, desc = "Notification History" },
-      { "<leader>bd", function() Snacks.bufdelete() end, desc = "Delete Buffer" },
       { "<leader>un", function() Snacks.notifier.hide() end, desc = "Dismiss All Notifications" },
+      { "<leader>bd", function() Snacks.bufdelete() end, desc = "Delete Buffer" },
        -- find
       { "<leader>fc", function() Snacks.picker.files({ cwd = "~/.config/nvim" }) end, desc = "Find Config File" },
       { "<leader>ff", function() Snacks.picker.files() end, desc = "Find Files" },
@@ -146,10 +127,10 @@ return {
             { "gr", function() Snacks.picker.lsp_references() end, nowait = true, desc = "References" },
             { "gI", function() Snacks.picker.lsp_implementations() end, desc = "Goto Implementation" },
             { "gt", function() Snacks.picker.lsp_type_definitions() end, desc = "Goto Type Definition" },
-            { "<leader>ss", function() Snacks.picker.lsp_symbols({ filter = kind_filter }) end, desc = "LSP Symbols", has = "documentSymbol" },
-            { "<leader>sS", function() Snacks.picker.lsp_workspace_symbols({ filter = kind_filter }) end, desc = "LSP Workspace Symbols", has = "workspace/symbols" },
             { "gai", function() Snacks.picker.lsp_incoming_calls() end, desc = "C[a]lls Incoming", has = "callHierarchy/incomingCalls" },
             { "gao", function() Snacks.picker.lsp_outgoing_calls() end, desc = "C[a]lls Outgoing", has = "callHierarchy/outgoingCalls" },
+            { "<leader>ss", function() Snacks.picker.lsp_symbols() end, desc = "LSP Symbols", has = "documentSymbol" },
+            { "<leader>sS", function() Snacks.picker.lsp_workspace_symbols() end, desc = "LSP Workspace Symbols", has = "workspace/symbols" },
           },
         },
       },
