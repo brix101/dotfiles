@@ -5,7 +5,7 @@ return {
     dependencies = {
       "mason.nvim",
       { "mason-org/mason-lspconfig.nvim", config = function() end },
-      -- { "j-hui/fidget.nvim" },
+      { "j-hui/fidget.nvim", opts = {} },
       "saghen/blink.cmp",
     },
     opts_extend = { "servers.*.keys" },
@@ -67,7 +67,11 @@ return {
               { "<leader>rn", vim.lsp.buf.rename, desc = "Rename", has = "rename" },
             },
           },
-          jsonls = {},
+          cssls = {},
+          html = {},
+          graphql = {
+            filetypes = { "graphql", "gql", "typescriptreact", "javascriptreact" },
+          },
           lua_ls = {
             settings = {
               Lua = {
