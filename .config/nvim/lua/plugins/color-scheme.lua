@@ -3,7 +3,7 @@ return {
     "catppuccin/nvim",
     name = "catppuccin",
     opts = {
-      transparent_background = false,
+      -- transparent_background = false,
       color_overrides = {
         mocha = {
           -- base = "#1e1e2e",
@@ -14,10 +14,18 @@ return {
           -- crust = "#070711",
         },
       },
+      lsp_styles = {
+        underlines = {
+          errors = { "undercurl" },
+          hints = { "undercurl" },
+          warnings = { "undercurl" },
+          information = { "undercurl" },
+        },
+      },
       integrations = {
         blink_cmp = true,
-        diffview = true,
-        fidget = true,
+        flash = true,
+        grug_far = true,
         gitsigns = true,
         harpoon = true,
         illuminate = true,
