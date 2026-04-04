@@ -67,6 +67,7 @@ return {
               { "<leader>rn", vim.lsp.buf.rename, desc = "Rename", has = "rename" },
             },
           },
+          bashls = {},
           cssls = {},
           html = {},
           graphql = {

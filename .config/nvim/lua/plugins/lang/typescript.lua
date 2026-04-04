@@ -139,7 +139,11 @@ return {
             },
           },
         },
-        oxlint = {},
+        oxlint = {
+          settings = {
+            fixKind = "all",
+          },
+        },
         --- disable the oxfmt lsp server since we use conform for formatting
         oxfmt = { enabled = false },
       },
@@ -212,7 +216,6 @@ return {
   {
     "stevearc/conform.nvim",
     optional = true,
-    ---@param opts ConformOpts
     opts = function(_, opts)
       opts.formatters_by_ft = opts.formatters_by_ft or {}
       for _, ft in ipairs(supported) do
