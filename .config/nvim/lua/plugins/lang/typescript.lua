@@ -210,7 +210,7 @@ return {
 
   {
     "mason-org/mason.nvim",
-    opts = { ensure_installed = { "prettierd", "oxfmt" } },
+    opts = { ensure_installed = { "prettier", "oxfmt" } },
   },
   -- conform
   {
@@ -219,11 +219,11 @@ return {
     opts = function(_, opts)
       opts.formatters_by_ft = opts.formatters_by_ft or {}
       for _, ft in ipairs(supported) do
-        opts.formatters_by_ft[ft] = { "oxfmt", "prettierd", stop_after_first = true }
+        opts.formatters_by_ft[ft] = { "oxfmt", "prettier", stop_after_first = true }
       end
 
       opts.formatters = opts.formatters or {}
-      opts.formatters.prettierd = {
+      opts.formatters.prettier = {
         condition = function(_, ctx)
           return vim.fs.find({
             ".prettierrc",
