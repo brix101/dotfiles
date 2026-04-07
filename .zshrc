@@ -85,7 +85,7 @@ eval "$(fzf --zsh)"
 #                 tmux attach || tmux attach'
 #                 # tmux attach -t terminal'
 
-# export PATH=~/.local/bin:$PATH
+export PATH=~/.local/bin:$PATH
 
 # pnpm
 export PNPM_HOME="/Users/brixterporras/Library/pnpm"
@@ -94,24 +94,5 @@ case ":$PATH:" in
   *) export PATH="$PNPM_HOME:$PATH" ;;
 esac
 # pnpm end
-#
 
-dsql-token () {
-  local SHORT="$1"
-  local REGION="us-east-1"
-  local HOSTNAME="${SHORT}.dsql.${REGION}.on.aws"
-
-  aws dsql generate-db-connect-admin-auth-token \
-    --region "$REGION" \
-    --expires-in 28800 \
-    --hostname "$HOSTNAME" \
-  | tr -d '\n' | pbcopy
-}
-
-# # Append the timestamp and socket path to a log file
-# if [ -n "$SSH_AUTH_SOCK" ]; then
-#     echo "$(date): SSH_AUTH_SOCK is set to $SSH_AUTH_SOCK" >> ~/.ssh/agent_history.log
-# else
-#     echo "$(date): SSH_AUTH_SOCK is NOT set" >> ~/.ssh/agent_history.log
-# fi
 export PATH="/opt/homebrew/opt/libpq/bin:$PATH"

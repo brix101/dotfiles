@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+SHORT="$1"
+REGION="us-east-1"
+HOSTNAME="${SHORT}.dsql.${REGION}.on.aws"
+
+if [ -z "$SHORT" ]; then
+  echo "Usage: dsql-token <short-name>"
+  exit 1
+fi
+
+aws dsql generate-db-connect-admin-auth-token \
+  --region "$REGION" \
+  --expires-in 28800 \
+  --hostname "$HOSTNAME" \
+| tr -d '\n' | pbcopy
+
+echo "Token copied to clipboard!"
