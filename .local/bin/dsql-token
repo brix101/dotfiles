@@ -1,18 +1,38 @@
 #!/usr/bin/env bash
 
-SHORT="$1"
-REGION="us-east-1"
-HOSTNAME="${SHORT}.dsql.${REGION}.on.aws"
+# Exit on error, undefined variables, and pipeline failures
+set -euo pipefail
 
-if [ -z "$SHORT" ]; then
-  echo "Usage: dsql-token <short-name>"
+# 1. Fail fast: Validate input before doing any work
+if [ -z "${1:-}" ]; then
+  echo "Usage: $(basename "$0") <short-name>" >&2
   exit 1
 fi
 
-aws dsql generate-db-connect-admin-auth-token \
+SHORT="$1"
+REGION="${AWS_REGION:-${AWS_DEFAULT_REGION:-us-east-1}}"
+HOSTNAME="${SHORT}.dsql.${REGION}.on.aws"
+SSO_PROFILE="${AWS_PROFILE:-default}"
+
+echo "Using AWS profile: $SSO_PROFILE" >&2
+
+if ! aws sts get-caller-identity --profile "$SSO_PROFILE" &>/dev/null; then
+  echo "Not authenticated to AWS (profile: $SSO_PROFILE). Running aws sso login..." >&2
+  aws sso login --profile "$SSO_PROFILE"
+fi
+
+echo "Generating DSQL token for $HOSTNAME..." >&2
+
+TOKEN=$(aws dsql generate-db-connect-admin-auth-token \
+  --profile "$SSO_PROFILE" \
   --region "$REGION" \
   --expires-in 28800 \
-  --hostname "$HOSTNAME" \
-| tr -d '\n' | pbcopy
+  --hostname "$HOSTNAME")
 
-echo "Token copied to clipboard!"
+if command -v pbcopy &>/dev/null; then
+  printf "%s" "$TOKEN" | pbcopy
+  echo "Token copied to clipboard! (macOS)" >&2
+else
+  echo "Clipboard utility not found. Here is your token:" >&2
+  echo "$TOKEN"
+fi
