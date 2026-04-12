@@ -5,7 +5,7 @@ return {
     dependencies = {
       "mason.nvim",
       { "mason-org/mason-lspconfig.nvim", config = function() end },
-      { "j-hui/fidget.nvim", opts = {} },
+      -- { "j-hui/fidget.nvim", opts = {} },
       "saghen/blink.cmp",
     },
     opts_extend = { "servers.*.keys" },
