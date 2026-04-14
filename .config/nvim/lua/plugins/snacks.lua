@@ -69,7 +69,7 @@ return {
           Snacks.toggle.treesitter():map("<leader>ut")
 
           if vim.lsp.inlay_hint then
-            Snacks.toggle.inlay_hints():map("<leader>ui")
+            Snacks.toggle.inlay_hints():map("<leader>uh")
           end
         end,
       })
