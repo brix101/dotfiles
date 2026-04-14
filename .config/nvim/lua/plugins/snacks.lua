@@ -18,7 +18,7 @@ return {
         timeout = 3000,
         style = "fancy",
       },
-      picker = { enabled = true, ui_select = true },
+      picker = { enabled = true },
       rename = { enabled = true },
       toggle = { enabled = true },
       scratch = { enabled = true },
@@ -71,16 +71,6 @@ return {
           if vim.lsp.inlay_hint then
             Snacks.toggle.inlay_hints():map("<leader>ui")
           end
-
-          Snacks.toggle({
-            name = "Highlight color",
-            get = function()
-              return require("nvim-highlight-colors").is_active()
-            end,
-            set = function()
-              require("nvim-highlight-colors").toggle()
-            end,
-          }):map("<leader>uh")
         end,
       })
     end,

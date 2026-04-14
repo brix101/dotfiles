@@ -1,5 +1,20 @@
 return {
-
+  {
+    "nvim-mini/mini.comment",
+    event = "VeryLazy",
+    dependencies = {
+      "nvim-treesitter/nvim-treesitter",
+      { "JoosepAlviste/nvim-ts-context-commentstring", opts = { enable_autocmd = false } },
+      { "folke/ts-comments.nvim", opts = {} },
+    },
+    opts = {
+      options = {
+        custom_commentstring = function()
+          return require("ts_context_commentstring.internal").calculate_commentstring() or vim.bo.commentstring
+        end,
+      },
+    },
+  },
   {
     "nvim-mini/mini.ai",
     event = "VeryLazy",
@@ -76,23 +91,6 @@ return {
         highlight = "gsh", -- Highlight surrounding
         replace = "gsr", -- Replace surrounding
         update_n_lines = "gsn", -- Update `n_lines`
-      },
-    },
-  },
-
-  {
-    "nvim-mini/mini.comment",
-    event = "VeryLazy",
-    dependencies = {
-      "nvim-treesitter/nvim-treesitter",
-      { "JoosepAlviste/nvim-ts-context-commentstring", opts = { enable_autocmd = false } },
-      { "folke/ts-comments.nvim", opts = {} },
-    },
-    opts = {
-      options = {
-        custom_commentstring = function()
-          return require("ts_context_commentstring.internal").calculate_commentstring() or vim.bo.commentstring
-        end,
       },
     },
   },
