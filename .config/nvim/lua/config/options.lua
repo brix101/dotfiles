@@ -73,7 +73,7 @@ opt.wrap = false -- Disable line wrap
 -- Experimental UI2: floating cmdline and messages
 vim.o.cmdheight = 1
 require("vim._core.ui2").enable({
-  enable = true,
+  enable = true, -- Whether to enable or disable the UI.
   msg = {
     targets = {
       [""] = "msg",
@@ -103,18 +103,18 @@ require("vim._core.ui2").enable({
       wmsg = "msg",
       typed_cmd = "cmd",
     },
-    cmd = {
-      height = 0.5,
+    cmd = { -- Options related to messages in the cmdline window.
+      height = 0.5, -- Maximum height while expanded for messages beyond 'cmdheight'.
     },
-    dialog = {
-      height = 0.5,
+    dialog = { -- Options related to dialog window.
+      height = 0.5, -- Maximum height.
     },
-    msg = {
-      height = 0.3,
-      timeout = 5000,
+    msg = { -- Options related to msg window.
+      height = 0.5, -- Maximum height.
+      timeout = 4000, -- Time a message is visible in the message window.
     },
-    pager = {
-      height = 0.5,
+    pager = { -- Options related to message window.
+      height = 1, -- Maximum height.
     },
   },
 })
