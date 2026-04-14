@@ -110,36 +110,36 @@ vim.api.nvim_create_autocmd("CursorMovedI", {
 })
 
 -- lsp progress notifications to ui2
-vim.api.nvim_create_autocmd("LspProgress", {
-  callback = function(args)
-    local client_id = args.data.client_id
-    local client = vim.lsp.get_client_by_id(client_id)
-    if not client then
-      return
-    end
-
-    local value = args.data.params.value
-    local msg_id = ("progress-lsp-%s"):format(client_id)
-    local title = ("[%s] %s"):format(client.name or client_id, value.title)
-    local msg = value.message or "finished"
-
-    if value.kind == "end" then
-      vim.api.nvim_echo({ { msg } }, false, {
-        id = msg_id,
-        kind = "progress",
-        source = "vim.lsp",
-        title = title,
-        status = "success",
-      })
-    else -- "begin" or "report"
-      vim.api.nvim_echo({ { msg } }, false, {
-        id = msg_id,
-        kind = "progress",
-        source = "vim.lsp",
-        title = title,
-        status = "running",
-        percent = value.percentage,
-      })
-    end
-  end,
-})
+-- vim.api.nvim_create_autocmd("LspProgress", {
+--   callback = function(args)
+--     local client_id = args.data.client_id
+--     local client = vim.lsp.get_client_by_id(client_id)
+--     if not client then
+--       return
+--     end
+--
+--     local value = args.data.params.value
+--     local msg_id = ("progress-lsp-%s"):format(client_id)
+--     local title = ("[%s] %s"):format(client.name or client_id, value.title)
+--     local msg = value.message or "finished"
+--
+--     if value.kind == "end" then
+--       vim.api.nvim_echo({ { msg } }, false, {
+--         id = msg_id,
+--         kind = "progress",
+--         source = "vim.lsp",
+--         title = title,
+--         status = "success",
+--       })
+--     else -- "begin" or "report"
+--       vim.api.nvim_echo({ { msg } }, false, {
+--         id = msg_id,
+--         kind = "progress",
+--         source = "vim.lsp",
+--         title = title,
+--         status = "running",
+--         percent = value.percentage,
+--       })
+--     end
+--   end,
+-- })
