@@ -18,7 +18,7 @@ return {
         timeout = 3000,
         style = "fancy",
       },
-      picker = { enabled = true },
+      picker = { enabled = true, ui_select = true },
       rename = { enabled = true },
       toggle = { enabled = true },
       scratch = { enabled = true },
