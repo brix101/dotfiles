@@ -90,23 +90,23 @@ return {
 
       sources = {
         default = { "lsp", "path", "snippets", "buffer" },
-        providers = {
-          lsp = {
-            score_offset = 1000, -- Extreme priority to override fuzzy matching
-          },
-          path = {
-            score_offset = 3, -- File paths moderate priority
-          },
-          snippets = {
-            score_offset = -100, -- Much lower priority
-            max_items = 2, -- Limit snippet suggestions
-            min_keyword_length = 3, -- Don't show for single chars
-          },
-          buffer = {
-            score_offset = -150, -- Lowest priority
-            min_keyword_length = 3, -- Only show after 3 chars
-          },
-        },
+        -- providers = {
+        --   lsp = {
+        --     score_offset = 1000, -- Extreme priority to override fuzzy matching
+        --   },
+        --   path = {
+        --     score_offset = 3, -- File paths moderate priority
+        --   },
+        --   snippets = {
+        --     score_offset = -100, -- Much lower priority
+        --     max_items = 2, -- Limit snippet suggestions
+        --     min_keyword_length = 3, -- Don't show for single chars
+        --   },
+        --   buffer = {
+        --     score_offset = -150, -- Lowest priority
+        --     min_keyword_length = 3, -- Only show after 3 chars
+        --   },
+        -- },
       },
 
       keymap = {
