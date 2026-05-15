@@ -1,7 +1,7 @@
 return {
   {
     "saghen/blink.cmp",
-    event = "VimEnter",
+    event = { "InsertEnter", "CmdlineEnter" },
     version = "1.*",
     opts_extend = {
       "sources.completion.enabled_providers",
