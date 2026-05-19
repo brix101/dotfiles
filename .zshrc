@@ -89,6 +89,8 @@ eval "$(fzf --zsh)"
 
 export PATH=~/.local/bin:$PATH
 
+export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
+
 # pnpm
 export PNPM_HOME="/Users/brixterporras/Library/pnpm"
 case ":$PATH:" in
@@ -96,5 +98,3 @@ case ":$PATH:" in
   *) export PATH="$PNPM_HOME/bin:$PATH" ;;
 esac
 # pnpm end
-
-export PATH="/opt/homebrew/opt/libpq/bin:$PATH"

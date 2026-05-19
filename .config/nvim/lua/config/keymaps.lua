@@ -1,3 +1,7 @@
+local prelude = require("config.prelude")
+local copy_line_diagnostics_to_clipboard = prelude.copy_line_diagnostics_to_clipboard
+local open_link = prelude.open_link
+
 local set = vim.keymap.set
 
 -- TIP: Disable arrow keys in normal mode
@@ -44,7 +48,7 @@ local diagnostic_goto = function(next, severity)
       severity = severity and vim.diagnostic.severity[severity] or nil,
       float = {
         border = "rounded",
-        focusable = false,
+        -- focusable = false,
       },
     })
   end
@@ -53,8 +57,10 @@ local open_float = function()
   vim.diagnostic.open_float({ border = "rounded" })
 end
 
+set("n", "gl", open_link, { desc = "Open Link" })
+
 set("n", "<leader>d", open_float, { desc = "Line Diagnostics" })
--- set("n", "<leader>cd", open_float, { desc = "Line Diagnostics" })
+set("n", "<leader>cd", copy_line_diagnostics_to_clipboard, { desc = "Copy Line Diagnostics" })
 set("n", "]d", diagnostic_goto(true), { desc = "Next Diagnostic" })
 set("n", "[d", diagnostic_goto(false), { desc = "Prev Diagnostic" })
 set("n", "]e", diagnostic_goto(true, "ERROR"), { desc = "Next Error" })

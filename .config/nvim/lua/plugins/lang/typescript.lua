@@ -112,6 +112,20 @@ return {
               desc = "Fix all diagnostics",
             },
             {
+              "<leader>cu",
+              function()
+                require("utils").lsp_action["source.removeUnused.ts"]()
+              end,
+              desc = "Remove unused imports",
+            },
+            {
+              "<leader>cD",
+              function()
+                require("utils").lsp_action["source.fixAll.ts"]()
+              end,
+              desc = "Fix all diagnostics",
+            },
+            {
               "<leader>cV",
               function()
                 execute({
