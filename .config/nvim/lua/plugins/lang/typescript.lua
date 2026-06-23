@@ -17,8 +17,7 @@ local supported = {
   "astro",
 }
 
-local execute = require("utils").lsp_execute
-local action = require("utils").lsp_action
+local lsp = require("utils").lsp
 
 return {
   {
@@ -82,7 +81,7 @@ return {
               function()
                 local win = vim.api.nvim_get_current_win()
                 local params = vim.lsp.util.make_position_params(win, "utf-16")
-                execute({
+                lsp.execute({
                   command = "typescript.goToSourceDefinition",
                   arguments = { params.textDocument.uri, params.position },
                   open = true,
@@ -93,7 +92,7 @@ return {
             {
               "gR",
               function()
-                execute({
+                lsp.execute({
                   command = "typescript.findAllFileReferences",
                   arguments = { vim.uri_from_bufnr(0) },
                   open = true,
@@ -103,32 +102,32 @@ return {
             },
             {
               "<leader>cM",
-              action["source.addMissingImports.ts"],
+              lsp.action["source.addMissingImports.ts"],
               desc = "Add missing imports",
             },
             {
               "<leader>cD",
-              action["source.fixAll.ts"],
+              lsp.action["source.fixAll.ts"],
               desc = "Fix all diagnostics",
             },
             {
               "<leader>cu",
               function()
-                require("utils").lsp_action["source.removeUnused.ts"]()
+                lsp.action["source.removeUnused.ts"]()
               end,
               desc = "Remove unused imports",
             },
             {
               "<leader>cD",
               function()
-                require("utils").lsp_action["source.fixAll.ts"]()
+                lsp.action["source.fixAll.ts"]()
               end,
               desc = "Fix all diagnostics",
             },
             {
               "<leader>cV",
               function()
-                execute({
+                lsp.execute({
                   title = "Select TypeScript Version",
                   filter = "vtsls",
                   command = "typescript.selectTypeScriptVersion",

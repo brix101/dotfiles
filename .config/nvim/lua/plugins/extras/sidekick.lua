@@ -52,7 +52,7 @@ return {
   {
     "folke/sidekick.nvim",
     opts = function()
-      require("utils").cmp_actions.ai_nes = function()
+      require("utils").cmp.actions.ai_nes = function()
         local Nes = require("sidekick.nes")
         if Nes.have() and (Nes.jump() or Nes.apply()) then
           return true
@@ -90,7 +90,9 @@ return {
       { "<leader>a", "", desc = "+ai", mode = { "n", "v" } },
       {
         "<leader>aa",
-        function() require("sidekick.cli").toggle() end,
+        function() require("sidekick.cli").toggle({
+          name = "opencode"
+        }) end,
         desc = "Sidekick Toggle CLI",
       },
       {

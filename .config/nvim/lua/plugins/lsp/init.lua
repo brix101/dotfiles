@@ -109,9 +109,13 @@ return {
       return ret
     end,
     config = function(_, opts)
-      for server, server_opts in pairs(opts.servers) do
+      -- setup keymaps
+      local names = vim.tbl_keys(opts.servers) ---@type string[]
+      table.sort(names)
+      for _, server in ipairs(names) do
+        local server_opts = opts.servers[server]
         if type(server_opts) == "table" and server_opts.keys then
-          require("utils").lsp_keymap({ name = server ~= "*" and server or nil }, server_opts.keys)
+          require("plugins.lsp.keymaps").set({ name = server ~= "*" and server or nil }, server_opts.keys)
         end
       end
 

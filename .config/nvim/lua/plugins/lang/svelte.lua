@@ -17,7 +17,7 @@ return {
             {
               "<leader>co",
               function()
-                require("utils").lsp_action["source.organizeImports"]()
+                require("utils").lsp.action["source.organizeImports"]()
               end,
               desc = "Organize Imports",
             },

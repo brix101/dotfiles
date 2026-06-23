@@ -119,7 +119,7 @@ return {
     config = function(_, opts)
       opts.keymap["<Tab>"] = {
         require("blink.cmp.keymap.presets").get("super-tab")["<Tab>"][1],
-        require("utils").cmp_map({ "snippet_forward", "ai_nes", "ai_accept" }),
+        require("utils").cmp.map({ "snippet_forward", "ai_nes", "ai_accept" }),
         "fallback",
       }
 

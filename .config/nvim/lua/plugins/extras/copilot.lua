@@ -27,7 +27,7 @@ return {
             vim.lsp.inline_completion.enable()
           end)
           -- Accept inline suggestions or next edits
-          require("utils").cmp_actions.ai_accept = function()
+          require("utils").cmp.actions.ai_accept = function()
             return vim.lsp.inline_completion.get()
           end
         end,
