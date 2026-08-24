@@ -90,9 +90,7 @@ return {
       { "<leader>a", "", desc = "+ai", mode = { "n", "v" } },
       {
         "<leader>aa",
-        function() require("sidekick.cli").toggle({
-          name = "opencode"
-        }) end,
+        function() require("sidekick.cli").toggle() end,
         desc = "Sidekick Toggle CLI",
       },
       {
