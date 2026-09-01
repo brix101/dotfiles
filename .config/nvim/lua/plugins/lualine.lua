@@ -83,6 +83,28 @@ return {
         return string.format("󱡅 %s/%d", current_index, total_marks)
       end
 
+      local function python_venv()
+        if vim.bo.filetype ~= "python" then
+          return ""
+        end
+
+        local venv = vim.env.VIRTUAL_ENV
+        local ok, vs = pcall(require, "venv-selector")
+        if ok and vs.venv() and vs.venv() ~= "" then
+          venv = vs.venv()
+        end
+        if not venv or venv == "" then
+          return ""
+        end
+
+        -- Generic names like .venv aren't informative, show the project folder instead
+        local name = vim.fn.fnamemodify(venv, ":t")
+        if name == ".venv" or name == "venv" then
+          name = vim.fn.fnamemodify(venv, ":h:t")
+        end
+        return " " .. name
+      end
+
       local opts = {
         options = {
           theme = "auto",
@@ -128,6 +150,7 @@ return {
           },
           lualine_x = {},
           lualine_y = {
+            { python_venv },
             { "filetype" },
           },
           lualine_z = {
