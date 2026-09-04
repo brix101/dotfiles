@@ -16,6 +16,7 @@ opt.autowrite = true -- Enable auto write
 opt.clipboard = vim.env.SSH_CONNECTION and "" or "unnamedplus" -- Sync with system clipboard
 opt.confirm = true -- Confirm to save changes before exiting modified buffer
 opt.colorcolumn = "80" -- Highlight column 80
+opt.conceallevel = 1 -- Hide * markup for bold and italic
 opt.cursorline = true -- Enable highlighting of the current line
 opt.expandtab = true -- Use spaces instead of tabs
 opt.fillchars = {
