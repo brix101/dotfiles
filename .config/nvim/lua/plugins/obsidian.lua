@@ -25,15 +25,17 @@ return {
           return
         end
         local name = vim.fn.fnamemodify(path, ":t")
-        if vim.fn.confirm("Delete " .. name .. "?", "&Yes\n&No", 2) ~= 1 then
+        if vim.fn.confirm("Move " .. name .. " to Trash?", "&Yes\n&No", 2) ~= 1 then
           return
         end
-        if vim.fn.delete(path) ~= 0 then
-          vim.notify("Failed to delete " .. name, vim.log.levels.ERROR)
+        -- macOS ships /usr/bin/trash (14+), which moves files to ~/.Trash with "Put Back" support
+        local result = vim.system({ "trash", path }):wait()
+        if result.code ~= 0 then
+          vim.notify("Failed to trash " .. name .. ": " .. vim.trim(result.stderr or ""), vim.log.levels.ERROR)
           return
         end
         Snacks.bufdelete({ force = true })
-        vim.notify("Deleted " .. name)
+        vim.notify("Moved " .. name .. " to Trash")
       end,
       desc = "Obsidian: Delete note",
     },
