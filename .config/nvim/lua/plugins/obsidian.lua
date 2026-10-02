@@ -16,11 +16,35 @@ return {
     { "<leader>of", "<cmd>Obsidian follow_link<cr>", desc = "Obsidian: Follow link" },
     { "<leader>oT", "<cmd>Obsidian template<cr>", desc = "Obsidian: Insert template" },
     { "<leader>oN", "<cmd>Obsidian new_from_template<cr>", desc = "Obsidian: New note from template" },
+    {
+      "<leader>oD",
+      function()
+        local path = vim.api.nvim_buf_get_name(0)
+        if path == "" or vim.fn.filereadable(path) == 0 then
+          vim.notify("No file to delete", vim.log.levels.WARN)
+          return
+        end
+        local name = vim.fn.fnamemodify(path, ":t")
+        if vim.fn.confirm("Delete " .. name .. "?", "&Yes\n&No", 2) ~= 1 then
+          return
+        end
+        if vim.fn.delete(path) ~= 0 then
+          vim.notify("Failed to delete " .. name, vim.log.levels.ERROR)
+          return
+        end
+        Snacks.bufdelete({ force = true })
+        vim.notify("Deleted " .. name)
+      end,
+      desc = "Obsidian: Delete note",
+    },
   },
   ---@module 'obsidian'
   ---@type obsidian.config
   opts = {
     legacy_commands = false, -- this will be removed in 4.0.0
+    -- Put new notes in "<vault>/notes" instead of the current buffer's directory
+    notes_subdir = "notes",
+    new_notes_location = "notes_subdir",
     -- Human-readable slug filenames, e.g. "My Note" -> "my-note.md"
     note_id_func = function(title, path)
       return require("obsidian.builtin").title_id(title, path)
