@@ -37,6 +37,24 @@ M.lsp = {
       end
     end,
   }),
+  --- Returns the code action kinds supported by the matching clients
+  ---@param filter? vim.lsp.get_clients.Filter
+  ---@return string[]
+  code_actions = function(filter)
+    filter = filter or {}
+    local ret = {} ---@type string[]
+    local clients = vim.lsp.get_clients(filter)
+    for _, client in ipairs(clients) do
+      -- check server capabilities first
+      vim.list_extend(ret, vim.tbl_get(client, "server_capabilities", "codeActionProvider", "codeActionKinds") or {})
+      -- check dynamic capabilities
+      local regs = client.dynamic_capabilities:get("codeActionProvider", filter)
+      for _, reg in ipairs(regs or {}) do
+        vim.list_extend(ret, vim.tbl_get(reg, "registerOptions", "codeActionKinds") or {})
+      end
+    end
+    return M.dedup(ret)
+  end,
 }
 
 M.cmp = {
@@ -72,6 +90,22 @@ M.cmp = {
     end
   end,
 }
+
+--- Removes duplicate entries from a list, keeping first occurrence order
+---@generic T
+---@param list T[]
+---@return T[]
+function M.dedup(list)
+  local ret = {}
+  local seen = {}
+  for _, v in ipairs(list) do
+    if not seen[v] then
+      seen[v] = true
+      ret[#ret + 1] = v
+    end
+  end
+  return ret
+end
 
 function M.extend(t, key, values)
   local keys = vim.split(key, ".", { plain = true })

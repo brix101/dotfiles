@@ -1,4 +1,7 @@
 -- https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/plugins/lsp/init.lua
+
+local lsp = require("utils").lsp
+
 return {
   {
     "neovim/nvim-lspconfig",
@@ -65,6 +68,26 @@ return {
               { "<leader>cc", vim.lsp.codelens.run, desc = "Run Codelens", mode = { "n", "x" }, has = "codeLens" },
               { "<leader>cC", vim.lsp.codelens.enable, desc = "Refresh & Display Codelens", mode = { "n" }, has = "codeLens" },
               { "<leader>rn", vim.lsp.buf.rename, desc = "Rename", has = "rename" },
+              { "]]", function() Snacks.words.jump(vim.v.count1) end, has = "documentHighlight",
+                desc = "Next Reference", enabled = function() return Snacks.words.is_enabled() end },
+              { "[[", function() Snacks.words.jump(-vim.v.count1) end, has = "documentHighlight",
+                desc = "Prev Reference", enabled = function() return Snacks.words.is_enabled() end },
+              { "<a-n>", function() Snacks.words.jump(vim.v.count1, true) end, has = "documentHighlight",
+                desc = "Next Reference", enabled = function() return Snacks.words.is_enabled() end },
+              { "<a-p>", function() Snacks.words.jump(-vim.v.count1, true) end, has = "documentHighlight",
+                desc = "Prev Reference", enabled = function() return Snacks.words.is_enabled() end },
+              {
+                "<leader>co",
+                lsp.action["source.organizeImports"],
+                desc = "Organize Imports",
+                has = "codeAction",
+                enabled = function(buf)
+                  local code_actions = vim.tbl_filter(function(action)
+                    return action:find("^source%.organizeImports%.?")
+                  end, lsp.code_actions({ bufnr = buf }))
+                  return #code_actions > 0
+                end
+              },
             },
           },
           bashls = {},
