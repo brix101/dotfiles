@@ -68,6 +68,7 @@ return {
               { "<leader>cc", vim.lsp.codelens.run, desc = "Run Codelens", mode = { "n", "x" }, has = "codeLens" },
               { "<leader>cC", vim.lsp.codelens.enable, desc = "Refresh & Display Codelens", mode = { "n" }, has = "codeLens" },
               { "<leader>rn", vim.lsp.buf.rename, desc = "Rename", has = "rename" },
+              { "<leader>rf", function() Snacks.rename.rename_file() end, desc = "Rename File", mode ={"n"}, has = { "workspace/didRenameFiles", "workspace/willRenameFiles" } },
               { "]]", function() Snacks.words.jump(vim.v.count1) end, has = "documentHighlight",
                 desc = "Next Reference", enabled = function() return Snacks.words.is_enabled() end },
               { "[[", function() Snacks.words.jump(-vim.v.count1) end, has = "documentHighlight",
