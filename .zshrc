@@ -48,7 +48,6 @@ bindkey '^p' history-search-backward
 bindkey '^n' history-search-forward
 bindkey '^[w' kill-region
 
-bindkey -s ^f "tmux-sessionizer\n"
 
 # History
 HISTSIZE=5000
@@ -80,12 +79,6 @@ eval "$(fzf --zsh)"
 # eval "$(zoxide init --cmd cd zsh)"
 
 #########################################################################################################
-# alias mux='pgrep -vx tmux > /dev/null && \
-#                 tmux new -d -s delete-me && \
-#                 tmux run-shell ~/.config/tmux/plugins/tmux-resurrect/scripts/restore.sh && \
-#                 tmux kill-session -t delete-me && \
-#                 tmux attach || tmux attach'
-#                 # tmux attach -t terminal'
 
 export PATH=~/.local/bin:$PATH
 

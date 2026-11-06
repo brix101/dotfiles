@@ -1,2 +1,1 @@
 .local/bin/*
-!.local/bin/tmux-sessionizer
