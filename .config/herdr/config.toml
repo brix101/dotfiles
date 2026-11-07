@@ -631,7 +631,7 @@ status_indicators = "symbols"
 # Popup delivery: "off", in-app "herdr", outer-terminal "terminal", or direct
 # OS "system" notifications.
 # Default: "off".
-delivery = "herdr"
+delivery = "system"
 
 # Delay before finished or needs-input Agent notifications. Herdr sends only if
 # the pane remains in that state. Valid range: 0-3600 seconds.
@@ -660,7 +660,7 @@ position = "top-right"
 [ui.sound]
 # Play sounds when Agents change state in background workspaces.
 # Default: true.
-enabled = false
+enabled = true
 
 # MP3 used for every notification sound. Relative paths resolve from this file.
 # Default: unset.
