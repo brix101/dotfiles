@@ -103,11 +103,46 @@ float determineStartVertexFactor(vec2 a, vec2 b) {
     return 1.0 - max(condition1, condition2);
 }
 
-// Purple, matches the Catppuccin accent: Mauve settling, Pink flash.
-const vec4 TRAIL_COLOR = vec4(0.796, 0.651, 0.969, 1.0);        // Mauve
-const vec4 TRAIL_COLOR_ACCENT = vec4(0.961, 0.761, 0.906, 1.0); // Pink
-// const vec4 TRAIL_COLOR = vec4(1.0, 0.725, 0.161, 1.0);
-// const vec4 TRAIL_COLOR_ACCENT = vec4(1.0, 0., 0., 1.0);
+// Catppuccin Mocha: Peach settling, Red flash.
+const vec4 TRAIL_COLOR = vec4(0.980, 0.702, 0.529, 1.0);        // Peach #FAB387
+const vec4 TRAIL_COLOR_ACCENT = vec4(0.953, 0.545, 0.659, 1.0); // Red #F38BA8
+//
+// Other Catppuccin Mocha pairings (settle color, then flash accent).
+// Uncomment one pair and comment out the active pair above.
+//
+// Mauve / Pink
+// const vec4 TRAIL_COLOR = vec4(0.796, 0.651, 0.969, 1.0);        // Mauve #CBA6F7
+// const vec4 TRAIL_COLOR_ACCENT = vec4(0.961, 0.761, 0.906, 1.0); // Pink #F5C2E7
+//
+// Blue / Sapphire
+// const vec4 TRAIL_COLOR = vec4(0.537, 0.706, 0.980, 1.0);        // Blue #89B4FA
+// const vec4 TRAIL_COLOR_ACCENT = vec4(0.455, 0.780, 0.925, 1.0); // Sapphire #74C7EC
+//
+// Sky / Lavender
+// const vec4 TRAIL_COLOR = vec4(0.537, 0.863, 0.922, 1.0);        // Sky #89DCEB
+// const vec4 TRAIL_COLOR_ACCENT = vec4(0.706, 0.745, 0.996, 1.0); // Lavender #B4BEFE
+//
+// Green / Teal
+// const vec4 TRAIL_COLOR = vec4(0.651, 0.890, 0.631, 1.0);        // Green #A6E3A1
+// const vec4 TRAIL_COLOR_ACCENT = vec4(0.580, 0.886, 0.835, 1.0); // Teal #94E2D5
+//
+// Yellow / Peach
+// const vec4 TRAIL_COLOR = vec4(0.976, 0.886, 0.686, 1.0);        // Yellow #F9E2AF
+// const vec4 TRAIL_COLOR_ACCENT = vec4(0.980, 0.702, 0.529, 1.0); // Peach #FAB387
+//
+// Red / Maroon
+// const vec4 TRAIL_COLOR = vec4(0.953, 0.545, 0.659, 1.0);        // Red #F38BA8
+// const vec4 TRAIL_COLOR_ACCENT = vec4(0.922, 0.627, 0.675, 1.0); // Maroon #EBA0AC
+//
+// Flamingo / Rosewater
+// const vec4 TRAIL_COLOR = vec4(0.949, 0.804, 0.804, 1.0);        // Flamingo #F2CDCD
+// const vec4 TRAIL_COLOR_ACCENT = vec4(0.961, 0.878, 0.863, 1.0); // Rosewater #F5E0DC
+//
+// Text / Lavender (neutral cursor, soft blue flash)
+// const vec4 TRAIL_COLOR = vec4(0.804, 0.839, 0.957, 1.0);        // Text #CDD6F4
+// const vec4 TRAIL_COLOR_ACCENT = vec4(0.706, 0.745, 0.996, 1.0); // Lavender #B4BEFE
+//
+// Non-Catppuccin originals
 // const vec4 TRAIL_COLOR = vec4(0.482, 0.886, 1.0, 1.0);
 // const vec4 TRAIL_COLOR_ACCENT = vec4(0.0, 0.424, 1.0, 1.0);
 const vec4 CURRENT_CURSOR_COLOR = TRAIL_COLOR;
