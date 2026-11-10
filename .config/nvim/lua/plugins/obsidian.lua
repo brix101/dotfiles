@@ -93,6 +93,39 @@ return {
   config = function(_, opts)
     require("obsidian").setup(opts)
 
+    -- Push ~/vaults to GitHub a little after the last save in a vault.
+    -- Debounced: every save restarts a 2-minute timer, so one editing session
+    -- becomes one commit. ~/vaults/backup.sh is also run daily by launchd.
+    local backup_timer = nil
+    local function schedule_vault_backup()
+      if backup_timer then
+        backup_timer:stop()
+        backup_timer:close()
+      end
+      backup_timer = vim.uv.new_timer()
+      backup_timer:start(
+        2 * 60 * 1000,
+        0,
+        vim.schedule_wrap(function()
+          backup_timer:close()
+          backup_timer = nil
+          vim.system({ "zsh", vim.fn.expand("~/vaults/backup.sh") }, {}, function(result)
+            if result.code ~= 0 then
+              vim.schedule(function()
+                vim.notify("Vault backup failed, see ~/vaults/backup.log", vim.log.levels.WARN)
+              end)
+            end
+          end)
+        end)
+      )
+    end
+
+    vim.api.nvim_create_autocmd("BufWritePost", {
+      pattern = vim.fn.expand("~/vaults") .. "/*",
+      desc = "Back up the Obsidian vaults to GitHub after saving a note",
+      callback = schedule_vault_backup,
+    })
+
     vim.api.nvim_create_autocmd("User", {
       pattern = "ObsidianNoteEnter",
       desc = "Disable render-markdown when entering an Obsidian note",
