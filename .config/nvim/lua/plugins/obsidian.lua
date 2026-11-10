@@ -109,12 +109,15 @@ return {
         vim.schedule_wrap(function()
           backup_timer:close()
           backup_timer = nil
+          vim.notify("Vault backup: pushing to GitHub...", vim.log.levels.INFO)
           vim.system({ "zsh", vim.fn.expand("~/vaults/backup.sh") }, {}, function(result)
-            if result.code ~= 0 then
-              vim.schedule(function()
+            vim.schedule(function()
+              if result.code == 0 then
+                vim.notify("Vault backup: done", vim.log.levels.INFO)
+              else
                 vim.notify("Vault backup failed, see ~/vaults/backup.log", vim.log.levels.WARN)
-              end)
-            end
+              end
+            end)
           end)
         end)
       )
