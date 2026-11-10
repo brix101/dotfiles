@@ -109,13 +109,34 @@ return {
         vim.schedule_wrap(function()
           backup_timer:close()
           backup_timer = nil
-          vim.notify("Vault backup: pushing to GitHub...", vim.log.levels.INFO)
+          -- progress message (ui2): one id, updated from running to success/failed
+          local msg_id = "obsidian.vault-backup"
+          local title = "Vault backup"
+          vim.api.nvim_echo({ { "pushing to GitHub..." } }, false, {
+            id = msg_id,
+            kind = "progress",
+            source = "obsidian",
+            title = title,
+            status = "running",
+          })
           vim.system({ "zsh", vim.fn.expand("~/vaults/backup.sh") }, {}, function(result)
             vim.schedule(function()
               if result.code == 0 then
-                vim.notify("Vault backup: done", vim.log.levels.INFO)
+                vim.api.nvim_echo({ { "pushed" } }, false, {
+                  id = msg_id,
+                  kind = "progress",
+                  source = "obsidian",
+                  title = title,
+                  status = "success",
+                })
               else
-                vim.notify("Vault backup failed, see ~/vaults/backup.log", vim.log.levels.WARN)
+                vim.api.nvim_echo({ { "failed, see ~/vaults/backup.log" } }, false, {
+                  id = msg_id,
+                  kind = "progress",
+                  source = "obsidian",
+                  title = title,
+                  status = "failed",
+                })
               end
             end)
           end)
